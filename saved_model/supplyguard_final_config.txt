@@ -1,0 +1,19 @@
+SUPPLYGUARD FINAL MODEL CONFIGURATION
+=====================================
+
+Algorithm: Random Forest
+Number of trees: 500
+Maximum depth: None
+Minimum samples per leaf: 2
+Class weight: None
+Random state: 42
+Classification threshold: 0.41
+Number of features: 31
+Training samples: 144415
+Testing samples: 36104
+Accuracy: 86.40%
+Precision: 86.18%
+Recall: 89.56%
+F1 Score: 87.84%
+ROC-AUC: 93.13%
+Training time: 264.10 seconds

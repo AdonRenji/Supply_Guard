@@ -1,0 +1,9 @@
+Experiment,Feature Count,Removed Features,Accuracy (%),Precision (%),Recall (%),F1 Score (%),ROC-AUC (%),Training Time (seconds),Accuracy (%) Change,Precision (%) Change,Recall (%) Change,F1 Score (%) Change,ROC-AUC (%) Change
+Baseline - All 31,31,None,86.4,86.18,89.56,87.84,93.13,273.74,0.0,0.0,0.0,0.0,0.0
+Remove duplicate Order Day,30,Order Day,86.0,85.85,89.15,87.47,92.77,285.11,-0.4,-0.33,-0.41,-0.37,-0.36
+Remove Is Weekend,30,Is Weekend,86.25,85.99,89.51,87.71,93.04,301.83,-0.15,-0.19,-0.05,-0.13,-0.09
+Remove Is Night,30,Is Night,86.27,86.0,89.54,87.74,93.0,287.82,-0.13,-0.18,-0.02,-0.1,-0.13
+Remove Interaction Feature,30,Interaction_ShippingMode_OrderHour,85.03,84.72,88.71,86.67,92.25,273.41,-1.37,-1.46,-0.85,-1.17,-0.88
+Remove Order Month,30,Order Month,86.04,85.92,89.14,87.5,92.86,275.78,-0.36,-0.26,-0.42,-0.34,-0.27
+Remove Order Week of Year,30,Order Week of Year,85.89,85.8,89.0,87.37,92.81,277.92,-0.51,-0.38,-0.56,-0.47,-0.32
+Remove three derived features,28,"Order Day, Is Weekend, Is Night",85.71,85.66,88.81,87.21,92.62,301.91,-0.69,-0.52,-0.75,-0.63,-0.51

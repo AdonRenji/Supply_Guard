@@ -1,0 +1,407 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SupplyGuard | Shipment Risk Prediction</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+<div class="page">
+
+    <!-- Header -->
+    <header class="hero">
+        <div class="logo">SG</div>
+        <div>
+            <h1>SupplyGuard</h1>
+            <p>AI-Powered Shipment Delay Prediction System</p>
+        </div>
+    </header>
+
+    <!-- Introduction -->
+    <section class="intro">
+        <h2>Shipment Risk Assessment</h2>
+        <p>Enter the shipment details below to predict its late-delivery risk.</p>
+    </section>
+
+    <!-- Error message -->
+    {% if error %}
+    <div class="alert" role="alert">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    <!-- Prediction form -->
+    <form method="POST" action="/">
+
+        <!-- Shipment Information -->
+        <section class="form-section">
+            <h3>🚚 Shipment Information</h3>
+
+            <div class="form-grid">
+
+                <div class="field">
+                    <label for="shipping_mode">Shipping Mode</label>
+                    <select id="shipping_mode" name="shipping_mode" required>
+                        <option value="" disabled
+                            {% if not form_data.get('shipping_mode') %}selected{% endif %}>
+                            Select shipping mode
+                        </option>
+                        {% for value in options.shipping_mode %}
+                        <option value="{{ value }}"
+                            {% if form_data.get('shipping_mode') == value %}selected{% endif %}>
+                            {{ value }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="days_scheduled">Days for Shipment (Scheduled)</label>
+                    <select id="days_scheduled" name="days_scheduled" required>
+                        <option value="" disabled
+                            {% if not form_data.get('days_scheduled') %}selected{% endif %}>
+                            Select scheduled days
+                        </option>
+                        {% for value in days_options %}
+                        <option value="{{ value }}"
+                            {% if form_data.get('days_scheduled')|string == value|string %}selected{% endif %}>
+                            {{ value }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="market">Market</label>
+                    <select id="market" name="market" required>
+                        <option value="" disabled
+                            {% if not form_data.get('market') %}selected{% endif %}>
+                            Select market
+                        </option>
+                        {% for value in options.market %}
+                        <option value="{{ value }}"
+                            {% if form_data.get('market') == value %}selected{% endif %}>
+                            {{ value }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="order_region">Order Region</label>
+                    <select id="order_region" name="order_region" required>
+                        <option value="" disabled
+                            {% if not form_data.get('order_region') %}selected{% endif %}>
+                            Select order region
+                        </option>
+                        {% for value in options.order_region %}
+                        <option value="{{ value }}"
+                            {% if form_data.get('order_region') == value %}selected{% endif %}>
+                            {{ value }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="order_country">Order Country</label>
+                    <select id="order_country" name="order_country" required>
+                        <option value="" disabled
+                            {% if not form_data.get('order_country') %}selected{% endif %}>
+                            Select order country
+                        </option>
+                        {% for value in options.order_country %}
+                        <option value="{{ value }}"
+                            {% if form_data.get('order_country') == value %}selected{% endif %}>
+                            {{ value }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="order_state">Order State</label>
+                    <select id="order_state" name="order_state" required>
+                        <option value="" disabled
+                            {% if not form_data.get('order_state') %}selected{% endif %}>
+                            Select order state
+                        </option>
+                        {% for value in options.order_state %}
+                        <option value="{{ value }}"
+                            {% if form_data.get('order_state') == value %}selected{% endif %}>
+                            {{ value }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="order_date">Order Date</label>
+                    <input type="date"
+                           id="order_date"
+                           name="order_date"
+                           min="{{ min_date }}"
+                           max="{{ max_date }}"
+                           value="{{ form_data.get('order_date', '') }}"
+                           required>
+                </div>
+
+                <div class="field">
+                    <label for="order_time">Order Time (24-hour format)</label>
+                    <input type="text"
+                           id="order_time"
+                           name="order_time"
+                           placeholder="HH:MM (e.g., 14:30)"
+                           pattern="([01][0-9]|2[0-3]):[0-5][0-9]"
+                           title="Enter time in 24-hour format, for example 09:44 or 14:30."
+                           value="{{ form_data.get('order_time', '') }}"
+                           required>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Customer Information -->
+        <section class="form-section">
+            <h3>👤 Customer Information</h3>
+
+            <div class="form-grid">
+
+                <div class="field">
+                    <label for="customer_country">Customer Country</label>
+                    <select id="customer_country" name="customer_country" required>
+                        <option value="" disabled
+                            {% if not form_data.get('customer_country') %}selected{% endif %}>
+                            Select customer country
+                        </option>
+                        {% for value in options.customer_country %}
+                        <option value="{{ value }}"
+                            {% if form_data.get('customer_country') == value %}selected{% endif %}>
+                            {{ value }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="customer_segment">Customer Segment</label>
+                    <select id="customer_segment" name="customer_segment" required>
+                        <option value="" disabled
+                            {% if not form_data.get('customer_segment') %}selected{% endif %}>
+                            Select customer segment
+                        </option>
+                        {% for value in options.customer_segment %}
+                        <option value="{{ value }}"
+                            {% if form_data.get('customer_segment') == value %}selected{% endif %}>
+                            {{ value }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="customer_city">Customer City</label>
+                    <select id="customer_city" name="customer_city" required>
+                        <option value="" disabled
+                            {% if not form_data.get('customer_city') %}selected{% endif %}>
+                            Select customer city
+                        </option>
+                        {% for value in options.customer_city %}
+                        <option value="{{ value }}"
+                            {% if form_data.get('customer_city') == value %}selected{% endif %}>
+                            {{ value }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="customer_state">Customer State</label>
+                    <select id="customer_state" name="customer_state" required>
+                        <option value="" disabled
+                            {% if not form_data.get('customer_state') %}selected{% endif %}>
+                            Select customer state
+                        </option>
+                        {% for value in options.customer_state %}
+                        <option value="{{ value }}"
+                            {% if form_data.get('customer_state') == value %}selected{% endif %}>
+                            {{ value }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Product Information -->
+        <section class="form-section">
+            <h3>📦 Product Information</h3>
+
+            <div class="form-grid">
+
+                <div class="field">
+                    <label for="category_name">Category Name</label>
+                    <select id="category_name" name="category_name" required>
+                        <option value="" disabled
+                            {% if not form_data.get('category_name') %}selected{% endif %}>
+                            Select product category
+                        </option>
+                        {% for value in options.category_name %}
+                        <option value="{{ value }}"
+                            {% if form_data.get('category_name') == value %}selected{% endif %}>
+                            {{ value }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="department_name">Department Name</label>
+                    <select id="department_name" name="department_name" required>
+                        <option value="" disabled
+                            {% if not form_data.get('department_name') %}selected{% endif %}>
+                            Select department
+                        </option>
+                        {% for value in options.department_name %}
+                        <option value="{{ value }}"
+                            {% if form_data.get('department_name') == value %}selected{% endif %}>
+                            {{ value }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="quantity">Order Item Quantity</label>
+                    <select id="quantity" name="quantity" required>
+                        <option value="" disabled
+                            {% if not form_data.get('quantity') %}selected{% endif %}>
+                            Select quantity
+                        </option>
+                        {% for value in quantity_options %}
+                        <option value="{{ value }}"
+                            {% if form_data.get('quantity')|string == value|string %}selected{% endif %}>
+                            {{ value }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="product_price">Product Price</label>
+                    <input type="number"
+                           id="product_price"
+                           name="product_price"
+                           step="any"
+                           min="0"
+                           placeholder="Enter product price"
+                           value="{{ form_data.get('product_price', '') }}"
+                           required>
+                </div>
+
+                <div class="field">
+                    <label for="discount_rate">Discount Rate (0–1)</label>
+                    <input type="number"
+                           id="discount_rate"
+                           name="discount_rate"
+                           step="any"
+                           min="0"
+                           max="1"
+                           placeholder="Enter discount rate"
+                           value="{{ form_data.get('discount_rate', '') }}"
+                           required>
+                </div>
+
+                <div class="field">
+                    <label for="sales">Sales</label>
+                    <input type="number"
+                           id="sales"
+                           name="sales"
+                           step="any"
+                           min="0"
+                           placeholder="Enter sales amount"
+                           value="{{ form_data.get('sales', '') }}"
+                           required>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Order Information -->
+        <section class="form-section">
+            <h3>🧾 Order Information</h3>
+
+            <div class="form-grid">
+
+                <div class="field">
+                    <label for="type">Payment Type</label>
+                    <select id="type" name="type" required>
+                        <option value="" disabled
+                            {% if not form_data.get('type') %}selected{% endif %}>
+                            Select payment type
+                        </option>
+                        {% for value in options.type %}
+                        <option value="{{ value }}"
+                            {% if form_data.get('type') == value %}selected{% endif %}>
+                            {{ value }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Submit -->
+        <button class="submit-button" type="submit">
+            Predict Shipment Risk
+        </button>
+
+    </form>
+
+    <!-- Prediction Result -->
+    {% if result %}
+    <section class="result-card {% if result.prediction == 1 %}risk{% else %}safe{% endif %}">
+
+        <p class="result-caption">PREDICTION RESULT</p>
+
+        <h2>{{ result.label }}</h2>
+
+        <div class="probability">
+            {{ "%.2f"|format(result.probability) }}%
+        </div>
+
+        <p>Late Delivery Probability</p>
+
+        <div class="meter">
+            <div class="meter-fill"
+                 style="width: {{ result.probability }}%;">
+            </div>
+        </div>
+
+        <p>Decision threshold: {{ result.threshold }}%</p>
+
+        {% if result.prediction == 1 %}
+        <p>The model predicts late-delivery risk for this shipment.</p>
+        {% else %}
+        <p>The model predicts no late-delivery risk for this shipment.</p>
+        {% endif %}
+
+    </section>
+    {% endif %}
+
+    <!-- Footer -->
+    <footer>
+        SupplyGuard · Machine Learning Shipment Risk Prediction
+    </footer>
+
+</div>
+</body>
+</html>

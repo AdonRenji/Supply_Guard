@@ -1,0 +1,2076 @@
+Encoded_Feature
+num__Days for shipment (scheduled)
+num__Order Item Quantity
+num__Order Item Product Price
+num__Order Item Discount Rate
+num__Sales
+num__Order Month
+num__Order Day
+num__Order Day of Week
+num__Order Hour
+num__Is Weekend
+num__Order Week of Year
+num__Order Day of Month
+num__Is Month Start
+num__Is Month End
+num__Is Quarter Start
+num__Is Quarter End
+num__Is Business Hour
+num__Is Night
+cat__Shipping Mode_First Class
+cat__Shipping Mode_Same Day
+cat__Shipping Mode_Second Class
+cat__Shipping Mode_Standard Class
+cat__Customer Country_EE. UU.
+cat__Customer Country_Puerto Rico
+cat__Category Name_Accessories
+cat__Category Name_As Seen on  TV!
+cat__Category Name_Baby 
+cat__Category Name_Baseball & Softball
+cat__Category Name_Basketball
+cat__Category Name_Books 
+cat__Category Name_Boxing & MMA
+cat__Category Name_CDs 
+cat__Category Name_Cameras 
+cat__Category Name_Camping & Hiking
+cat__Category Name_Cardio Equipment
+cat__Category Name_Children's Clothing
+cat__Category Name_Cleats
+cat__Category Name_Computers
+cat__Category Name_Consumer Electronics
+cat__Category Name_Crafts
+cat__Category Name_DVDs
+cat__Category Name_Electronics
+cat__Category Name_Fishing
+cat__Category Name_Fitness Accessories
+cat__Category Name_Garden
+cat__Category Name_Girls' Apparel
+cat__Category Name_Golf Apparel
+cat__Category Name_Golf Bags & Carts
+cat__Category Name_Golf Balls
+cat__Category Name_Golf Gloves
+cat__Category Name_Golf Shoes
+cat__Category Name_Health and Beauty
+cat__Category Name_Hockey
+cat__Category Name_Hunting & Shooting
+cat__Category Name_Indoor/Outdoor Games
+cat__Category Name_Kids' Golf Clubs
+cat__Category Name_Lacrosse
+cat__Category Name_Men's Clothing
+cat__Category Name_Men's Footwear
+cat__Category Name_Men's Golf Clubs
+cat__Category Name_Music
+cat__Category Name_Pet Supplies
+cat__Category Name_Shop By Sport
+cat__Category Name_Soccer
+cat__Category Name_Sporting Goods
+cat__Category Name_Strength Training
+cat__Category Name_Tennis & Racquet
+cat__Category Name_Toys
+cat__Category Name_Trade-In
+cat__Category Name_Video Games
+cat__Category Name_Water Sports
+cat__Category Name_Women's Apparel
+cat__Category Name_Women's Clothing
+cat__Category Name_Women's Golf Clubs
+cat__Market_Africa
+cat__Market_Europe
+cat__Market_LATAM
+cat__Market_Pacific Asia
+cat__Market_USCA
+cat__Order Region_Canada
+cat__Order Region_Caribbean
+cat__Order Region_Central Africa
+cat__Order Region_Central America
+cat__Order Region_Central Asia
+cat__Order Region_East Africa
+cat__Order Region_East of USA
+cat__Order Region_Eastern Asia
+cat__Order Region_Eastern Europe
+cat__Order Region_North Africa
+cat__Order Region_Northern Europe
+cat__Order Region_Oceania
+cat__Order Region_South America
+cat__Order Region_South Asia
+cat__Order Region_South of  USA 
+cat__Order Region_Southeast Asia
+cat__Order Region_Southern Africa
+cat__Order Region_Southern Europe
+cat__Order Region_US Center 
+cat__Order Region_West Africa
+cat__Order Region_West Asia
+cat__Order Region_West of USA 
+cat__Order Region_Western Europe
+cat__Order Country_Afganistán
+cat__Order Country_Albania
+cat__Order Country_Alemania
+cat__Order Country_Angola
+cat__Order Country_Arabia Saudí
+cat__Order Country_Argelia
+cat__Order Country_Argentina
+cat__Order Country_Armenia
+cat__Order Country_Australia
+cat__Order Country_Austria
+cat__Order Country_Azerbaiyán
+cat__Order Country_Bangladés
+cat__Order Country_Barbados
+cat__Order Country_Baréin
+cat__Order Country_Belice
+cat__Order Country_Benín
+cat__Order Country_Bielorrusia
+cat__Order Country_Bolivia
+cat__Order Country_Bosnia y Herzegovina
+cat__Order Country_Botsuana
+cat__Order Country_Brasil
+cat__Order Country_Bulgaria
+cat__Order Country_Burkina Faso
+cat__Order Country_Burundi
+cat__Order Country_Bután
+cat__Order Country_Bélgica
+cat__Order Country_Camboya
+cat__Order Country_Camerún
+cat__Order Country_Canada
+cat__Order Country_Chad
+cat__Order Country_Chile
+cat__Order Country_China
+cat__Order Country_Chipre
+cat__Order Country_Colombia
+cat__Order Country_Corea del Sur
+cat__Order Country_Costa Rica
+cat__Order Country_Costa de Marfil
+cat__Order Country_Croacia
+cat__Order Country_Cuba
+cat__Order Country_Dinamarca
+cat__Order Country_Ecuador
+cat__Order Country_Egipto
+cat__Order Country_El Salvador
+cat__Order Country_Emiratos Árabes Unidos
+cat__Order Country_Eritrea
+cat__Order Country_Eslovaquia
+cat__Order Country_Eslovenia
+cat__Order Country_España
+cat__Order Country_Estados Unidos
+cat__Order Country_Estonia
+cat__Order Country_Etiopía
+cat__Order Country_Filipinas
+cat__Order Country_Finlandia
+cat__Order Country_Francia
+cat__Order Country_Gabón
+cat__Order Country_Georgia
+cat__Order Country_Ghana
+cat__Order Country_Grecia
+cat__Order Country_Guadalupe
+cat__Order Country_Guatemala
+cat__Order Country_Guayana Francesa
+cat__Order Country_Guinea
+cat__Order Country_Guinea Ecuatorial
+cat__Order Country_Guinea-Bissau
+cat__Order Country_Guyana
+cat__Order Country_Haití
+cat__Order Country_Honduras
+cat__Order Country_Hong Kong
+cat__Order Country_Hungría
+cat__Order Country_India
+cat__Order Country_Indonesia
+cat__Order Country_Irak
+cat__Order Country_Irlanda
+cat__Order Country_Irán
+cat__Order Country_Israel
+cat__Order Country_Italia
+cat__Order Country_Jamaica
+cat__Order Country_Japón
+cat__Order Country_Jordania
+cat__Order Country_Kazajistán
+cat__Order Country_Kenia
+cat__Order Country_Kirguistán
+cat__Order Country_Kuwait
+cat__Order Country_Laos
+cat__Order Country_Lesoto
+cat__Order Country_Liberia
+cat__Order Country_Libia
+cat__Order Country_Lituania
+cat__Order Country_Luxemburgo
+cat__Order Country_Líbano
+cat__Order Country_Macedonia
+cat__Order Country_Madagascar
+cat__Order Country_Malasia
+cat__Order Country_Mali
+cat__Order Country_Marruecos
+cat__Order Country_Martinica
+cat__Order Country_Mauritania
+cat__Order Country_Moldavia
+cat__Order Country_Mongolia
+cat__Order Country_Montenegro
+cat__Order Country_Mozambique
+cat__Order Country_Myanmar (Birmania)
+cat__Order Country_México
+cat__Order Country_Namibia
+cat__Order Country_Nepal
+cat__Order Country_Nicaragua
+cat__Order Country_Nigeria
+cat__Order Country_Noruega
+cat__Order Country_Nueva Zelanda
+cat__Order Country_Níger
+cat__Order Country_Omán
+cat__Order Country_Pakistán
+cat__Order Country_Panamá
+cat__Order Country_Papúa Nueva Guinea
+cat__Order Country_Paraguay
+cat__Order Country_Países Bajos
+cat__Order Country_Perú
+cat__Order Country_Polonia
+cat__Order Country_Portugal
+cat__Order Country_Qatar
+cat__Order Country_Reino Unido
+cat__Order Country_República Centroafricana
+cat__Order Country_República Checa
+cat__Order Country_República Democrática del Congo
+cat__Order Country_República Dominicana
+cat__Order Country_República de Gambia
+cat__Order Country_República del Congo
+cat__Order Country_Ruanda
+cat__Order Country_Rumania
+cat__Order Country_Rusia
+cat__Order Country_Senegal
+cat__Order Country_Serbia
+cat__Order Country_Sierra Leona
+cat__Order Country_Singapur
+cat__Order Country_Siria
+cat__Order Country_Somalia
+cat__Order Country_Sri Lanka
+cat__Order Country_Suazilandia
+cat__Order Country_SudAfrica
+cat__Order Country_Sudán
+cat__Order Country_Sudán del Sur
+cat__Order Country_Suecia
+cat__Order Country_Suiza
+cat__Order Country_Surinam
+cat__Order Country_Sáhara Occidental
+cat__Order Country_Tailandia
+cat__Order Country_Taiwán
+cat__Order Country_Tanzania
+cat__Order Country_Tayikistán
+cat__Order Country_Togo
+cat__Order Country_Trinidad y Tobago
+cat__Order Country_Turkmenistán
+cat__Order Country_Turquía
+cat__Order Country_Túnez
+cat__Order Country_Ucrania
+cat__Order Country_Uganda
+cat__Order Country_Uruguay
+cat__Order Country_Uzbekistán
+cat__Order Country_Venezuela
+cat__Order Country_Vietnam
+cat__Order Country_Yemen
+cat__Order Country_Yibuti
+cat__Order Country_Zambia
+cat__Order Country_Zimbabue
+cat__Order State_Abia
+cat__Order State_Abruzos
+cat__Order State_Aceh
+cat__Order State_Acre
+cat__Order State_Adamaoua
+cat__Order State_Adamawa
+cat__Order State_Adana
+cat__Order State_Adiyaman
+cat__Order State_Afyonkarahisar
+cat__Order State_Aichi
+cat__Order State_Ajmán
+cat__Order State_Akmola
+cat__Order State_Aksaray
+cat__Order State_Akwa Ibom
+cat__Order State_Al Asimah
+cat__Order State_Al Bahr al Ahmar
+cat__Order State_Al Buhayrah
+cat__Order State_Al Hudayda
+cat__Order State_Al Jawf
+cat__Order State_Al Marqab
+cat__Order State_Alabama
+cat__Order State_Alagoas
+cat__Order State_Alberta
+cat__Order State_Alejandría
+cat__Order State_Alger
+cat__Order State_Alibori
+cat__Order State_Almaty
+cat__Order State_Alsacia-Champaña-Ardenas-Lorena
+cat__Order State_Alta Austria
+cat__Order State_Amapá
+cat__Order State_Amasya
+cat__Order State_Amazonas
+cat__Order State_Amberes
+cat__Order State_Amur
+cat__Order State_Amán
+cat__Order State_Analamanga
+cat__Order State_Anambra
+cat__Order State_Ancash
+cat__Order State_Andalucía
+cat__Order State_Andhra Pradesh
+cat__Order State_Andiján
+cat__Order State_Anhui
+cat__Order State_Ankara
+cat__Order State_Annaba
+cat__Order State_Anseba
+cat__Order State_Antalya
+cat__Order State_Antioquía
+cat__Order State_Antofagasta
+cat__Order State_Anzoátegui
+cat__Order State_Aomori
+cat__Order State_Apulia
+cat__Order State_Aquitania-Lemosín-Poitou-Charentes
+cat__Order State_Ar Raqa
+cat__Order State_Arad
+cat__Order State_Aragua
+cat__Order State_Arauca
+cat__Order State_Arbil
+cat__Order State_Ardahan
+cat__Order State_Ardebil
+cat__Order State_Arequipa
+cat__Order State_Arges
+cat__Order State_Arica y Parinacota
+cat__Order State_Arizona
+cat__Order State_Arjánguelsk
+cat__Order State_Arkansas
+cat__Order State_Artemisa
+cat__Order State_Artibonito
+cat__Order State_Arusha
+cat__Order State_Ash Sharqiyah
+cat__Order State_Ashanti
+cat__Order State_Asir
+cat__Order State_Asiut
+cat__Order State_Asjabad
+cat__Order State_Assam
+cat__Order State_Astaná
+cat__Order State_Astracán
+cat__Order State_Asturias
+cat__Order State_Asunción
+cat__Order State_Aswan
+cat__Order State_Atacama
+cat__Order State_Atakora
+cat__Order State_Atlántico
+cat__Order State_Atlántida
+cat__Order State_Atsimo-Andrefana
+cat__Order State_Atsinanana
+cat__Order State_Attica
+cat__Order State_Auckland
+cat__Order State_Australia Occidental
+cat__Order State_Australia del Sur
+cat__Order State_Auvernia
+cat__Order State_Auvernia-Ródano-Alpes
+cat__Order State_Aveiro
+cat__Order State_Ayacucho
+cat__Order State_Aydin
+cat__Order State_Azuay
+cat__Order State_Babilonia
+cat__Order State_Bacau
+cat__Order State_Baden-Wurtemberg
+cat__Order State_Bagdad
+cat__Order State_Bahía
+cat__Order State_Baja California
+cat__Order State_Baja California Sur
+cat__Order State_Baja Sajonia
+cat__Order State_Bajo Congo
+cat__Order State_Baki
+cat__Order State_Bali
+cat__Order State_Balikesir
+cat__Order State_Balti
+cat__Order State_Baluchistán
+cat__Order State_Bamako
+cat__Order State_Bandundu
+cat__Order State_Bangkok
+cat__Order State_Bangui
+cat__Order State_Bani Suwayf
+cat__Order State_Banská Bystrica
+cat__Order State_Barahona
+cat__Order State_Bashkortostán
+cat__Order State_Basilea-Ciudad
+cat__Order State_Basilicata
+cat__Order State_Basora
+cat__Order State_Batman
+cat__Order State_Batna
+cat__Order State_Bauchi
+cat__Order State_Bavaria
+cat__Order State_Bay of Plenty
+cat__Order State_Beirut
+cat__Order State_Benadir
+cat__Order State_Bengala Occidental
+cat__Order State_Bengasi
+cat__Order State_Bengkulu
+cat__Order State_Benguela
+cat__Order State_Benue
+cat__Order State_Berlín
+cat__Order State_Berna
+cat__Order State_Bihar
+cat__Order State_Bihor
+cat__Order State_Bingöl
+cat__Order State_Bishkek
+cat__Order State_Bistrita-Nasaud
+cat__Order State_Bisáu
+cat__Order State_Bitola
+cat__Order State_Bié
+cat__Order State_Boeny
+cat__Order State_Bogotá
+cat__Order State_Bolu
+cat__Order State_Bolívar
+cat__Order State_Borgou
+cat__Order State_Borgoña-Franco Condado
+cat__Order State_Borneo Meridional
+cat__Order State_Borneo Occidental
+cat__Order State_Borno
+cat__Order State_Botosani
+cat__Order State_Boyacá
+cat__Order State_Bra?ov
+cat__Order State_Brabante Flamenco
+cat__Order State_Brabante Septentrional
+cat__Order State_Braga
+cat__Order State_Braila
+cat__Order State_Brandenburgo
+cat__Order State_Bremen
+cat__Order State_Brest
+cat__Order State_Bretaña
+cat__Order State_Briansk
+cat__Order State_Bruselas
+cat__Order State_Budapest
+cat__Order State_Buenos Aires
+cat__Order State_Buenos Aires (provincia)
+cat__Order State_Bugía
+cat__Order State_Bulawayo
+cat__Order State_Burgas
+cat__Order State_Bursa
+cat__Order State_Busan
+cat__Order State_Bushehr
+cat__Order State_Buskerud
+cat__Order State_Buyumbura Mairie
+cat__Order State_Buzau
+cat__Order State_Béchar
+cat__Order State_Békés
+cat__Order State_Bélgorod
+cat__Order State_Bío-Bío
+cat__Order State_Cabo Delgado
+cat__Order State_Cabo Occidental
+cat__Order State_Cabo Oriental
+cat__Order State_Cadisia
+cat__Order State_Cajamarca
+cat__Order State_Calabarzón
+cat__Order State_Calabria
+cat__Order State_Caldas
+cat__Order State_California
+cat__Order State_Callao
+cat__Order State_Camagüey
+cat__Order State_Campania
+cat__Order State_Campeche
+cat__Order State_Canelones
+cat__Order State_Cantabria
+cat__Order State_Canterbury
+cat__Order State_Capital Nacional
+cat__Order State_Caquetá
+cat__Order State_Carabobo
+cat__Order State_Caras-Severin
+cat__Order State_Carintia
+cat__Order State_Carolina del Norte
+cat__Order State_Carolina del Sur
+cat__Order State_Casanare
+cat__Order State_Castilla y León
+cat__Order State_Castilla-La Mancha
+cat__Order State_Cataluña
+cat__Order State_Catamarca
+cat__Order State_Ceará
+cat__Order State_Central
+cat__Order State_Centro
+cat__Order State_Centro-Valle de Loira
+cat__Order State_Cerdeña
+cat__Order State_Cesar
+cat__Order State_Ceuta
+cat__Order State_Chaco
+cat__Order State_Chaguanas
+cat__Order State_Chandigarh
+cat__Order State_Chauía-Uardiga
+cat__Order State_Cheliábinsk
+cat__Order State_Cherkasy
+cat__Order State_Chernihiv
+cat__Order State_Chhattisgarh
+cat__Order State_Chiapas
+cat__Order State_Chiba
+cat__Order State_Chihuahua
+cat__Order State_Chimaltenango
+cat__Order State_Chinandega
+cat__Order State_Chiriquí
+cat__Order State_Chisináu
+cat__Order State_Chittagong
+cat__Order State_Chocó
+cat__Order State_Choluteca
+cat__Order State_Chongqing
+cat__Order State_Chubut
+cat__Order State_Chukha
+cat__Order State_Chungcheong del Sur
+cat__Order State_Chuquisaca
+cat__Order State_Cidade De Maputo
+cat__Order State_Ciego de Ávila
+cat__Order State_Cienfuegos
+cat__Order State_Ciudad Ho Chi Minh
+cat__Order State_Ciudad de Almatý
+cat__Order State_Cluj
+cat__Order State_Coahuila
+cat__Order State_Cochabamba
+cat__Order State_Coimbra
+cat__Order State_Cojedes
+cat__Order State_Colima
+cat__Order State_Colorado
+cat__Order State_Columbia británica
+cat__Order State_Colón
+cat__Order State_Connecticut
+cat__Order State_Constantina
+cat__Order State_Constanza
+cat__Order State_Copperbelt
+cat__Order State_Cordillera
+cat__Order State_Cork
+cat__Order State_Corrientes
+cat__Order State_Corse
+cat__Order State_Cortés
+cat__Order State_Corum
+cat__Order State_Costa
+cat__Order State_Cross River
+cat__Order State_Cundinamarca
+cat__Order State_Cuscatlán
+cat__Order State_Célebes Central
+cat__Order State_Célebes Septentrional
+cat__Order State_Célebes Suroriental
+cat__Order State_Córdoba
+cat__Order State_Daca
+cat__Order State_Daegu
+cat__Order State_Daejeon
+cat__Order State_Daguestán
+cat__Order State_Dakar
+cat__Order State_Dakota del Norte
+cat__Order State_Dakota del Sur
+cat__Order State_Dar es Salaam
+cat__Order State_Dayr az Zawr
+cat__Order State_Delaware
+cat__Order State_Delhi
+cat__Order State_Delta
+cat__Order State_Demerara-Berbice Superior
+cat__Order State_Denizli
+cat__Order State_Departamento Atlántico
+cat__Order State_Di Car
+cat__Order State_Diala
+cat__Order State_Diana
+cat__Order State_Diffa
+cat__Order State_Dinamarca Meridional
+cat__Order State_Dire Dawa
+cat__Order State_Distrito Capital
+cat__Order State_Distrito Federal
+cat__Order State_Distrito de Cayo
+cat__Order State_Distrito de Columbia
+cat__Order State_Dix-Huit Montagnes
+cat__Order State_Diyarbakir
+cat__Order State_Djelfa
+cat__Order State_Dnipropetrovsk
+cat__Order State_Doha
+cat__Order State_Dolj
+cat__Order State_Donetsk
+cat__Order State_Donga
+cat__Order State_Drenthe
+cat__Order State_Duarte
+cat__Order State_Dublín
+cat__Order State_Dublín del Sur
+cat__Order State_Dukala-Abda
+cat__Order State_Durango
+cat__Order State_Durrës
+cat__Order State_Dà Nang
+cat__Order State_Düzce
+cat__Order State_Ebonyi
+cat__Order State_Ecuatoria Central
+cat__Order State_Edo
+cat__Order State_El Aaiún
+cat__Order State_El Beni
+cat__Order State_El Cairo
+cat__Order State_Elazig
+cat__Order State_Elbasan
+cat__Order State_Emilia-Romaña
+cat__Order State_Entre Ríos
+cat__Order State_Enugu
+cat__Order State_Erzurum
+cat__Order State_Escania
+cat__Order State_Escocia
+cat__Order State_Escuintla
+cat__Order State_Eskisehir
+cat__Order State_Espaillat
+cat__Order State_Espíritu Santo
+cat__Order State_Est
+cat__Order State_Estado Libre
+cat__Order State_Estambul
+cat__Order State_Estelí
+cat__Order State_Estocolmo
+cat__Order State_Estuaire
+cat__Order State_Extremadura
+cat__Order State_Extreme-Nord
+cat__Order State_Fars
+cat__Order State_Fayún
+cat__Order State_Federación de Bosnia y Herzegovina
+cat__Order State_Fez-Bulmán
+cat__Order State_Finlandia del Sudoeste
+cat__Order State_Flanders Occidental
+cat__Order State_Flanders Oriental
+cat__Order State_Florida
+cat__Order State_Francisco Morazán
+cat__Order State_Französisch-Guayana
+cat__Order State_Frisia
+cat__Order State_Friuli-Venecia Julia
+cat__Order State_Fromager
+cat__Order State_Fujian
+cat__Order State_Fukui
+cat__Order State_Fukuoka
+cat__Order State_Galati
+cat__Order State_Gales
+cat__Order State_Galicia
+cat__Order State_Galway
+cat__Order State_Gansu
+cat__Order State_Garb-Chrarda-Beni Hsen
+cat__Order State_Gauteng
+cat__Order State_Gaziantep
+cat__Order State_Georgia
+cat__Order State_Gezira
+cat__Order State_Gharbia
+cat__Order State_Ginebra
+cat__Order State_Gisborne
+cat__Order State_Giurgiu
+cat__Order State_Gobolka Woqooyi Galbeed
+cat__Order State_Goiás
+cat__Order State_Golestán
+cat__Order State_Gombe
+cat__Order State_Gorj
+cat__Order State_Grad Zagreb
+cat__Order State_Gran Accra
+cat__Order State_Gran Casablanca
+cat__Order State_Gran Polonia
+cat__Order State_Gran Valle del Rift
+cat__Order State_Granada
+cat__Order State_Grand Gedeh
+cat__Order State_Granma
+cat__Order State_Grodno
+cat__Order State_Groningen
+cat__Order State_Guadalupe
+cat__Order State_Guanacaste
+cat__Order State_Guanajuato
+cat__Order State_Guangdong
+cat__Order State_Guangxi
+cat__Order State_Guantánamo
+cat__Order State_Guatemala
+cat__Order State_Guayas
+cat__Order State_Guelma
+cat__Order State_Guelmim-Esmara
+cat__Order State_Guerrero
+cat__Order State_Guilán
+cat__Order State_Guizhou
+cat__Order State_Gulu
+cat__Order State_Gunma
+cat__Order State_Guyarat
+cat__Order State_Guárico
+cat__Order State_Gy?r
+cat__Order State_Gyeonggi
+cat__Order State_Gyeongsangnam
+cat__Order State_Gómel
+cat__Order State_Güeldres
+cat__Order State_Haifa
+cat__Order State_Hainan
+cat__Order State_Hajdú-Bihar
+cat__Order State_Halland
+cat__Order State_Hamadán
+cat__Order State_Hamburgo
+cat__Order State_Harare
+cat__Order State_Harjumaa
+cat__Order State_Haryana
+cat__Order State_Hatay
+cat__Order State_Haut-Sassandra
+cat__Order State_Haute-Matsiatra
+cat__Order State_Hawke's Bay
+cat__Order State_Hebei
+cat__Order State_Hedmark
+cat__Order State_Heilongjiang
+cat__Order State_Henan
+cat__Order State_Henao
+cat__Order State_Herat
+cat__Order State_Hesse
+cat__Order State_Hidalgo
+cat__Order State_Hims
+cat__Order State_Hiroshima
+cat__Order State_Hokkaido
+cat__Order State_Holanda Meridional
+cat__Order State_Holanda Septentrional
+cat__Order State_Holguín
+cat__Order State_Hong Kong
+cat__Order State_Hordaland
+cat__Order State_Hormozgán
+cat__Order State_Hradec Králové
+cat__Order State_Huambo
+cat__Order State_Hubei
+cat__Order State_Huehuetenango
+cat__Order State_Huila
+cat__Order State_Hunan
+cat__Order State_Hunedoara
+cat__Order State_Hyogo
+cat__Order State_Iasi
+cat__Order State_Ibaraki
+cat__Order State_Ibb
+cat__Order State_Ica
+cat__Order State_Idaho
+cat__Order State_Igdir
+cat__Order State_Ilam
+cat__Order State_Illinois
+cat__Order State_Imericia
+cat__Order State_Imo
+cat__Order State_Indiana
+cat__Order State_Inglaterra
+cat__Order State_Inhambane
+cat__Order State_Iowa
+cat__Order State_Irbid
+cat__Order State_Irkutsk
+cat__Order State_Isfahán
+cat__Order State_Ishikawa
+cat__Order State_Isla de Francia
+cat__Order State_Isla de la Juventud
+cat__Order State_Islas Baleares
+cat__Order State_Isparta
+cat__Order State_Ivano-Frankivsk
+cat__Order State_Ivanovo
+cat__Order State_Izmir
+cat__Order State_Jaiber Pajtunjuá
+cat__Order State_Jalisco
+cat__Order State_Jambi
+cat__Order State_Jammu y Cachemira
+cat__Order State_Jartum
+cat__Order State_Java Central
+cat__Order State_Java Occidental
+cat__Order State_Java Oriental
+cat__Order State_Jeju
+cat__Order State_Jersón
+cat__Order State_Jerusalén
+cat__Order State_Jharkhand
+cat__Order State_Jiangsu
+cat__Order State_Jiangxi
+cat__Order State_Jilin
+cat__Order State_Jinja
+cat__Order State_Jizzakh
+cat__Order State_Jizán
+cat__Order State_Jorasán Razaví
+cat__Order State_Jorasán del Sur
+cat__Order State_Jubbada Hoose
+cat__Order State_Jujuy
+cat__Order State_Junín
+cat__Order State_Jutlandia Central
+cat__Order State_Juzestán
+cat__Order State_Járkov
+cat__Order State_Kabardia-Balkaria
+cat__Order State_Kabarole
+cat__Order State_Kabul
+cat__Order State_Kaduna
+cat__Order State_Kafr el Sheij
+cat__Order State_Kagawa
+cat__Order State_Kahramanmara?
+cat__Order State_Kalimantan Oriental
+cat__Order State_Kaliningrado
+cat__Order State_Kaluga
+cat__Order State_Kampala
+cat__Order State_Kanagawa
+cat__Order State_Kandahar
+cat__Order State_Kankan
+cat__Order State_Kano
+cat__Order State_Kansas
+cat__Order State_Kara
+cat__Order State_Karagandá
+cat__Order State_Karaman
+cat__Order State_Karbala
+cat__Order State_Karnataka
+cat__Order State_Kars
+cat__Order State_Kasai Occidental
+cat__Order State_Kasai Oriental
+cat__Order State_Kasala
+cat__Order State_Kashkadar
+cat__Order State_Kastamonu
+cat__Order State_Katanga
+cat__Order State_Katsina
+cat__Order State_Kaunas
+cat__Order State_Kayes
+cat__Order State_Kayseri
+cat__Order State_Kentucky
+cat__Order State_Kerala
+cat__Order State_Kerman
+cat__Order State_Kermanshah
+cat__Order State_Khatlon
+cat__Order State_Khmelnytskyi
+cat__Order State_Khomas
+cat__Order State_Khorezm
+cat__Order State_Khulna
+cat__Order State_Khánh Hòa
+cat__Order State_Kigali
+cat__Order State_Kigoma
+cat__Order State_Kilimanjaro
+cat__Order State_Kilis
+cat__Order State_Kindia
+cat__Order State_Kinshasa
+cat__Order State_Kirovohrad
+cat__Order State_Kirsehir
+cat__Order State_Kivu del Sur
+cat__Order State_Kiên Giang
+cat__Order State_Klaip?da
+cat__Order State_Kocaeli
+cat__Order State_Konya
+cat__Order State_Korçë
+cat__Order State_Kostanái
+cat__Order State_Kuala Lumpur
+cat__Order State_Kumanovo
+cat__Order State_Kurdistán
+cat__Order State_KwaZulu-Natal
+cat__Order State_Kwara
+cat__Order State_Kymenlaakso
+cat__Order State_Kütahya
+cat__Order State_La Libertad
+cat__Order State_La Pampa
+cat__Order State_La Paz
+cat__Order State_La Rioja
+cat__Order State_La Romana
+cat__Order State_La Vega
+cat__Order State_Lacio
+cat__Order State_Lacs
+cat__Order State_Laghouat
+cat__Order State_Lagos
+cat__Order State_Lagunes
+cat__Order State_Lambayeque
+cat__Order State_Languedoc-Rosellón-Mediodía-Pirineos
+cat__Order State_Lara
+cat__Order State_Las Tunas
+cat__Order State_Lebap
+cat__Order State_León
+cat__Order State_Liaoning
+cat__Order State_Liberec
+cat__Order State_Lieja
+cat__Order State_Liguria
+cat__Order State_Lima
+cat__Order State_Lima (ciudad)
+cat__Order State_Limburgo
+cat__Order State_Limpopo
+cat__Order State_Lisboa
+cat__Order State_Litoral
+cat__Order State_Littoral
+cat__Order State_Liubliana
+cat__Order State_Lodz
+cat__Order State_Lombardía
+cat__Order State_Lorestan
+cat__Order State_Loreto
+cat__Order State_Lori
+cat__Order State_Los Lagos
+cat__Order State_Los Ríos
+cat__Order State_Luanda
+cat__Order State_Lublin
+cat__Order State_Lubusz
+cat__Order State_Lucerna
+cat__Order State_Lugansk
+cat__Order State_Luisiana
+cat__Order State_Lusaka
+cat__Order State_Luxemburgo
+cat__Order State_Luzón Central
+cat__Order State_Lviv
+cat__Order State_Líbano del Norte
+cat__Order State_Madhya Pradesh
+cat__Order State_Madrid
+cat__Order State_Magallanes y Antártica Chilena
+cat__Order State_Magdalena
+cat__Order State_Maharashtra
+cat__Order State_Maine
+cat__Order State_Malanje
+cat__Order State_Malatya
+cat__Order State_Maluku
+cat__Order State_Manabí
+cat__Order State_Managua
+cat__Order State_Manawatu-Wanganui
+cat__Order State_Mandoul
+cat__Order State_Manica
+cat__Order State_Manicalandia
+cat__Order State_Maniema
+cat__Order State_Manipur
+cat__Order State_Manisa
+cat__Order State_Manitoba
+cat__Order State_Manzini
+cat__Order State_Maputo
+cat__Order State_Mar Rojo
+cat__Order State_Mara
+cat__Order State_Maradi
+cat__Order State_Maramures
+cat__Order State_Marañón
+cat__Order State_Marche
+cat__Order State_Mardin
+cat__Order State_Markazí
+cat__Order State_Marlborough
+cat__Order State_Marrakech-Tensift-Al Hauz
+cat__Order State_Martinica
+cat__Order State_Mary
+cat__Order State_Maryland
+cat__Order State_Marítima
+cat__Order State_Masaya
+cat__Order State_Mascate
+cat__Order State_Maseru
+cat__Order State_Mashonalandia Occidental
+cat__Order State_Massachusetts
+cat__Order State_Matagalpa
+cat__Order State_Matanzas
+cat__Order State_Mato Grosso
+cat__Order State_Mato Grosso del Sur
+cat__Order State_Matruh
+cat__Order State_Mayabeque
+cat__Order State_Mazandarán
+cat__Order State_Mazovia
+cat__Order State_Mbeya
+cat__Order State_Meca
+cat__Order State_Mecklemburgo-Pomerania Occidental
+cat__Order State_Medina
+cat__Order State_Mehedinti
+cat__Order State_Melilla
+cat__Order State_Mendoza
+cat__Order State_Menia
+cat__Order State_Mequinez-Tafilalet
+cat__Order State_Meridional
+cat__Order State_Mersin
+cat__Order State_Mesena
+cat__Order State_Meta
+cat__Order State_Michigan
+cat__Order State_Michoacán
+cat__Order State_Mie
+cat__Order State_Minas Gerais
+cat__Order State_Mindanao Septentrional
+cat__Order State_Minnesota
+cat__Order State_Miranda
+cat__Order State_Misiones
+cat__Order State_Misisipi
+cat__Order State_Misurata
+cat__Order State_Misuri
+cat__Order State_Monagas
+cat__Order State_Mongolia Interior
+cat__Order State_Mono
+cat__Order State_Monseñor Nouel
+cat__Order State_Montana
+cat__Order State_Montevideo
+cat__Order State_Montserrado
+cat__Order State_Mopti
+cat__Order State_Moquegua
+cat__Order State_Moravia-Silesia
+cat__Order State_Morelos
+cat__Order State_Morogoro
+cat__Order State_Moscú
+cat__Order State_Mostaganem
+cat__Order State_Mpumalanga
+cat__Order State_Mtwara
+cat__Order State_Muharraq
+cat__Order State_Murcia
+cat__Order State_Mures
+cat__Order State_Mwanza
+cat__Order State_Mykolayiv
+cat__Order State_Mérida
+cat__Order State_México
+cat__Order State_Nagano
+cat__Order State_Nagasaki
+cat__Order State_Nairobi
+cat__Order State_Nakhon Ratchasima
+cat__Order State_Namangán
+cat__Order State_Namibe
+cat__Order State_Nampula
+cat__Order State_Namur
+cat__Order State_Nangarhar
+cat__Order State_Nariño
+cat__Order State_Navarra
+cat__Order State_Nayarit
+cat__Order State_Neamt
+cat__Order State_Nebraska
+cat__Order State_Negeri Sembilan
+cat__Order State_Nelson
+cat__Order State_Neuquén
+cat__Order State_Nevada
+cat__Order State_Nevsehir
+cat__Order State_Niamey
+cat__Order State_Niari
+cat__Order State_Niassa
+cat__Order State_Nicosia
+cat__Order State_Nigde
+cat__Order State_Nilo Blanco
+cat__Order State_Ningxia Hui
+cat__Order State_Nitra
+cat__Order State_Nom Pen
+cat__Order State_Nord
+cat__Order State_Nord-Ouest
+cat__Order State_Normandía
+cat__Order State_Noroeste
+cat__Order State_Norte de Santander
+cat__Order State_Norte-Paso de Calais-Picardía
+cat__Order State_Northland
+cat__Order State_Nouakchott
+cat__Order State_Nueva Escocia
+cat__Order State_Nueva Esparta
+cat__Order State_Nueva Gales del Sur
+cat__Order State_Nueva Jersey
+cat__Order State_Nueva York
+cat__Order State_Nuevo Hampshire
+cat__Order State_Nuevo León
+cat__Order State_Nuevo México
+cat__Order State_Nusa Tenggara Oriental
+cat__Order State_Nusatenggara Occidental
+cat__Order State_Nyanza
+cat__Order State_Nzérékoré
+cat__Order State_Níger
+cat__Order State_Nínive
+cat__Order State_Nóvgorod
+cat__Order State_O'Higgins
+cat__Order State_Oaxaca
+cat__Order State_Occidental
+cat__Order State_Odisha
+cat__Order State_Ogun
+cat__Order State_Ohio
+cat__Order State_Oita
+cat__Order State_Okayama
+cat__Order State_Oklahoma
+cat__Order State_Olomouc
+cat__Order State_Ondo
+cat__Order State_Ontario
+cat__Order State_Opole
+cat__Order State_Ordu
+cat__Order State_Oregón
+cat__Order State_Oriental
+cat__Order State_Oruro
+cat__Order State_Orán
+cat__Order State_Osaka
+cat__Order State_Osh
+cat__Order State_Osjecko-Baranjska
+cat__Order State_Oslo
+cat__Order State_Osmaniye
+cat__Order State_Osun
+cat__Order State_Otago
+cat__Order State_Ouest
+cat__Order State_Ouest del Sur
+cat__Order State_Ouémé
+cat__Order State_Overijssel
+cat__Order State_Oyo
+cat__Order State_Pahang
+cat__Order State_Panamá
+cat__Order State_Panevezys
+cat__Order State_Papua
+cat__Order State_Paramaribo
+cat__Order State_Paraná
+cat__Order State_Paraíba
+cat__Order State_Pará
+cat__Order State_Pavlodar
+cat__Order State_Paysandú
+cat__Order State_Pazardzhik
+cat__Order State_País Vasco
+cat__Order State_Países del Loira
+cat__Order State_Pekín
+cat__Order State_Pensilvania
+cat__Order State_Perak
+cat__Order State_Peravia
+cat__Order State_Pernambuco
+cat__Order State_Pernik
+cat__Order State_Piamonte
+cat__Order State_Piauí
+cat__Order State_Pichincha
+cat__Order State_Pilsen
+cat__Order State_Pinar del Río
+cat__Order State_Piura
+cat__Order State_Plateau
+cat__Order State_Plateaux
+cat__Order State_Plovdiv
+cat__Order State_Podgorica
+cat__Order State_Podlaquia
+cat__Order State_Polonia Menor
+cat__Order State_Poltava
+cat__Order State_Pomerania
+cat__Order State_Porto
+cat__Order State_Portuguesa
+cat__Order State_Potosí
+cat__Order State_Praga
+cat__Order State_Prahova
+cat__Order State_Prefectura de Vientián
+cat__Order State_Primorje-Gorski Kotar
+cat__Order State_Provenza-Alpes-Costa Azul
+cat__Order State_Provincia Oriental
+cat__Order State_Puducherry
+cat__Order State_Puebla
+cat__Order State_Puerto Saíd
+cat__Order State_Puno
+cat__Order State_Punyab
+cat__Order State_Pwani
+cat__Order State_Qazvín
+cat__Order State_Qina
+cat__Order State_Qinghai
+cat__Order State_Qom
+cat__Order State_Quebec
+cat__Order State_Queensland
+cat__Order State_Querétaro
+cat__Order State_Quezaltenango
+cat__Order State_Quindío
+cat__Order State_Quintana Roo
+cat__Order State_Rabat-Salé-Zemur-Zaer
+cat__Order State_Rajastán
+cat__Order State_Rajshahi
+cat__Order State_Rangún
+cat__Order State_Ras al-Jaima
+cat__Order State_Región Capital
+cat__Order State_Renania del Norte-Westfalia
+cat__Order State_Renania-Palatinado
+cat__Order State_Rhode Island
+cat__Order State_Riad
+cat__Order State_Riau
+cat__Order State_Rio Grande do Sul
+cat__Order State_Risaralda
+cat__Order State_Rivera
+cat__Order State_Rivne
+cat__Order State_Rize
+cat__Order State_Rogaland
+cat__Order State_Rondônia
+cat__Order State_Roraima
+cat__Order State_Ruvuma
+cat__Order State_Río Grande del Norte
+cat__Order State_Río Negro
+cat__Order State_Río de Janeiro
+cat__Order State_Ríos
+cat__Order State_Sabah
+cat__Order State_Saga
+cat__Order State_Saida
+cat__Order State_Saint-Louis
+cat__Order State_Saitama
+cat__Order State_Sajonia
+cat__Order State_Sajonia-Anhalt
+cat__Order State_Saladino
+cat__Order State_Salta
+cat__Order State_Salzburgo
+cat__Order State_Samsun
+cat__Order State_San Cristóbal
+cat__Order State_San Fernando
+cat__Order State_San Galo
+cat__Order State_San Juan
+cat__Order State_San Luis
+cat__Order State_San Luis Potosí
+cat__Order State_San Miguel
+cat__Order State_San Pedro de Macorís
+cat__Order State_San Salvador
+cat__Order State_Sancti Spíritus
+cat__Order State_Sanliurfa
+cat__Order State_Santa Ana
+cat__Order State_Santa Catarina
+cat__Order State_Santa Caterina
+cat__Order State_Santa Cruz
+cat__Order State_Santa Fe
+cat__Order State_Santander
+cat__Order State_Santiago de Chile
+cat__Order State_Santiago de Cuba
+cat__Order State_Santiago del Estero
+cat__Order State_Santo Domingo
+cat__Order State_Sarawak
+cat__Order State_Sarre
+cat__Order State_Saskatchewan
+cat__Order State_Satu Mare
+cat__Order State_Savanes
+cat__Order State_Schleswig-Holstein
+cat__Order State_Selandia
+cat__Order State_Selangor
+cat__Order State_Semnán
+cat__Order State_Septentrional
+cat__Order State_Serbia Central
+cat__Order State_Sergipe
+cat__Order State_Setúbal
+cat__Order State_Sevastopol
+cat__Order State_Seúl
+cat__Order State_Shaanxi
+cat__Order State_Shandong
+cat__Order State_Shanghái
+cat__Order State_Shanxi
+cat__Order State_Shinyanga
+cat__Order State_Shizuoka
+cat__Order State_Shkodër
+cat__Order State_Shumen
+cat__Order State_Sibiu
+cat__Order State_Sichuan
+cat__Order State_Sicilia
+cat__Order State_Sidi Bel Abbes
+cat__Order State_Siirt
+cat__Order State_Sikasso
+cat__Order State_Silesia
+cat__Order State_Sinaloa
+cat__Order State_Sind
+cat__Order State_Singapur
+cat__Order State_Sirnak
+cat__Order State_Sistán y Baluchistán
+cat__Order State_Sivas
+cat__Order State_Skikda
+cat__Order State_Sliven
+cat__Order State_Sofala
+cat__Order State_Sofía-Ciudad
+cat__Order State_Sokoto
+cat__Order State_Sonora
+cat__Order State_Sonsonate
+cat__Order State_Southland
+cat__Order State_Split-Dalmacia
+cat__Order State_Stara Zagora
+cat__Order State_Stiria
+cat__Order State_Stávropol
+cat__Order State_Suceava
+cat__Order State_Sucre
+cat__Order State_Sud
+cat__Order State_Sudeste
+cat__Order State_Suhaj
+cat__Order State_Sumatra Meridional
+cat__Order State_Sumatra Occidental
+cat__Order State_Sumatra Septentrional
+cat__Order State_Sumy
+cat__Order State_Surjandarín
+cat__Order State_Sus-Masa-Draa
+cat__Order State_Sylhet
+cat__Order State_São Paulo
+cat__Order State_Södermanland
+cat__Order State_T?nh C?n Th?
+cat__Order State_Tabasco
+cat__Order State_Tabora
+cat__Order State_Tabuk
+cat__Order State_Tadla-Azilal
+cat__Order State_Taipéi
+cat__Order State_Taiz
+cat__Order State_Tamaulipas
+cat__Order State_Tambov
+cat__Order State_Tamil Nadu
+cat__Order State_Tanga
+cat__Order State_Taranaki
+cat__Order State_Tarapacá
+cat__Order State_Tarija
+cat__Order State_Tasmania
+cat__Order State_Taza-Alhucemas-Taunat
+cat__Order State_Teherán
+cat__Order State_Tekirdag
+cat__Order State_Tel Aviv
+cat__Order State_Telangana
+cat__Order State_Tennessee
+cat__Order State_Ternópil
+cat__Order State_Territorio de la Capital Australiana
+cat__Order State_Territorio de la Capital Federal
+cat__Order State_Territorio del Norte
+cat__Order State_Tete
+cat__Order State_Texas
+cat__Order State_Th? Dô Hà N?i
+cat__Order State_Thiès
+cat__Order State_Tianjin
+cat__Order State_Tiflis
+cat__Order State_Timis
+cat__Order State_Tipaza
+cat__Order State_Tirol
+cat__Order State_Tizi Ouzou
+cat__Order State_Tlemcen
+cat__Order State_Tocantins
+cat__Order State_Tochigi
+cat__Order State_Tokat
+cat__Order State_Tokio
+cat__Order State_Tolima
+cat__Order State_Toscana
+cat__Order State_Tottori
+cat__Order State_Trebisonda
+cat__Order State_Trengganu
+cat__Order State_Trentino-Alto Adigio
+cat__Order State_Tripura
+cat__Order State_Turingia
+cat__Order State_Táchira
+cat__Order State_Tánger-Tetuán
+cat__Order State_Túnez
+cat__Order State_Ucayali
+cat__Order State_Ulsan
+cat__Order State_Ulán Bator
+cat__Order State_Umbría
+cat__Order State_Upsala
+cat__Order State_Usak
+cat__Order State_Utah
+cat__Order State_Utrecht
+cat__Order State_Uttar Pradesh
+cat__Order State_Uttarakhand
+cat__Order State_Uusimaa
+cat__Order State_Valenciana
+cat__Order State_Valle del Cauca
+cat__Order State_Vallée du Bandama
+cat__Order State_Valparaíso
+cat__Order State_Van
+cat__Order State_Vargas
+cat__Order State_Varna
+cat__Order State_Vaud
+cat__Order State_Veracruz
+cat__Order State_Vermont
+cat__Order State_Vest-Agder
+cat__Order State_Victoria
+cat__Order State_Viena
+cat__Order State_Villa Clara
+cat__Order State_Vilna
+cat__Order State_Virginia
+cat__Order State_Virginia Occidental
+cat__Order State_Visayas Occidental
+cat__Order State_Vitsyebsk
+cat__Order State_Vladímir
+cat__Order State_Vlorë
+cat__Order State_Volinia
+cat__Order State_Vorónezh
+cat__Order State_Vrancea
+cat__Order State_Vâlcea
+cat__Order State_Värmland
+cat__Order State_Västra Götaland
+cat__Order State_Véneto
+cat__Order State_Vínnytsia
+cat__Order State_Waikato
+cat__Order State_Washington
+cat__Order State_Wellington
+cat__Order State_Wisconsin
+cat__Order State_Xinjiang Uygur
+cat__Order State_Yakarta
+cat__Order State_Yalova
+cat__Order State_Yamaguchi
+cat__Order State_Yambol
+cat__Order State_Yaracuy
+cat__Order State_Yaroslavl
+cat__Order State_Yazd
+cat__Order State_Yevrey
+cat__Order State_Yibuti
+cat__Order State_Yobe
+cat__Order State_Yogyakarta
+cat__Order State_Yoro
+cat__Order State_Yucatán
+cat__Order State_Yunnan
+cat__Order State_Zacatecas
+cat__Order State_Zagrebacka
+cat__Order State_Zambezia
+cat__Order State_Zamfara
+cat__Order State_Zanyán
+cat__Order State_Zaporiyia
+cat__Order State_Zelanda
+cat__Order State_Zhambyl
+cat__Order State_Zhejiang
+cat__Order State_Zhytómyr
+cat__Order State_Ziguinchor
+cat__Order State_Zinder
+cat__Order State_Zulia
+cat__Order State_Zúrich
+cat__Order State_iauliai
+cat__Order State_ilina
+cat__Order State_Çanakkale
+cat__Order State_Équateur
+cat__Order State_Ústí nad Labem
+cat__Customer Segment_Consumer
+cat__Customer Segment_Corporate
+cat__Customer Segment_Home Office
+cat__Department Name_Apparel
+cat__Department Name_Book Shop
+cat__Department Name_Discs Shop
+cat__Department Name_Fan Shop
+cat__Department Name_Fitness
+cat__Department Name_Footwear
+cat__Department Name_Golf
+cat__Department Name_Health and Beauty 
+cat__Department Name_Outdoors
+cat__Department Name_Pet Shop
+cat__Department Name_Technology
+cat__Interaction_ShippingMode_OrderHour_First Class_Hour_0
+cat__Interaction_ShippingMode_OrderHour_First Class_Hour_1
+cat__Interaction_ShippingMode_OrderHour_First Class_Hour_10
+cat__Interaction_ShippingMode_OrderHour_First Class_Hour_11
+cat__Interaction_ShippingMode_OrderHour_First Class_Hour_12
+cat__Interaction_ShippingMode_OrderHour_First Class_Hour_13
+cat__Interaction_ShippingMode_OrderHour_First Class_Hour_14
+cat__Interaction_ShippingMode_OrderHour_First Class_Hour_15
+cat__Interaction_ShippingMode_OrderHour_First Class_Hour_16
+cat__Interaction_ShippingMode_OrderHour_First Class_Hour_17
+cat__Interaction_ShippingMode_OrderHour_First Class_Hour_18
+cat__Interaction_ShippingMode_OrderHour_First Class_Hour_19
+cat__Interaction_ShippingMode_OrderHour_First Class_Hour_2
+cat__Interaction_ShippingMode_OrderHour_First Class_Hour_20
+cat__Interaction_ShippingMode_OrderHour_First Class_Hour_21
+cat__Interaction_ShippingMode_OrderHour_First Class_Hour_22
+cat__Interaction_ShippingMode_OrderHour_First Class_Hour_23
+cat__Interaction_ShippingMode_OrderHour_First Class_Hour_3
+cat__Interaction_ShippingMode_OrderHour_First Class_Hour_4
+cat__Interaction_ShippingMode_OrderHour_First Class_Hour_5
+cat__Interaction_ShippingMode_OrderHour_First Class_Hour_6
+cat__Interaction_ShippingMode_OrderHour_First Class_Hour_7
+cat__Interaction_ShippingMode_OrderHour_First Class_Hour_8
+cat__Interaction_ShippingMode_OrderHour_First Class_Hour_9
+cat__Interaction_ShippingMode_OrderHour_Same Day_Hour_0
+cat__Interaction_ShippingMode_OrderHour_Same Day_Hour_1
+cat__Interaction_ShippingMode_OrderHour_Same Day_Hour_10
+cat__Interaction_ShippingMode_OrderHour_Same Day_Hour_11
+cat__Interaction_ShippingMode_OrderHour_Same Day_Hour_12
+cat__Interaction_ShippingMode_OrderHour_Same Day_Hour_13
+cat__Interaction_ShippingMode_OrderHour_Same Day_Hour_14
+cat__Interaction_ShippingMode_OrderHour_Same Day_Hour_15
+cat__Interaction_ShippingMode_OrderHour_Same Day_Hour_16
+cat__Interaction_ShippingMode_OrderHour_Same Day_Hour_17
+cat__Interaction_ShippingMode_OrderHour_Same Day_Hour_18
+cat__Interaction_ShippingMode_OrderHour_Same Day_Hour_19
+cat__Interaction_ShippingMode_OrderHour_Same Day_Hour_2
+cat__Interaction_ShippingMode_OrderHour_Same Day_Hour_20
+cat__Interaction_ShippingMode_OrderHour_Same Day_Hour_21
+cat__Interaction_ShippingMode_OrderHour_Same Day_Hour_22
+cat__Interaction_ShippingMode_OrderHour_Same Day_Hour_23
+cat__Interaction_ShippingMode_OrderHour_Same Day_Hour_3
+cat__Interaction_ShippingMode_OrderHour_Same Day_Hour_4
+cat__Interaction_ShippingMode_OrderHour_Same Day_Hour_5
+cat__Interaction_ShippingMode_OrderHour_Same Day_Hour_6
+cat__Interaction_ShippingMode_OrderHour_Same Day_Hour_7
+cat__Interaction_ShippingMode_OrderHour_Same Day_Hour_8
+cat__Interaction_ShippingMode_OrderHour_Same Day_Hour_9
+cat__Interaction_ShippingMode_OrderHour_Second Class_Hour_0
+cat__Interaction_ShippingMode_OrderHour_Second Class_Hour_1
+cat__Interaction_ShippingMode_OrderHour_Second Class_Hour_10
+cat__Interaction_ShippingMode_OrderHour_Second Class_Hour_11
+cat__Interaction_ShippingMode_OrderHour_Second Class_Hour_12
+cat__Interaction_ShippingMode_OrderHour_Second Class_Hour_13
+cat__Interaction_ShippingMode_OrderHour_Second Class_Hour_14
+cat__Interaction_ShippingMode_OrderHour_Second Class_Hour_15
+cat__Interaction_ShippingMode_OrderHour_Second Class_Hour_16
+cat__Interaction_ShippingMode_OrderHour_Second Class_Hour_17
+cat__Interaction_ShippingMode_OrderHour_Second Class_Hour_18
+cat__Interaction_ShippingMode_OrderHour_Second Class_Hour_19
+cat__Interaction_ShippingMode_OrderHour_Second Class_Hour_2
+cat__Interaction_ShippingMode_OrderHour_Second Class_Hour_20
+cat__Interaction_ShippingMode_OrderHour_Second Class_Hour_21
+cat__Interaction_ShippingMode_OrderHour_Second Class_Hour_22
+cat__Interaction_ShippingMode_OrderHour_Second Class_Hour_23
+cat__Interaction_ShippingMode_OrderHour_Second Class_Hour_3
+cat__Interaction_ShippingMode_OrderHour_Second Class_Hour_4
+cat__Interaction_ShippingMode_OrderHour_Second Class_Hour_5
+cat__Interaction_ShippingMode_OrderHour_Second Class_Hour_6
+cat__Interaction_ShippingMode_OrderHour_Second Class_Hour_7
+cat__Interaction_ShippingMode_OrderHour_Second Class_Hour_8
+cat__Interaction_ShippingMode_OrderHour_Second Class_Hour_9
+cat__Interaction_ShippingMode_OrderHour_Standard Class_Hour_0
+cat__Interaction_ShippingMode_OrderHour_Standard Class_Hour_1
+cat__Interaction_ShippingMode_OrderHour_Standard Class_Hour_10
+cat__Interaction_ShippingMode_OrderHour_Standard Class_Hour_11
+cat__Interaction_ShippingMode_OrderHour_Standard Class_Hour_12
+cat__Interaction_ShippingMode_OrderHour_Standard Class_Hour_13
+cat__Interaction_ShippingMode_OrderHour_Standard Class_Hour_14
+cat__Interaction_ShippingMode_OrderHour_Standard Class_Hour_15
+cat__Interaction_ShippingMode_OrderHour_Standard Class_Hour_16
+cat__Interaction_ShippingMode_OrderHour_Standard Class_Hour_17
+cat__Interaction_ShippingMode_OrderHour_Standard Class_Hour_18
+cat__Interaction_ShippingMode_OrderHour_Standard Class_Hour_19
+cat__Interaction_ShippingMode_OrderHour_Standard Class_Hour_2
+cat__Interaction_ShippingMode_OrderHour_Standard Class_Hour_20
+cat__Interaction_ShippingMode_OrderHour_Standard Class_Hour_21
+cat__Interaction_ShippingMode_OrderHour_Standard Class_Hour_22
+cat__Interaction_ShippingMode_OrderHour_Standard Class_Hour_23
+cat__Interaction_ShippingMode_OrderHour_Standard Class_Hour_3
+cat__Interaction_ShippingMode_OrderHour_Standard Class_Hour_4
+cat__Interaction_ShippingMode_OrderHour_Standard Class_Hour_5
+cat__Interaction_ShippingMode_OrderHour_Standard Class_Hour_6
+cat__Interaction_ShippingMode_OrderHour_Standard Class_Hour_7
+cat__Interaction_ShippingMode_OrderHour_Standard Class_Hour_8
+cat__Interaction_ShippingMode_OrderHour_Standard Class_Hour_9
+cat__Customer City_Aguadilla
+cat__Customer City_Alameda
+cat__Customer City_Albany
+cat__Customer City_Albuquerque
+cat__Customer City_Algonquin
+cat__Customer City_Alhambra
+cat__Customer City_Allentown
+cat__Customer City_Alpharetta
+cat__Customer City_Amarillo
+cat__Customer City_Anaheim
+cat__Customer City_Ann Arbor
+cat__Customer City_Annandale
+cat__Customer City_Annapolis
+cat__Customer City_Antioch
+cat__Customer City_Apex
+cat__Customer City_Apopka
+cat__Customer City_Arecibo
+cat__Customer City_Arlington
+cat__Customer City_Arlington Heights
+cat__Customer City_Asheboro
+cat__Customer City_Astoria
+cat__Customer City_Atlanta
+cat__Customer City_Augusta
+cat__Customer City_Aurora
+cat__Customer City_Austin
+cat__Customer City_Azusa
+cat__Customer City_Bakersfield
+cat__Customer City_Baldwin Park
+cat__Customer City_Ballwin
+cat__Customer City_Baltimore
+cat__Customer City_Bartlett
+cat__Customer City_Bay Shore
+cat__Customer City_Bayamon
+cat__Customer City_Bayonne
+cat__Customer City_Baytown
+cat__Customer City_Beaverton
+cat__Customer City_Bell Gardens
+cat__Customer City_Bellflower
+cat__Customer City_Bellingham
+cat__Customer City_Beloit
+cat__Customer City_Bend
+cat__Customer City_Bensalem
+cat__Customer City_Berwyn
+cat__Customer City_Billings
+cat__Customer City_Birmingham
+cat__Customer City_Bismarck
+cat__Customer City_Blacksburg
+cat__Customer City_Bloomfield
+cat__Customer City_Bolingbrook
+cat__Customer City_Bountiful
+cat__Customer City_Bowling Green
+cat__Customer City_Brandon
+cat__Customer City_Brentwood
+cat__Customer City_Bridgeton
+cat__Customer City_Brighton
+cat__Customer City_Bristol
+cat__Customer City_Brockton
+cat__Customer City_Broken Arrow
+cat__Customer City_Bronx
+cat__Customer City_Brooklyn
+cat__Customer City_Broomfield
+cat__Customer City_Brownsville
+cat__Customer City_Buena Park
+cat__Customer City_Buffalo
+cat__Customer City_Burnsville
+cat__Customer City_CA
+cat__Customer City_Caguas
+cat__Customer City_Campbell
+cat__Customer City_Canoga Park
+cat__Customer City_Canovanas
+cat__Customer City_Canton
+cat__Customer City_Canyon Country
+cat__Customer City_Carlisle
+cat__Customer City_Carlsbad
+cat__Customer City_Carmichael
+cat__Customer City_Carol Stream
+cat__Customer City_Carolina
+cat__Customer City_Carrollton
+cat__Customer City_Carson
+cat__Customer City_Cary
+cat__Customer City_Catonsville
+cat__Customer City_Cayey
+cat__Customer City_Cerritos
+cat__Customer City_Chambersburg
+cat__Customer City_Chandler
+cat__Customer City_Chapel Hill
+cat__Customer City_Charlotte
+cat__Customer City_Chesapeake
+cat__Customer City_Chicago
+cat__Customer City_Chicago Heights
+cat__Customer City_Chillicothe
+cat__Customer City_Chino
+cat__Customer City_Chino Hills
+cat__Customer City_Chula Vista
+cat__Customer City_Cicero
+cat__Customer City_Cincinnati
+cat__Customer City_Citrus Heights
+cat__Customer City_Clarksville
+cat__Customer City_Clearfield
+cat__Customer City_Clementon
+cat__Customer City_Cleveland
+cat__Customer City_Clovis
+cat__Customer City_College Station
+cat__Customer City_Colorado Springs
+cat__Customer City_Colton
+cat__Customer City_Columbia
+cat__Customer City_Columbus
+cat__Customer City_Compton
+cat__Customer City_Conway
+cat__Customer City_Cordova
+cat__Customer City_Corona
+cat__Customer City_Costa Mesa
+cat__Customer City_Crown Point
+cat__Customer City_Crystal Lake
+cat__Customer City_Cumberland
+cat__Customer City_Cupertino
+cat__Customer City_Cypress
+cat__Customer City_Dallas
+cat__Customer City_Daly City
+cat__Customer City_Danbury
+cat__Customer City_Davis
+cat__Customer City_Dayton
+cat__Customer City_Dearborn
+cat__Customer City_Decatur
+cat__Customer City_Del Rio
+cat__Customer City_Denton
+cat__Customer City_Denver
+cat__Customer City_Des Plaines
+cat__Customer City_Detroit
+cat__Customer City_Diamond Bar
+cat__Customer City_Dorchester Center
+cat__Customer City_Douglasville
+cat__Customer City_Doylestown
+cat__Customer City_Dubuque
+cat__Customer City_Duluth
+cat__Customer City_Dundalk
+cat__Customer City_Eagle Pass
+cat__Customer City_East Brunswick
+cat__Customer City_East Lansing
+cat__Customer City_Edinburg
+cat__Customer City_Edison
+cat__Customer City_El Cajon
+cat__Customer City_El Centro
+cat__Customer City_El Monte
+cat__Customer City_El Paso
+cat__Customer City_Elgin
+cat__Customer City_Elk Grove
+cat__Customer City_Elmhurst
+cat__Customer City_Elyria
+cat__Customer City_Encinitas
+cat__Customer City_Endicott
+cat__Customer City_Enfield
+cat__Customer City_Englewood
+cat__Customer City_Escondido
+cat__Customer City_Eugene
+cat__Customer City_Everett
+cat__Customer City_Ewa Beach
+cat__Customer City_Fairfield
+cat__Customer City_Far Rockaway
+cat__Customer City_Fargo
+cat__Customer City_Fayetteville
+cat__Customer City_Federal Way
+cat__Customer City_Findlay
+cat__Customer City_Florissant
+cat__Customer City_Flushing
+cat__Customer City_Folsom
+cat__Customer City_Fond Du Lac
+cat__Customer City_Fontana
+cat__Customer City_Forest Hills
+cat__Customer City_Fort Lauderdale
+cat__Customer City_Fort Washington
+cat__Customer City_Fort Worth
+cat__Customer City_Fountain Valley
+cat__Customer City_Frankfort
+cat__Customer City_Freehold
+cat__Customer City_Freeport
+cat__Customer City_Fremont
+cat__Customer City_Fresno
+cat__Customer City_Fullerton
+cat__Customer City_Gaithersburg
+cat__Customer City_Garden Grove
+cat__Customer City_Gardena
+cat__Customer City_Garland
+cat__Customer City_Germantown
+cat__Customer City_Gilroy
+cat__Customer City_Glen Burnie
+cat__Customer City_Glendale
+cat__Customer City_Glenview
+cat__Customer City_Goleta
+cat__Customer City_Goose Creek
+cat__Customer City_Granada Hills
+cat__Customer City_Grand Prairie
+cat__Customer City_Granite City
+cat__Customer City_Greeley
+cat__Customer City_Greensboro
+cat__Customer City_Greensburg
+cat__Customer City_Greenville
+cat__Customer City_Grove City
+cat__Customer City_Guayama
+cat__Customer City_Guaynabo
+cat__Customer City_Gwynn Oak
+cat__Customer City_Hacienda Heights
+cat__Customer City_Hagerstown
+cat__Customer City_Hamilton
+cat__Customer City_Hampton
+cat__Customer City_Hamtramck
+cat__Customer City_Hanford
+cat__Customer City_Hanover
+cat__Customer City_Harlingen
+cat__Customer City_Harvey
+cat__Customer City_Hawthorne
+cat__Customer City_Hayward
+cat__Customer City_Hempstead
+cat__Customer City_Henderson
+cat__Customer City_Hendersonville
+cat__Customer City_Henrico
+cat__Customer City_Hesperia
+cat__Customer City_Hialeah
+cat__Customer City_Hickory
+cat__Customer City_Highland
+cat__Customer City_Highland Park
+cat__Customer City_Hilliard
+cat__Customer City_Holland
+cat__Customer City_Hollister
+cat__Customer City_Hollywood
+cat__Customer City_Honolulu
+cat__Customer City_Houston
+cat__Customer City_Howell
+cat__Customer City_Humacao
+cat__Customer City_Huntington Beach
+cat__Customer City_Huntington Park
+cat__Customer City_Huntington Station
+cat__Customer City_Hyattsville
+cat__Customer City_Indianapolis
+cat__Customer City_Indio
+cat__Customer City_Irving
+cat__Customer City_Irvington
+cat__Customer City_Irwin
+cat__Customer City_Ithaca
+cat__Customer City_Jackson
+cat__Customer City_Jackson Heights
+cat__Customer City_Jacksonville
+cat__Customer City_Jamaica
+cat__Customer City_Jersey City
+cat__Customer City_Joliet
+cat__Customer City_Jonesboro
+cat__Customer City_Juana Diaz
+cat__Customer City_Kailua
+cat__Customer City_Kaneohe
+cat__Customer City_Katy
+cat__Customer City_Kenner
+cat__Customer City_Kent
+cat__Customer City_Knoxville
+cat__Customer City_La Crosse
+cat__Customer City_La Habra
+cat__Customer City_La Mesa
+cat__Customer City_La Mirada
+cat__Customer City_La Puente
+cat__Customer City_Laguna Hills
+cat__Customer City_Laguna Niguel
+cat__Customer City_Lake Forest
+cat__Customer City_Lakewood
+cat__Customer City_Lancaster
+cat__Customer City_Lansdale
+cat__Customer City_Laredo
+cat__Customer City_Las Cruces
+cat__Customer City_Las Vegas
+cat__Customer City_Lawrence
+cat__Customer City_Lawrenceville
+cat__Customer City_Lawton
+cat__Customer City_Lenoir
+cat__Customer City_Levittown
+cat__Customer City_Lewisville
+cat__Customer City_Lilburn
+cat__Customer City_Lindenhurst
+cat__Customer City_Lithonia
+cat__Customer City_Littleton
+cat__Customer City_Livermore
+cat__Customer City_Lockport
+cat__Customer City_Lodi
+cat__Customer City_Lombard
+cat__Customer City_Lompoc
+cat__Customer City_Long Beach
+cat__Customer City_Longmont
+cat__Customer City_Longview
+cat__Customer City_Los Angeles
+cat__Customer City_Louisville
+cat__Customer City_Loveland
+cat__Customer City_Lutz
+cat__Customer City_Lynn
+cat__Customer City_Lynnwood
+cat__Customer City_Lynwood
+cat__Customer City_Madera
+cat__Customer City_Madison
+cat__Customer City_Malden
+cat__Customer City_Manati
+cat__Customer City_Manchester
+cat__Customer City_Marietta
+cat__Customer City_Marion
+cat__Customer City_Marrero
+cat__Customer City_Martinez
+cat__Customer City_Martinsburg
+cat__Customer City_Massapequa
+cat__Customer City_Massillon
+cat__Customer City_Mayaguez
+cat__Customer City_Mcallen
+cat__Customer City_Mchenry
+cat__Customer City_Mechanicsburg
+cat__Customer City_Medford
+cat__Customer City_Medina
+cat__Customer City_Memphis
+cat__Customer City_Mentor
+cat__Customer City_Merced
+cat__Customer City_Meridian
+cat__Customer City_Mesa
+cat__Customer City_Mesquite
+cat__Customer City_Metairie
+cat__Customer City_Methuen
+cat__Customer City_Miami
+cat__Customer City_Michigan City
+cat__Customer City_Middletown
+cat__Customer City_Milford
+cat__Customer City_Mililani
+cat__Customer City_Milpitas
+cat__Customer City_Milwaukee
+cat__Customer City_Mission
+cat__Customer City_Mission Viejo
+cat__Customer City_Modesto
+cat__Customer City_Moline
+cat__Customer City_Montebello
+cat__Customer City_Moreno Valley
+cat__Customer City_Morganton
+cat__Customer City_Morristown
+cat__Customer City_Morrisville
+cat__Customer City_Mount Pleasant
+cat__Customer City_Mount Prospect
+cat__Customer City_Murfreesboro
+cat__Customer City_Muskegon
+cat__Customer City_Napa
+cat__Customer City_Nashville
+cat__Customer City_National City
+cat__Customer City_New Albany
+cat__Customer City_New Bedford
+cat__Customer City_New Braunfels
+cat__Customer City_New Brunswick
+cat__Customer City_New Castle
+cat__Customer City_New Haven
+cat__Customer City_New Orleans
+cat__Customer City_New York
+cat__Customer City_Newark
+cat__Customer City_Newburgh
+cat__Customer City_Norcross
+cat__Customer City_Norfolk
+cat__Customer City_Normal
+cat__Customer City_North Bergen
+cat__Customer City_North Hills
+cat__Customer City_North Hollywood
+cat__Customer City_North Las Vegas
+cat__Customer City_North Richland Hills
+cat__Customer City_North Tonawanda
+cat__Customer City_Norwalk
+cat__Customer City_O Fallon
+cat__Customer City_Oak Lawn
+cat__Customer City_Oakland
+cat__Customer City_Oceanside
+cat__Customer City_Ogden
+cat__Customer City_Olathe
+cat__Customer City_Ontario
+cat__Customer City_Opa Locka
+cat__Customer City_Opelousas
+cat__Customer City_Orange Park
+cat__Customer City_Oregon City
+cat__Customer City_Orlando
+cat__Customer City_Oviedo
+cat__Customer City_Oxnard
+cat__Customer City_Pacoima
+cat__Customer City_Painesville
+cat__Customer City_Palatine
+cat__Customer City_Palmdale
+cat__Customer City_Palo Alto
+cat__Customer City_Panorama City
+cat__Customer City_Paramount
+cat__Customer City_Parkville
+cat__Customer City_Pasadena
+cat__Customer City_Passaic
+cat__Customer City_Pawtucket
+cat__Customer City_Peabody
+cat__Customer City_Pekin
+cat__Customer City_Peoria
+cat__Customer City_Perth Amboy
+cat__Customer City_Pharr
+cat__Customer City_Philadelphia
+cat__Customer City_Phoenix
+cat__Customer City_Pico Rivera
+cat__Customer City_Piscataway
+cat__Customer City_Pittsburg
+cat__Customer City_Pittsfield
+cat__Customer City_Placentia
+cat__Customer City_Plainfield
+cat__Customer City_Plano
+cat__Customer City_Plymouth
+cat__Customer City_Pomona
+cat__Customer City_Pompano Beach
+cat__Customer City_Ponce
+cat__Customer City_Porterville
+cat__Customer City_Portland
+cat__Customer City_Potomac
+cat__Customer City_Poway
+cat__Customer City_Powder Springs
+cat__Customer City_Princeton
+cat__Customer City_Provo
+cat__Customer City_Quincy
+cat__Customer City_Raleigh
+cat__Customer City_Rancho Cordova
+cat__Customer City_Rancho Cucamonga
+cat__Customer City_Redmond
+cat__Customer City_Rego Park
+cat__Customer City_Reno
+cat__Customer City_Reseda
+cat__Customer City_Revere
+cat__Customer City_Reynoldsburg
+cat__Customer City_Rialto
+cat__Customer City_Richardson
+cat__Customer City_Richmond
+cat__Customer City_Ridgewood
+cat__Customer City_Rio Grande
+cat__Customer City_Rio Rancho
+cat__Customer City_Riverside
+cat__Customer City_Rochester
+cat__Customer City_Rock Hill
+cat__Customer City_Rome
+cat__Customer City_Roseburg
+cat__Customer City_Rosemead
+cat__Customer City_Roseville
+cat__Customer City_Roswell
+cat__Customer City_Round Rock
+cat__Customer City_Rowland Heights
+cat__Customer City_Sacramento
+cat__Customer City_Saginaw
+cat__Customer City_Saint Charles
+cat__Customer City_Saint Louis
+cat__Customer City_Saint Paul
+cat__Customer City_Saint Peters
+cat__Customer City_Salem
+cat__Customer City_Salina
+cat__Customer City_Salinas
+cat__Customer City_Salt Lake City
+cat__Customer City_San Antonio
+cat__Customer City_San Benito
+cat__Customer City_San Bernardino
+cat__Customer City_San Diego
+cat__Customer City_San Francisco
+cat__Customer City_San Jose
+cat__Customer City_San Juan
+cat__Customer City_San Marcos
+cat__Customer City_San Pablo
+cat__Customer City_San Pedro
+cat__Customer City_San Ramon
+cat__Customer City_San Sebastian
+cat__Customer City_Sandusky
+cat__Customer City_Sanford
+cat__Customer City_Santa Ana
+cat__Customer City_Santa Clara
+cat__Customer City_Santa Cruz
+cat__Customer City_Santa Fe
+cat__Customer City_Santa Maria
+cat__Customer City_Santee
+cat__Customer City_Scottsdale
+cat__Customer City_Seattle
+cat__Customer City_Sheboygan
+cat__Customer City_Silver Spring
+cat__Customer City_Simi Valley
+cat__Customer City_Smyrna
+cat__Customer City_South El Monte
+cat__Customer City_South Gate
+cat__Customer City_South Ozone Park
+cat__Customer City_South Richmond Hill
+cat__Customer City_South San Francisco
+cat__Customer City_Spokane
+cat__Customer City_Spring
+cat__Customer City_Spring Valley
+cat__Customer City_Springfield
+cat__Customer City_Stafford
+cat__Customer City_Stamford
+cat__Customer City_Staten Island
+cat__Customer City_Stockbridge
+cat__Customer City_Stockton
+cat__Customer City_Stone Mountain
+cat__Customer City_Strongsville
+cat__Customer City_Sugar Land
+cat__Customer City_Summerville
+cat__Customer City_Sumner
+cat__Customer City_Sun Valley
+cat__Customer City_Sunnyvale
+cat__Customer City_Sylmar
+cat__Customer City_Tallahassee
+cat__Customer City_Tampa
+cat__Customer City_Taunton
+cat__Customer City_Taylor
+cat__Customer City_Temecula
+cat__Customer City_Tempe
+cat__Customer City_Tinley Park
+cat__Customer City_Toa Alta
+cat__Customer City_Toa Baja
+cat__Customer City_Toms River
+cat__Customer City_Tonawanda
+cat__Customer City_Tracy
+cat__Customer City_Troy
+cat__Customer City_Trujillo Alto
+cat__Customer City_Tucson
+cat__Customer City_Tulare
+cat__Customer City_Tustin
+cat__Customer City_Union
+cat__Customer City_Union City
+cat__Customer City_Upland
+cat__Customer City_Vacaville
+cat__Customer City_Vallejo
+cat__Customer City_Valrico
+cat__Customer City_Van Nuys
+cat__Customer City_Vega Baja
+cat__Customer City_Ventura
+cat__Customer City_Victorville
+cat__Customer City_Virginia Beach
+cat__Customer City_Visalia
+cat__Customer City_Vista
+cat__Customer City_Waipahu
+cat__Customer City_Walnut
+cat__Customer City_Warren
+cat__Customer City_Washington
+cat__Customer City_Watsonville
+cat__Customer City_Waukegan
+cat__Customer City_Wayne
+cat__Customer City_Webster
+cat__Customer City_Weslaco
+cat__Customer City_West Chester
+cat__Customer City_West Covina
+cat__Customer City_West Haven
+cat__Customer City_West Jordan
+cat__Customer City_West Lafayette
+cat__Customer City_West New York
+cat__Customer City_West Orange
+cat__Customer City_Westerville
+cat__Customer City_Westland
+cat__Customer City_Westminster
+cat__Customer City_Wheaton
+cat__Customer City_Wheeling
+cat__Customer City_Wichita
+cat__Customer City_Wilkes Barre
+cat__Customer City_Williamsport
+cat__Customer City_Wilmington
+cat__Customer City_Winnetka
+cat__Customer City_Winter Park
+cat__Customer City_Woodbridge
+cat__Customer City_Woodside
+cat__Customer City_Woonsocket
+cat__Customer City_Wyandotte
+cat__Customer City_Wyoming
+cat__Customer City_Yauco
+cat__Customer City_Yonkers
+cat__Customer City_York
+cat__Customer City_Ypsilanti
+cat__Customer City_Yuma
+cat__Customer City_Zanesville
+cat__Type_CASH
+cat__Type_DEBIT
+cat__Type_PAYMENT
+cat__Type_TRANSFER
+cat__Customer State_91732
+cat__Customer State_95758
+cat__Customer State_AL
+cat__Customer State_AR
+cat__Customer State_AZ
+cat__Customer State_CA
+cat__Customer State_CO
+cat__Customer State_CT
+cat__Customer State_DC
+cat__Customer State_DE
+cat__Customer State_FL
+cat__Customer State_GA
+cat__Customer State_HI
+cat__Customer State_IA
+cat__Customer State_ID
+cat__Customer State_IL
+cat__Customer State_IN
+cat__Customer State_KS
+cat__Customer State_KY
+cat__Customer State_LA
+cat__Customer State_MA
+cat__Customer State_MD
+cat__Customer State_MI
+cat__Customer State_MN
+cat__Customer State_MO
+cat__Customer State_MT
+cat__Customer State_NC
+cat__Customer State_ND
+cat__Customer State_NJ
+cat__Customer State_NM
+cat__Customer State_NV
+cat__Customer State_NY
+cat__Customer State_OH
+cat__Customer State_OK
+cat__Customer State_OR
+cat__Customer State_PA
+cat__Customer State_PR
+cat__Customer State_RI
+cat__Customer State_SC
+cat__Customer State_TN
+cat__Customer State_TX
+cat__Customer State_UT
+cat__Customer State_VA
+cat__Customer State_WA
+cat__Customer State_WI
+cat__Customer State_WV
