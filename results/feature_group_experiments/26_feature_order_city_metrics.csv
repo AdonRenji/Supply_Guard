@@ -1,0 +1,2 @@
+Model,Feature Count,Random State,Threshold,Accuracy (%),Precision (%),Recall (%),F1-score (%),ROC-AUC (%),True Negatives,False Positives,False Negatives,True Positives,Training Time (seconds)
+26-feature model (+ Order City),26,42,0.41,84.92,85.28,87.62,86.43,91.91,13314,2994,2451,17345,217.12

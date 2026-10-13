@@ -1,0 +1,11 @@
+Order Region,Orders,Actual_Late_Risk_Rate,Predicted_Late_Risk_Rate,Accuracy,False_Positives,False_Negatives
+Western Europe,12351,55.39,61.17,67.5,2364,1650
+Central America,5272,54.74,61.63,64.47,1118,755
+Northern Europe,4360,53.12,59.06,67.41,840,581
+Southern Europe,4192,54.99,60.31,67.96,783,560
+South America,2960,53.48,58.38,65.3,586,441
+Southeast Asia,1749,55.63,61.46,65.58,352,250
+Oceania,1436,55.15,63.09,66.99,294,180
+Caribbean,1349,50.63,47.89,67.61,200,237
+Eastern Asia,1316,55.24,62.84,67.63,263,163
+South Asia,1119,56.03,62.02,67.2,217,150

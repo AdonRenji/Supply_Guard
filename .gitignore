@@ -42,3 +42,5 @@ Thumbs.db
 # Keep results/ because they contain final evaluation outputs
 # results/ is intentionally NOT ignored
 saved_model/supplyguard_final_model.joblib
+
+saved_model_25_features/supplyguard_25_model.joblib

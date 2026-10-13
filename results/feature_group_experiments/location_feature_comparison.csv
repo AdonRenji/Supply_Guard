@@ -1,0 +1,3 @@
+Model,Features Retained,Features Removed,Accuracy (%),Precision (%),Recall (%),F1 Score (%),ROC-AUC (%),Training Time (seconds),True Negatives,False Positives,False Negatives,True Positives
+Model A - Original 31 Features,31,0,86.4,86.18,89.56,87.84,93.13,277.27,13464,2844,2066,17730
+Model B - Without Customer Location,28,3,83.57,83.46,87.34,85.36,90.8,263.34,12881,3427,2506,17290

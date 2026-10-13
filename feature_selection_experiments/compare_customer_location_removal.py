@@ -4,6 +4,8 @@
 # ============================================================
 
 import time
+from pathlib import Path
+
 import pandas as pd
 
 from sklearn.model_selection import train_test_split
@@ -22,32 +24,81 @@ from sklearn.metrics import (
     confusion_matrix
 )
 
-# ------------------------------------------------------------
+# ============================================================
 # 1. SETTINGS
-# ------------------------------------------------------------
+# ============================================================
 
-DATASET_PATH = "DataCoSupplyChainDataset.csv"
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+DATASET_PATH = BASE_DIR / "DataCoSupplyChainDataset.csv"
+
+OUTPUT_DIR = BASE_DIR / "results" / "feature_group_experiments"
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+OUTPUT_PATH = OUTPUT_DIR / "location_feature_comparison.csv"
+
 THRESHOLD = 0.41
 RANDOM_STATE = 42
+TEST_SIZE = 0.20
 
-# ------------------------------------------------------------
+# ============================================================
 # 2. LOAD DATASET
-# ------------------------------------------------------------
+# ============================================================
 
-print("=" * 65)
-print("SUPPLYGUARD - LOCATION FEATURE COMPARISON")
-print("=" * 65)
+print("=" * 70)
+print("SUPPLYGUARD - CUSTOMER LOCATION FEATURE COMPARISON")
+print("=" * 70)
+
+if not DATASET_PATH.exists():
+    raise FileNotFoundError(
+        f"Dataset not found: {DATASET_PATH}\n"
+        "Make sure DataCoSupplyChainDataset.csv is in the main "
+        "SupplyGuard project folder."
+    )
 
 df = pd.read_csv(DATASET_PATH, encoding="latin1")
 
-print("Dataset loaded successfully!")
+print("\nDataset loaded successfully!")
 print("Rows:", len(df))
 print("Columns:", len(df.columns))
 
-# ------------------------------------------------------------
+# ============================================================
 # 3. CREATE DATE FEATURES
 # Match train_final_model.py
-# ------------------------------------------------------------
+# ============================================================
+
+required_raw_columns = [
+    "order date (DateOrders)",
+    "Shipping Mode",
+    "Late_delivery_risk",
+    "Days for shipment (scheduled)",
+    "Customer Country",
+    "Category Name",
+    "Order Item Quantity",
+    "Market",
+    "Order Region",
+    "Order Country",
+    "Order State",
+    "Customer Segment",
+    "Department Name",
+    "Order Item Product Price",
+    "Order Item Discount Rate",
+    "Sales",
+    "Customer City",
+    "Type",
+    "Customer State"
+]
+
+missing_columns = [
+    col for col in required_raw_columns
+    if col not in df.columns
+]
+
+if missing_columns:
+    raise ValueError(
+        "Required dataset columns are missing:\n"
+        + "\n".join(missing_columns)
+    )
 
 df["DateOrders"] = pd.to_datetime(
     df["order date (DateOrders)"],
@@ -102,9 +153,9 @@ df["Interaction_ShippingMode_OrderHour"] = (
     + df["Order Hour"].astype(str)
 )
 
-# ------------------------------------------------------------
+# ============================================================
 # 4. DEFINE THE ORIGINAL 31 FEATURES
-# ------------------------------------------------------------
+# ============================================================
 
 features = [
     "Shipping Mode",
@@ -142,8 +193,9 @@ features = [
 
 target = "Late_delivery_risk"
 
-# Model B removes only the three customer-location features.
-location_features = [
+# Remove customer location only.
+# Keep destination information in the reduced model.
+customer_location_features = [
     "Customer Country",
     "Customer City",
     "Customer State"
@@ -151,9 +203,10 @@ location_features = [
 
 reduced_features = [
     feature for feature in features
-    if feature not in location_features
+    if feature not in customer_location_features
 ]
 
+# These definitions match train_final_model.py.
 categorical_features = [
     "Shipping Mode",
     "Customer Country",
@@ -191,29 +244,46 @@ numerical_features = [
     "Is Night"
 ]
 
-# ------------------------------------------------------------
+# Confirm that every feature is assigned to a preprocessing group.
+assert set(categorical_features + numerical_features) == set(features)
+assert len(categorical_features) + len(numerical_features) == len(features)
+
+# ============================================================
 # 5. PREPARE DATA AND SPLIT ONCE
-# ------------------------------------------------------------
+# ============================================================
 
 X = df[features].copy()
 y = df[target].copy()
 
+if y.isna().any():
+    raise ValueError(
+        "The target column contains missing values. "
+        "Resolve these before training."
+    )
+
+if not set(y.unique()).issubset({0, 1}):
+    raise ValueError(
+        "Late_delivery_risk must contain only 0 and 1."
+    )
+
 X_train, X_test, y_train, y_test = train_test_split(
     X,
     y,
-    test_size=0.20,
+    test_size=TEST_SIZE,
     random_state=RANDOM_STATE,
     stratify=y
 )
 
-print("\nTraining samples:", len(X_train))
-print("Testing samples:", len(X_test))
+print("\nTraining rows:", len(X_train))
+print("Testing rows:", len(X_test))
+print("Threshold:", THRESHOLD)
 print("Model A features:", len(features))
 print("Model B features:", len(reduced_features))
+print("Removed from Model B:", customer_location_features)
 
-# ------------------------------------------------------------
-# 6. CREATE AND EVALUATE EACH MODEL
-# ------------------------------------------------------------
+# ============================================================
+# 6. BUILD AND EVALUATE EACH MODEL
+# ============================================================
 
 def evaluate_model(model_name, selected_features):
     print(f"\nTraining {model_name}...")
@@ -255,11 +325,13 @@ def evaluate_model(model_name, selected_features):
         ))
     ])
 
+    # Fit on training data only.
     model.fit(
         X_train[selected_features],
         y_train
     )
 
+    # Evaluate both models on the exact same test rows.
     probabilities = model.predict_proba(
         X_test[selected_features]
     )[:, 1]
@@ -268,11 +340,18 @@ def evaluate_model(model_name, selected_features):
         probabilities >= THRESHOLD
     ).astype(int)
 
+    cm = confusion_matrix(
+        y_test,
+        predictions,
+        labels=[0, 1]
+    )
+
     elapsed = time.time() - start_time
 
     results = {
         "Model": model_name,
-        "Feature Count": len(selected_features),
+        "Features Retained": len(selected_features),
+        "Features Removed": len(features) - len(selected_features),
         "Accuracy (%)": round(
             accuracy_score(y_test, predictions) * 100, 2
         ),
@@ -294,21 +373,31 @@ def evaluate_model(model_name, selected_features):
         "ROC-AUC (%)": round(
             roc_auc_score(y_test, probabilities) * 100, 2
         ),
-        "Training Time (seconds)": round(elapsed, 2)
+        "Training Time (seconds)": round(elapsed, 2),
+        "True Negatives": int(cm[0, 0]),
+        "False Positives": int(cm[0, 1]),
+        "False Negatives": int(cm[1, 0]),
+        "True Positives": int(cm[1, 1])
     }
 
     print("\nConfusion matrix:")
-    print(confusion_matrix(y_test, predictions))
+    print(cm)
+
+    print(f"Accuracy:  {results['Accuracy (%)']:.2f}%")
+    print(f"Precision: {results['Precision (%)']:.2f}%")
+    print(f"Recall:    {results['Recall (%)']:.2f}%")
+    print(f"F1 Score:  {results['F1 Score (%)']:.2f}%")
+    print(f"ROC-AUC:   {results['ROC-AUC (%)']:.2f}%")
+    print(f"Training time: {elapsed:.2f} seconds")
 
     return results
 
-
-# ------------------------------------------------------------
-# 7. COMPARE BOTH MODELS
-# ------------------------------------------------------------
+# ============================================================
+# 7. RUN BOTH EXPERIMENTS
+# ============================================================
 
 results_a = evaluate_model(
-    "Model A - All 31 Features",
+    "Model A - Original 31 Features",
     features
 )
 
@@ -317,17 +406,26 @@ results_b = evaluate_model(
     reduced_features
 )
 
+# ============================================================
+# 8. DISPLAY AND SAVE COMPARISON
+# ============================================================
+
 comparison = pd.DataFrame([results_a, results_b])
 
-print("\n" + "=" * 90)
-print("FINAL COMPARISON")
-print("=" * 90)
+print("\n" + "=" * 100)
+print("FINAL CUSTOMER LOCATION COMPARISON")
+print("=" * 100)
+
 print(comparison.to_string(index=False))
 
 comparison.to_csv(
-    "location_feature_comparison.csv",
+    OUTPUT_PATH,
     index=False
 )
 
-print("\nResults saved to location_feature_comparison.csv")
-print("Existing saved model files were not modified.")
+print("\nResults saved to:")
+print(OUTPUT_PATH)
+
+print("\nExisting saved model and Flask app were not modified.")
+print("Review the metrics before deciding which features to retain.")
+print("=" * 70)
