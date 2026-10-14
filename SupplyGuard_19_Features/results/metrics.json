@@ -1,0 +1,32 @@
+[
+    {
+        "features": 19,
+        "trees": 200,
+        "threshold": 0.41,
+        "accuracy_percent": 83.885,
+        "precision_percent": 83.306,
+        "recall_percent": 88.306,
+        "f1_percent": 85.733,
+        "roc_auc_percent": 91.178,
+        "true_negative": 12805,
+        "false_positive": 3503,
+        "false_negative": 2315,
+        "true_positive": 17481,
+        "training_seconds": 114.42
+    },
+    {
+        "features": 19,
+        "trees": 200,
+        "threshold": 0.5,
+        "accuracy_percent": 79.36,
+        "precision_percent": 88.042,
+        "recall_percent": 72.156,
+        "f1_percent": 79.311,
+        "roc_auc_percent": 91.178,
+        "true_negative": 14368,
+        "false_positive": 1940,
+        "false_negative": 5512,
+        "true_positive": 14284,
+        "training_seconds": 114.42
+    }
+]

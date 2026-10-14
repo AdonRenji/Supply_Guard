@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | SupplyGuard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="page">
+        <header class="hero">
+            <div class="logo">SG</div>
+            <div class="brand-content">
+                <h1>SupplyGuard</h1>
+                <p>AI-Powered Shipment Delay Prediction</p>
+            </div>
+        </header>
+
+        <main class="auth-card">
+            <h2>Welcome Back</h2>
+            <p>Sign in to access your dashboard.</p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="alert {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('login') }}">
+                <div class="field">
+                    <label for="email">Email Address</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        autocomplete="email"
+                        required
+                    >
+                </div>
+
+                <div class="field">
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="submit-button">
+                    Login to SupplyGuard
+                </button>
+            </form>
+
+            <p class="auth-link">
+                Don't have an account?
+                <a href="{{ url_for('register') }}">Create an account</a>
+            </p>
+        </main>
+    </div>
+</body>
+</html>

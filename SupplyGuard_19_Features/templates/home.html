@@ -1,0 +1,709 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SupplyGuard | Shipment Risk Assessment</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        .step-indicator {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .step-tab {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .step-tab.active {
+            display: flex;
+        }
+
+        .time-selectors {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .time-selectors select {
+            width: 100%;
+            min-width: 0;
+        }
+
+        .section-heading {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .sales-field input[readonly] {
+            cursor: not-allowed;
+            opacity: 0.9;
+        }
+
+        .step-navigation {
+            display: flex;
+            gap: 16px;
+            align-items: stretch;
+        }
+
+        .step-navigation .submit-button {
+            flex: 1;
+        }
+
+        .single-button .next-button {
+            width: 100%;
+        }
+
+        .result-card {
+            margin-top: 24px;
+        }
+
+        @media (max-width: 600px) {
+            .step-indicator {
+                grid-template-columns: 1fr;
+            }
+
+            .step-navigation {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="page">
+
+    <!-- Header -->
+    <header class="hero">
+        <div class="logo">SG</div>
+
+        <div class="brand-content">
+            <h1>SupplyGuard</h1>
+            <p>AI-Powered Shipment Delay Prediction System</p>
+        </div>
+
+        {% if session.get('email') %}
+        <div class="user-profile-group">
+            <div class="user-actions">
+                <span class="welcome-user">
+                    Welcome, {{ session.get('name', 'User') }}
+                </span>
+
+                <a href="{{ url_for('logout') }}" class="logout-button">
+                    Logout
+                </a>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                <div class="user-flash-badge {{ category }}" role="status">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endwith %}
+        </div>
+        {% endif %}
+    </header>
+
+    <!-- Introduction -->
+    <section class="intro">
+        <h2>Shipment Risk Assessment</h2>
+        <p>
+            Enter shipment and product details to estimate
+            the probability of late delivery.
+        </p>
+    </section>
+
+    <!-- Error message -->
+    {% if error %}
+    <div class="alert error" role="alert">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    <!-- Step indicator -->
+    <div class="step-indicator">
+        <div id="shipmentTab" class="step-tab active">
+            Shipment Information
+        </div>
+
+        <div id="productTab" class="step-tab">
+            Product Information
+        </div>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="progress-track">
+        <div id="progressFill" class="progress-fill"
+             style="width: 50%;"></div>
+    </div>
+
+    <form method="POST"
+          action="{{ url_for('home') }}"
+          id="riskForm">
+
+        <!-- ======================================
+             STEP 1: SHIPMENT INFORMATION
+        ======================================= -->
+        <section id="shipmentStep" class="form-step active">
+            <div class="form-section">
+                <div class="form-grid">
+
+                    <div class="field">
+                        <label for="shipping_mode">Shipping Mode</label>
+
+                        <select id="shipping_mode"
+                                name="shipping_mode" required>
+                            <option value="">Select shipping mode</option>
+
+                            {% for option in options.shipping_mode %}
+                            <option value="{{ option }}"
+                                {% if form_data.get('shipping_mode', '') == option %}
+                                    selected
+                                {% endif %}>
+                                {{ option }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="days_scheduled">
+                            Scheduled Shipping Days
+                        </label>
+
+                        <select id="days_scheduled"
+                                name="days_scheduled" required>
+                            <option value="">Select scheduled days</option>
+
+                            {% for day in days_options %}
+                            <option value="{{ day }}"
+                                {% if form_data.get('days_scheduled', '')|string == day|string %}
+                                    selected
+                                {% endif %}>
+                                {{ day }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="market">Market</label>
+
+                        <select id="market" name="market" required>
+                            <option value="">Select market</option>
+
+                            {% for option in options.market %}
+                            <option value="{{ option }}"
+                                {% if form_data.get('market', '') == option %}
+                                    selected
+                                {% endif %}>
+                                {{ option }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="order_region">Order Region</label>
+
+                        <select id="order_region"
+                                name="order_region" required>
+                            <option value="">Select region</option>
+
+                            {% for option in options.order_region %}
+                            <option value="{{ option }}"
+                                {% if form_data.get('order_region', '') == option %}
+                                    selected
+                                {% endif %}>
+                                {{ option }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="order_country">Order Country</label>
+
+                        <select id="order_country"
+                                name="order_country" required>
+                            <option value="">Select country</option>
+
+                            {% for option in options.order_country %}
+                            <option value="{{ option }}"
+                                {% if form_data.get('order_country', '') == option %}
+                                    selected
+                                {% endif %}>
+                                {{ option }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="order_state">Order State</label>
+
+                        <select id="order_state"
+                                name="order_state" required>
+                            <option value="">Select state</option>
+
+                            {% for option in options.order_state %}
+                            <option value="{{ option }}"
+                                {% if form_data.get('order_state', '') == option %}
+                                    selected
+                                {% endif %}>
+                                {{ option }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="order_date">Order Date</label>
+
+                        <input
+                            type="date"
+                            id="order_date"
+                            name="order_date"
+                            min="{{ min_date }}"
+                            max="{{ max_date }}"
+                            value="{{ form_data.get('order_date', '') }}"
+                            required
+                        >
+                    </div>
+
+                    <!-- Order time: manual typing with AM/PM option -->
+                    <div class="field">
+                        <label for="order_time_manual">Order Time</label>
+
+                        <div class="time-input-group">
+                            <input
+                                type="text"
+                                id="order_time_manual"
+                                name="order_time_manual"
+                                placeholder="HH:MM (e.g. 09:30)"
+                                maxlength="5"
+                                autocomplete="off"
+                                required
+                            >
+
+                            <select id="order_period" name="order_period" aria-label="Select AM or PM">
+                                <option value="AM" {% if form_data.get('order_period') == 'AM' %}selected{% endif %}>AM</option>
+                                <option value="PM" {% if form_data.get('order_period') == 'PM' %}selected{% endif %}>PM</option>
+                            </select>
+                        </div>
+
+                        <!-- Combined 24-hr time for backend -->
+                        <input
+                            type="hidden"
+                            id="order_time"
+                            name="order_time"
+                            value="{{ form_data.get('order_time', '') }}"
+                        >
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="step-navigation single-button">
+                <button type="button"
+                        class="next-button"
+                        id="nextButton">
+                    Next →
+                </button>
+            </div>
+        </section>
+
+        <!-- ======================================
+             STEP 2: PRODUCT INFORMATION
+        ======================================= -->
+        <section id="productStep" class="form-step">
+            <div class="form-section">
+
+                <h3 class="section-heading">
+                    📦 Product Information
+                </h3>
+
+                <div class="form-grid">
+
+                    <div class="field">
+                        <label for="quantity">Order Item Quantity</label>
+
+                        <select id="quantity" name="quantity" required>
+                            <option value="">Select quantity</option>
+
+                            {% for qty in quantity_options %}
+                            <option value="{{ qty }}"
+                                {% if form_data.get('quantity', '')|string == qty|string %}
+                                    selected
+                                {% endif %}>
+                                {{ qty }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="product_price">
+                            Product Price (per item)
+                        </label>
+
+                        <input
+                            type="number"
+                            id="product_price"
+                            name="product_price"
+                            min="0"
+                            step="any"
+                            placeholder="Enter product price"
+                            value="{{ form_data.get('product_price', '') }}"
+                            required
+                        >
+                    </div>
+
+                    <div class="field">
+                        <label for="discount_rate">Discount Rate</label>
+
+                        <select id="discount_rate"
+                                name="discount_rate" required>
+                            <option value="">Select discount rate</option>
+
+                            {% for rate in discount_options %}
+                            <option value="{{ rate.value }}"
+                                {% if form_data.get('discount_rate', '') and (form_data.get('discount_rate', '')|float == rate.value|float) %}
+                                    selected
+                                {% endif %}>
+                                {{ rate.label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="field sales-field">
+                        <label for="sales">Sales</label>
+
+                        <input
+                            type="number"
+                            id="sales"
+                            name="sales"
+                            step="any"
+                            value="{{ form_data.get('sales', '') }}"
+                            placeholder="Calculated automatically"
+                            readonly
+                        >
+                    </div>
+
+                    <div class="field">
+                        <label for="type">Order Type</label>
+
+                        <select id="type" name="type" required>
+                            <option value="">Select order type</option>
+
+                            {% for option in options.type %}
+                            <option value="{{ option }}"
+                                {% if form_data.get('type', '') == option %}
+                                    selected
+                                {% endif %}>
+                                {{ option }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="step-navigation">
+                <button type="button"
+                        class="back-button"
+                        id="backButton">
+                    ← Back
+                </button>
+
+                <button type="submit" class="submit-button">
+                    Predict Shipment Risk
+                </button>
+            </div>
+        </section>
+
+    </form>
+
+    <!-- ======================================
+         PREDICTION RESULT
+    ======================================= -->
+    {% if result %}
+    <section class="result-card
+        {% if result.prediction %}risk{% else %}safe{% endif %}">
+
+        <p class="result-eyebrow">PREDICTION RESULT</p>
+
+        <h2>{{ result.label }}</h2>
+
+        <div class="probability">
+            {{ "%.2f"|format(result.probability) }}%
+        </div>
+
+        <p class="probability-label">
+            Late Delivery Probability
+        </p>
+
+        <div class="meter">
+            <div class="meter-fill"
+                 style="width: {{ result.probability }}%;">
+            </div>
+        </div>
+
+        <p>
+            Decision threshold: 41%
+        </p>
+    </section>
+    {% endif %}
+
+    <footer>
+        <p>
+            SupplyGuard — AI-Powered Shipment Delay Prediction System
+        </p>
+    </footer>
+
+</div>
+
+<script>
+    const shipmentStep = document.getElementById("shipmentStep");
+    const productStep = document.getElementById("productStep");
+    const shipmentTab = document.getElementById("shipmentTab");
+    const productTab = document.getElementById("productTab");
+    const progressFill = document.getElementById("progressFill");
+
+    const timeManualInput = document.getElementById("order_time_manual");
+    const timePeriodSelect = document.getElementById("order_period");
+    const orderTimeInput = document.getElementById("order_time");
+
+    const riskForm = document.getElementById("riskForm");
+
+    // Convert typed 12-hr time + AM/PM into 24-hr HH:MM for backend
+    function syncOrderTime() {
+        const rawTime = timeManualInput.value.trim();
+        const period = timePeriodSelect.value;
+
+        if (!rawTime) {
+            orderTimeInput.value = "";
+            return false;
+        }
+
+        const match = rawTime.match(/^([0-1]?[0-9]|2[0-3]):([0-5][0-9])$/);
+        if (!match) {
+            orderTimeInput.value = "";
+            return false;
+        }
+
+        let hour = parseInt(match[1], 10);
+        const minute = match[2];
+
+        if (period === "PM" && hour < 12) {
+            hour += 12;
+        } else if (period === "AM" && hour === 12) {
+            hour = 0;
+        }
+
+        orderTimeInput.value = String(hour).padStart(2, "0") + ":" + minute;
+        return true;
+    }
+
+    // Auto-colon as user types e.g. "09" -> "09:"
+    timeManualInput.addEventListener("input", function (e) {
+        let val = this.value.replace(/[^0-9:]/g, "");
+        if (val.length === 2 && !val.includes(":") && e.inputType !== "deleteContentBackward") {
+            val = val + ":";
+        }
+        this.value = val;
+        syncOrderTime();
+    });
+
+    timePeriodSelect.addEventListener("change", syncOrderTime);
+
+    // Restore displayed time if Flask sends back order_time
+    function restoreTimeDisplay() {
+        const saved24 = orderTimeInput.value;
+        if (!saved24) return;
+
+        const match = saved24.match(/^([01]\d|2[0-3]):([0-5]\d)$/);
+        if (match) {
+            let hour = parseInt(match[1], 10);
+            const minute = match[2];
+            let period = "AM";
+
+            if (hour >= 12) {
+                period = "PM";
+                if (hour > 12) hour -= 12;
+            } else if (hour === 0) {
+                hour = 12;
+            }
+
+            timeManualInput.value = String(hour).padStart(2, "0") + ":" + minute;
+            timePeriodSelect.value = period;
+        }
+    }
+    restoreTimeDisplay();
+
+    // Show one step at a time.
+    function showStep(step) {
+        const onShipmentPage = step === 1;
+
+        shipmentStep.classList.toggle("active", onShipmentPage);
+        productStep.classList.toggle("active", !onShipmentPage);
+
+        shipmentTab.classList.toggle("active", onShipmentPage);
+        productTab.classList.toggle("active", !onShipmentPage);
+
+        shipmentTab.style.display = onShipmentPage ? "flex" : "none";
+        productTab.style.display = onShipmentPage ? "none" : "flex";
+
+        progressFill.style.width = onShipmentPage ? "50%" : "100%";
+    }
+
+    // Validate only the shipment page before moving forward.
+    function nextStep() {
+        const fields = shipmentStep.querySelectorAll(
+            "input:not([type='hidden']), select"
+        );
+
+        for (const field of fields) {
+            if (!field.checkValidity()) {
+                field.reportValidity();
+                return;
+            }
+        }
+
+        if (!syncOrderTime()) {
+            timeManualInput.setCustomValidity("Please enter a valid time in HH:MM format (e.g. 09:30).");
+            timeManualInput.reportValidity();
+            timeManualInput.setCustomValidity("");
+            return;
+        }
+
+        showStep(2);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function previousStep() {
+        showStep(1);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    document.getElementById("nextButton").addEventListener(
+        "click",
+        nextStep
+    );
+
+    document.getElementById("backButton").addEventListener(
+        "click",
+        previousStep
+    );
+
+    // Calculate Sales using quantity, item price and discount.
+    function calculateSales() {
+        const quantity = document.getElementById("quantity").value;
+        const price = document.getElementById("product_price").value;
+        const discount = document.getElementById("discount_rate").value;
+        const salesField = document.getElementById("sales");
+
+        if (quantity === "" || price === "" || discount === "") {
+            salesField.value = "";
+            return;
+        }
+
+        const q = Number(quantity);
+        const p = Number(price);
+        const d = Number(discount);
+
+        if (
+            !Number.isFinite(q) ||
+            !Number.isFinite(p) ||
+            !Number.isFinite(d) ||
+            q < 1 ||
+            p < 0 ||
+            d < 0 ||
+            d > 1
+        ) {
+            salesField.value = "";
+            return;
+        }
+
+        salesField.value = (q * p * (1 - d)).toFixed(2);
+    }
+
+    document.getElementById("quantity").addEventListener(
+        "change", calculateSales
+    );
+
+    document.getElementById("product_price").addEventListener(
+        "input", calculateSales
+    );
+
+    document.getElementById("discount_rate").addEventListener(
+        "change", calculateSales
+    );
+
+    // Validate the active step before moving forward.
+    // The final form submission validates every field.
+    riskForm.addEventListener("submit", function (event) {
+        calculateSales();
+
+        if (!syncOrderTime()) {
+            event.preventDefault();
+            showStep(1);
+
+            timeManualInput.setCustomValidity("Please enter a valid time in HH:MM format (e.g. 09:30).");
+            timeManualInput.reportValidity();
+            timeManualInput.setCustomValidity("");
+
+            return;
+        }
+
+        const invalidField = Array.from(
+            riskForm.querySelectorAll(
+                "input:not([type='hidden']), select"
+            )
+        ).find(field => !field.checkValidity());
+
+        if (invalidField) {
+            event.preventDefault();
+
+            if (shipmentStep.contains(invalidField)) {
+                showStep(1);
+            } else {
+                showStep(2);
+            }
+
+            invalidField.reportValidity();
+        }
+    });
+
+    // Restore the appropriate step after a server response.
+    {% if result %}
+        showStep(2);
+    {% elif error %}
+        showStep(2);
+    {% else %}
+        showStep(1);
+    {% endif %}
+
+    calculateSales();
+</script>
+</body>
+</html>

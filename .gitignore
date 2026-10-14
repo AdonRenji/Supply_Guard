@@ -44,3 +44,5 @@ Thumbs.db
 saved_model/supplyguard_final_model.joblib
 
 saved_model_25_features/supplyguard_25_model.joblib
+
+SupplyGuard_19_Features/saved_model/supplyguard_19_model.joblib

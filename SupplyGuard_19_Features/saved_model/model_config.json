@@ -1,0 +1,55 @@
+{
+    "features": [
+        "Shipping Mode",
+        "Days for shipment (scheduled)",
+        "Order Item Quantity",
+        "Market",
+        "Order Region",
+        "Order Country",
+        "Order State",
+        "Order Item Product Price",
+        "Order Item Discount Rate",
+        "Sales",
+        "Type",
+        "Order Month",
+        "Order Day",
+        "Order Day of Week",
+        "Order Hour",
+        "Is Weekend",
+        "Order Week of Year",
+        "Is Night",
+        "Interaction_ShippingMode_OrderHour"
+    ],
+    "categorical_features": [
+        "Shipping Mode",
+        "Market",
+        "Order Region",
+        "Order Country",
+        "Order State",
+        "Type",
+        "Interaction_ShippingMode_OrderHour"
+    ],
+    "numeric_features": [
+        "Days for shipment (scheduled)",
+        "Order Item Quantity",
+        "Order Item Product Price",
+        "Order Item Discount Rate",
+        "Sales",
+        "Order Month",
+        "Order Day",
+        "Order Day of Week",
+        "Order Hour",
+        "Is Weekend",
+        "Order Week of Year",
+        "Is Night"
+    ],
+    "target": "Late_delivery_risk",
+    "thresholds": [
+        0.41,
+        0.5
+    ],
+    "test_size": 0.2,
+    "random_state": 42,
+    "n_estimators": 200,
+    "training_seconds": 114.42
+}
