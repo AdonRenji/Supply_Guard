@@ -1,3 +1,0 @@
-Model,Accuracy,Precision,Recall,F1 Score,ROC-AUC,Training Time (seconds),Training Samples,Testing Samples
-Random Forest,86.4,86.18,89.56,87.84,93.13,228.01,144415,36104
-SVM,72.42,78.47,68.5,73.15,79.21,920.35,30000,36104

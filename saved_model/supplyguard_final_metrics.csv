@@ -1,2 +1,0 @@
-Model,Estimators,Max Depth,Min Samples Leaf,Class Weight,Random State,Features,Threshold,Training Samples,Testing Samples,Accuracy,Precision,Recall,F1 Score,ROC-AUC,Training Time Seconds
-Random Forest,500,None,2,None,42,31,0.41,144415,36104,86.40039884777309,86.17672790901138,89.56354819155385,87.83750309635869,93.12601207072998,264.0970060825348

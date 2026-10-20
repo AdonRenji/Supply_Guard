@@ -1,3 +1,0 @@
-Model,Feature Count,Training Rows,Validation Rows,Training Start,Training End,Validation Start,Validation End,Threshold,Accuracy (%),Precision (%),Recall (%),F1 Score (%),ROC-AUC (%),Training Time (seconds),True Negatives,False Positives,False Negatives,True Positives
-Model A - Eight features,8,108311,36104,2015-01-01 00:00:00,2016-09-24 21:11:00,2016-09-24 21:11:00,2017-04-22 15:17:00,0.41,66.89,68.44,73.09,70.69,75.51,288.02,9735,6648,5306,14415
-Model B - Six features,6,108311,36104,2015-01-01 00:00:00,2016-09-24 21:11:00,2016-09-24 21:11:00,2017-04-22 15:17:00,0.41,66.89,68.1,74.08,70.97,74.53,9824.0,9539,6844,5111,14610

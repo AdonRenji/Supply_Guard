@@ -1,2 +1,0 @@
-Model,Feature Count,Train Rows,Test Rows,Random State,Threshold,Accuracy (%),Precision (%),Recall (%),F1-score (%),ROC-AUC (%),Training Time (seconds),True Negatives,False Positives,False Negatives,True Positives
-SupplyGuard 25-feature Random Forest,25,144415,36104,42,0.41,84.84,84.06,89.29,86.6,91.93,224.34,12956,3352,2120,17676

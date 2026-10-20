@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Results | SupplyGuard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="result-body">
+<div class="result-page-container">
+
+    <!-- Top Header -->
+    <header class="hero result-hero">
+        <div class="logo">SG</div>
+
+        <div class="brand-content">
+            <h1>SupplyGuard</h1>
+            <p>Smarter Predictions. Safer Deliveries.</p>
+        </div>
+
+        {% if session.get('email') %}
+        <div class="user-actions">
+            <span class="welcome-user">
+                Welcome, {{ session.get('name', 'User') }} (Manager)
+            </span>
+
+            <a href="{{ url_for('logout') }}" class="logout-button">
+                Logout
+            </a>
+        </div>
+        {% endif %}
+    </header>
+
+    <!-- Main Results Card -->
+    <main class="prediction-results-card">
+
+        <!-- Card Top Bar: Back Button & Metadata -->
+        <div class="results-top-bar">
+            {% if order %}
+            <a href="{{ url_for('home', lookup_id=order.order_id) }}" class="back-pill-btn">
+                ← Back to Order {{ order.order_id }}
+            </a>
+            {% else %}
+            <a href="{{ url_for('manual_assessment') }}" class="back-pill-btn">
+                ← Back to Manual Calculator
+            </a>
+            {% endif %}
+
+            <div class="meta-pills">
+                {% if result.order_id %}
+                <span class="meta-tag" style="background: #e0e7ff; color: #3730a3; border-color: #c7d2fe;">
+                    <span class="meta-icon">📦</span> Order ID: <strong>{{ result.order_id }}</strong>
+                </span>
+                {% endif %}
+                <span class="meta-tag">
+                    <span class="meta-icon">📋</span> Prediction ID: <strong>{{ result.prediction_id }}</strong>
+                </span>
+                <span class="meta-tag">
+                    <span class="meta-icon">🕒</span> {{ result.timestamp }}
+                </span>
+            </div>
+        </div>
+
+        <!-- Section Title -->
+        <div class="results-header-title">
+            <div class="cube-icon-badge">📦</div>
+            <div>
+                <h2>Shipment Prediction Results</h2>
+                <p>AI-powered delivery risk assessment</p>
+            </div>
+        </div>
+
+        <!-- Risk Status Banner with Circular Gauge -->
+        <div class="risk-status-banner {% if result.is_late %}high-risk{% else %}low-risk{% endif %}">
+            <div class="risk-info-left">
+                <div class="status-indicator-badge">
+                    {% if result.is_late %}!{% else %}✓{% endif %}
+                </div>
+                <div class="status-text">
+                    <span class="status-eyebrow">Predicted Risk</span>
+                    <h3>{{ result.label }}</h3>
+                    <p>{{ result.description }}</p>
+                </div>
+            </div>
+
+            <div class="risk-gauge-right">
+                <div class="radial-gauge-wrapper">
+                    <svg viewBox="0 0 100 100" class="radial-gauge-svg">
+                        <circle class="gauge-track" cx="50" cy="50" r="40" />
+                        <circle
+                            class="gauge-progress {% if result.is_late %}gauge-high{% else %}gauge-low{% endif %}"
+                            cx="50" cy="50" r="40"
+                            style="stroke-dashoffset: {{ result.stroke_offset }};"
+                        />
+                    </svg>
+                    <div class="gauge-center-text">
+                        <span class="gauge-percent">{{ result.probability_int }}%</span>
+                        <span class="gauge-caption">Risk Probability</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if order and order['items'] %}
+        <!-- Associated Order Items Card -->
+        <div class="detail-card" style="margin-bottom: 24px; padding: 22px 24px; background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius-md);">
+            <div class="detail-card-header" style="margin-bottom: 14px;">
+                <span class="card-icon">📦</span>
+                <h4>Associated Order Products (Order ID: {{ order.order_id }})</h4>
+            </div>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 13.5px;">
+                    <thead>
+                        <tr style="background: #f8fafc; text-align: left; color: var(--text-secondary); border-bottom: 1px solid var(--border);">
+                            <th style="padding: 10px 12px; width: 90px;">Product ID</th>
+                            <th style="padding: 10px 12px;">Product Name</th>
+                            <th style="padding: 10px 12px; width: 100px; text-align: right;">Unit Price</th>
+                            <th style="padding: 10px 12px; width: 80px; text-align: center;">Qty</th>
+                            <th style="padding: 10px 12px; width: 90px; text-align: right;">Discount</th>
+                            <th style="padding: 10px 12px; width: 110px; text-align: right;">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in order['items'] %}
+                        <tr style="border-bottom: 1px solid #f1f5f9;">
+                            <td style="padding: 10px 12px; font-family: monospace; color: var(--muted);">#{{ item.product_id }}</td>
+                            <td style="padding: 10px 12px; font-weight: 600; color: var(--text);">{{ item.product_name }}</td>
+                            <td style="padding: 10px 12px; text-align: right;">${{ "%.2f"|format(item.product_price) }}</td>
+                            <td style="padding: 10px 12px; text-align: center; font-weight: 600;">{{ item.quantity }}</td>
+                            <td style="padding: 10px 12px; text-align: right; color: var(--muted);">{{ (item.discount_rate * 100)|round|int }}%</td>
+                            <td style="padding: 10px 12px; text-align: right; font-weight: 700; color: var(--primary);">${{ "%.2f"|format(item.sales) }}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr style="background: #f8fafc; font-weight: 700;">
+                            <td colspan="5" style="padding: 10px 12px; text-align: right; color: var(--text);">Total Order Amount:</td>
+                            <td style="padding: 10px 12px; text-align: right; color: var(--primary); font-family: monospace; font-size: 15px;">${{ "%.2f"|format(order.total_amount) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- 2-Column Structured Feature Cards Grid -->
+        <div class="result-details-grid">
+
+            <!-- Column 1 -->
+            <div class="grid-column">
+
+                <!-- 1. Shipment Details -->
+                <div class="detail-card">
+                    <div class="detail-card-header">
+                        <span class="card-icon">🚚</span>
+                        <h4>Shipment Details</h4>
+                    </div>
+                    <div class="kv-row">
+                        <span class="kv-label">Shipping Mode</span>
+                        <strong class="kv-value">{{ result.shipping_mode }}</strong>
+                    </div>
+                    <div class="kv-row">
+                        <span class="kv-label">Days for Shipment (Scheduled)</span>
+                        <strong class="kv-value">{{ result.days_scheduled }}</strong>
+                    </div>
+                </div>
+
+                <!-- 2. Location -->
+                <div class="detail-card">
+                    <div class="detail-card-header">
+                        <span class="card-icon">📍</span>
+                        <h4>Location</h4>
+                    </div>
+                    <div class="kv-row">
+                        <span class="kv-label">Order Region</span>
+                        <strong class="kv-value">{{ result.order_region }}</strong>
+                    </div>
+                    <div class="kv-row">
+                        <span class="kv-label">Order Country</span>
+                        <strong class="kv-value">{{ result.order_country }}</strong>
+                    </div>
+                    <div class="kv-row">
+                        <span class="kv-label">Order State</span>
+                        <strong class="kv-value">{{ result.order_state }}</strong>
+                    </div>
+                </div>
+
+                <!-- 3. Recommended Actions -->
+                <div class="detail-card actions-card">
+                    <div class="detail-card-header">
+                        <span class="card-icon">💡</span>
+                        <h4>Recommended Actions</h4>
+                    </div>
+                    <ol class="action-steps-list">
+                        {% for action in result.recommendations %}
+                        <li>
+                            <span class="step-badge">{{ loop.index }}</span>
+                            <span class="step-text">{{ action }}</span>
+                        </li>
+                        {% endfor %}
+                    </ol>
+                </div>
+
+            </div>
+
+            <!-- Column 2 -->
+            <div class="grid-column">
+
+                <!-- 4. Order Details -->
+                <div class="detail-card">
+                    <div class="detail-card-header">
+                        <span class="card-icon">📦</span>
+                        <h4>Order Details</h4>
+                    </div>
+                    <div class="kv-row">
+                        <span class="kv-label">Order Item Quantity</span>
+                        <strong class="kv-value">{{ result.quantity }}</strong>
+                    </div>
+                    <div class="kv-row">
+                        <span class="kv-label">Order Item Product Price</span>
+                        <strong class="kv-value">{{ result.product_price }}</strong>
+                    </div>
+                    <div class="kv-row">
+                        <span class="kv-label">Order Item Discount Rate</span>
+                        <strong class="kv-value">{{ result.discount_rate }}</strong>
+                    </div>
+                    <div class="kv-row">
+                        <span class="kv-label">Sales</span>
+                        <strong class="kv-value">{{ result.sales }}</strong>
+                    </div>
+                    <div class="kv-row">
+                        <span class="kv-label">Order Type</span>
+                        <strong class="kv-value">{{ result.order_type }}</strong>
+                    </div>
+                </div>
+
+                <!-- 5. Timing Information -->
+                <div class="detail-card">
+                    <div class="detail-card-header">
+                        <span class="card-icon">📅</span>
+                        <h4>Timing Information</h4>
+                    </div>
+                    <div class="kv-row">
+                        <span class="kv-label">Order Month</span>
+                        <strong class="kv-value">{{ result.order_month }}</strong>
+                    </div>
+                    <div class="kv-row">
+                        <span class="kv-label">Order Day</span>
+                        <strong class="kv-value">{{ result.order_day }}</strong>
+                    </div>
+                    <div class="kv-row">
+                        <span class="kv-label">Order Day of Week</span>
+                        <strong class="kv-value">{{ result.order_day_name }}</strong>
+                    </div>
+                    <div class="kv-row">
+                        <span class="kv-label">Order Hour</span>
+                        <strong class="kv-value">{{ result.order_hour }}:00</strong>
+                    </div>
+                    <div class="kv-row">
+                        <span class="kv-label">Is Weekend</span>
+                        <strong class="kv-value">{{ result.is_weekend }}</strong>
+                    </div>
+                    <div class="kv-row">
+                        <span class="kv-label">Order Week of Year</span>
+                        <strong class="kv-value">{{ result.order_week }}</strong>
+                    </div>
+                    <div class="kv-row">
+                        <span class="kv-label">Is Night</span>
+                        <strong class="kv-value">{{ result.is_night }}</strong>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- 6. Key Insight (Full Width) -->
+        <div class="key-insight-card">
+            <div class="insight-header">
+                <span class="insight-icon">ℹ️</span>
+                <h4>Key Insight</h4>
+            </div>
+            <p class="insight-body">
+                {{ result.key_insight }}
+            </p>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>SupplyGuard — AI-Powered Shipment Delay Prediction System</p>
+    </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,20 @@
+# SQLite database
+supplyguard.db
+*.db
+*.sqlite3
+
+# Python bytecode & caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.tmp
+
+# Environment & User data
+.env
+users.json.tmp
+
+# Large trained ML model — keep locally, don't upload
+saved_model/supplyguard_19_model.joblib
+
+
+users.json

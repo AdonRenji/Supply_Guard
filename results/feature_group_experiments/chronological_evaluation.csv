@@ -1,2 +1,0 @@
-Model,Feature Count,Accuracy (%),Precision (%),Recall (%),F1 Score (%),ROC-AUC (%),Threshold,Training Time (seconds),True Negatives,False Positives,False Negatives,True Positives
-Eight Operational Features - Chronological,8,66.80700199423887,67.78680622503788,74.82896670551867,71.1340206185567,75.37278693402195,0.41,418.66,9354,7017,4967,14766

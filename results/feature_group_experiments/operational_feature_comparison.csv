@@ -1,2 +1,0 @@
-Model,Feature Count,Accuracy (%),Precision (%),Recall (%),F1 Score (%),ROC-AUC (%),Training Time (seconds),True Negatives,False Positives,False Negatives,True Positives
-Eight Operational Features,8,83.15,81.55,89.53,85.35,92.29,340.74,12297,4011,2072,17724

@@ -1,3 +1,0 @@
-Model,Feature Count,Accuracy (%),Precision (%),Recall (%),F1 Score (%),ROC-AUC (%),Training Time (seconds)
-Model A - All 31 Features,31,86.4,86.18,89.56,87.84,93.13,360.44
-Model B - Without Customer Location,28,83.57,83.46,87.34,85.36,90.8,294.56

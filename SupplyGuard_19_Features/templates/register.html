@@ -79,6 +79,14 @@
                     >
                 </div>
 
+                <div class="field">
+                    <label for="role">Account Type</label>
+                    <select id="role" name="role" required style="width: 100%; height: 42px; border-radius: var(--radius-sm); border: 1.5px solid var(--border); padding: 0 12px; font-size: 14px; font-weight: 600;">
+                        <option value="customer" selected>🛒 Customer (Place Orders & Track Deliveries)</option>
+                        <option value="manager">👔 Manager (Inspect Orders & Predict Late-Delivery Risk)</option>
+                    </select>
+                </div>
+
                 <button type="submit" class="submit-button">
                     Create Account
                 </button>

@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Order Portal | SupplyGuard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .portal-nav {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            background: #ffffff;
+            padding: 10px 18px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+        .portal-nav a {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 16px;
+            border-radius: var(--radius-full);
+            text-decoration: none;
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            transition: all var(--transition-fast);
+        }
+        .portal-nav a:hover {
+            background: #f1f5f9;
+            color: var(--primary);
+        }
+        .portal-nav a.active {
+            background: var(--primary);
+            color: #ffffff;
+            box-shadow: var(--shadow-button);
+        }
+        .order-card {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 28px 32px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 32px;
+        }
+        .order-section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text);
+            margin: 0 0 18px 0;
+            padding-bottom: 12px;
+            border-bottom: 1.5px solid #f1f5f9;
+        }
+        .order-section-title .section-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: var(--primary-light);
+            color: var(--primary);
+            font-size: 16px;
+        }
+        .items-table-wrapper {
+            overflow-x: auto;
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+        }
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13.5px;
+        }
+        .items-table th {
+            background: #f8fafc;
+            color: var(--text-secondary);
+            font-weight: 700;
+            text-align: left;
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+        .items-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+        }
+        .items-table tr:last-child td {
+            border-bottom: none;
+        }
+        .items-table select,
+        .items-table input {
+            height: 38px;
+            padding: 0 10px;
+            font-size: 13px;
+        }
+        .remove-item-btn {
+            background: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        .remove-item-btn:hover {
+            background: #dc2626;
+            color: #ffffff;
+        }
+        .add-item-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #eff6ff;
+            color: var(--primary);
+            border: 1.5px dashed #bfdbfe;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        .add-item-btn:hover {
+            background: #dbeafe;
+            border-color: var(--primary);
+        }
+        .order-total-bar {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 24px;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
+            margin-top: 18px;
+        }
+        .order-total-bar .total-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--muted);
+        }
+        .order-total-bar .total-amount {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .submit-order-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            height: 52px;
+            margin-top: 24px;
+            background: var(--accent-gradient);
+            color: #ffffff;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: var(--shadow-button);
+            transition: all var(--transition-base);
+        }
+        /* Multi-step Checkout Stepper */
+        .checkout-stepper-wrap {
+            margin: 10px 0 24px;
+        }
+        .checkout-stepper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 640px;
+            margin: 0 auto 16px;
+        }
+        .checkout-step-pill {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #ffffff;
+            border: 1.5px solid var(--border);
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            user-select: none;
+            transition: all var(--transition-fast);
+            box-shadow: var(--shadow-sm);
+        }
+        .checkout-step-pill:hover {
+            border-color: #cbd5e1;
+            background: #f8fafc;
+        }
+        .step-pill-num {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 800;
+            background: #e2e8f0;
+            color: #64748b;
+            transition: all var(--transition-fast);
+        }
+        .step-pill-text {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            transition: color var(--transition-fast);
+        }
+        .checkout-step-pill.active {
+            border-color: var(--primary);
+            background: #eff6ff;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+        .checkout-step-pill.active .step-pill-num {
+            background: var(--primary);
+            color: #ffffff;
+        }
+        .checkout-step-pill.active .step-pill-text {
+            color: var(--primary);
+        }
+        .checkout-step-pill.completed .step-pill-num {
+            background: #16a34a;
+            color: #ffffff;
+        }
+        .checkout-step-pill.completed {
+            border-color: #bbf7d0;
+            background: #f0fdf4;
+        }
+        .checkout-step-pill.completed .step-pill-text {
+            color: #15803d;
+        }
+        .stepper-connector {
+            flex: 1;
+            height: 2.5px;
+            background: #e2e8f0;
+            margin: 0 10px;
+            border-radius: 2px;
+            transition: background var(--transition-fast);
+        }
+        .stepper-connector.completed {
+            background: #16a34a;
+        }
+        .form-step-screen {
+            display: none;
+            animation: fadeInStep 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .form-step-screen.active {
+            display: block;
+        }
+        @keyframes fadeInStep {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .wizard-nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+        .wizard-back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: #f1f5f9;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        .wizard-back-btn:hover {
+            background: #e2e8f0;
+            color: var(--text);
+        }
+        .wizard-next-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 13px 28px;
+            background: var(--primary);
+            color: #ffffff;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 14.5px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: var(--shadow-button);
+            transition: all var(--transition-fast);
+            margin-left: auto;
+        }
+        .wizard-next-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-button-hover);
+        }
+        .wizard-submit-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 32px;
+            background: var(--accent-gradient);
+            color: #ffffff;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 15.5px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: var(--shadow-button);
+            transition: all var(--transition-base);
+            margin-left: auto;
+        }
+        .wizard-submit-btn:hover {
+            background: var(--accent-gradient-hover);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-button-hover);
+        }
+        @media (max-width: 680px) {
+            .step-pill-text { display: none; }
+            .checkout-step-pill { padding: 6px; }
+            .stepper-connector { margin: 0 6px; }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+
+    <!-- Top Header -->
+    <header class="hero">
+        <div class="logo">SG</div>
+        <div class="brand-content">
+            <h1>SupplyGuard</h1>
+            <p>Customer Order Placement Portal</p>
+        </div>
+
+        {% if session.get('email') %}
+        <div class="user-profile-group">
+            <div class="user-actions">
+                <span class="welcome-user">Welcome, {{ session.get('name', 'User') }} {% if session.get('role') == 'customer' %}(Customer){% endif %}</span>
+                {% if session.get('role') == 'manager' %}
+                <a href="{{ url_for('home') }}" class="logout-button" style="background: var(--primary); color: #ffffff; margin-right: 6px;">Manager Dashboard →</a>
+                {% endif %}
+                <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
+            </div>
+        </div>
+        {% else %}
+        <div class="user-actions">
+            <a href="{{ url_for('login') }}" class="logout-button">Customer Login</a>
+        </div>
+        {% endif %}
+    </header>
+
+    <!-- Intro -->
+    <section class="intro">
+        <h2>Place a Customer Order</h2>
+        <p>Select products from our live catalogue, configure delivery destination and shipping method, and submit to generate your tracked Order ID.</p>
+    </section>
+
+    <!-- Flash / Error Messages -->
+    {% if error %}
+    <div class="alert error" role="alert">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+        <div class="alert {{ category }}" role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+    {% endwith %}
+
+    <!-- Wizard Stepper Navigation -->
+    <div class="checkout-stepper-wrap">
+        <div class="checkout-stepper">
+            <div class="checkout-step-pill active" id="stepPill1" onclick="validateAndGoToStep(1)">
+                <span class="step-pill-num" id="stepNum1">1</span>
+                <span class="step-pill-text">Customer Details</span>
+            </div>
+            <div class="stepper-connector" id="connector1"></div>
+            <div class="checkout-step-pill" id="stepPill2" onclick="validateAndGoToStep(2)">
+                <span class="step-pill-num" id="stepNum2">2</span>
+                <span class="step-pill-text">Order Items & Promo</span>
+            </div>
+            <div class="stepper-connector" id="connector2"></div>
+            <div class="checkout-step-pill" id="stepPill3" onclick="validateAndGoToStep(3)">
+                <span class="step-pill-num" id="stepNum3">3</span>
+                <span class="step-pill-text">Shipping & Delivery</span>
+            </div>
+        </div>
+        <div class="progress-track" style="max-width: 640px; margin: 0 auto;">
+            <div id="checkoutProgressFill" class="progress-fill" style="width: 33.3%;"></div>
+        </div>
+    </div>
+
+    <form method="POST" action="{{ url_for('place_order') }}" id="orderForm">
+
+        <!-- ============================================== -->
+        <!-- SCREEN 1: CUSTOMER INFORMATION & TRANSACTION   -->
+        <!-- ============================================== -->
+        <section class="order-card form-step-screen active" id="stepScreen1">
+            <h3 class="order-section-title">
+                <span class="section-icon">👤</span> Customer Details & Transaction
+                <span style="font-size: 13px; font-weight: 600; color: var(--muted); margin-left: auto;">Step 1 of 3</span>
+            </h3>
+            <p style="color: var(--muted); font-size: 13.5px; margin-top: -8px; margin-bottom: 18px;">
+                Confirm your account contact information and payment method for this shipment order.
+            </p>
+
+            <div class="form-grid">
+                <div class="field">
+                    <label for="customer_name">Customer Full Name</label>
+                    <input type="text" id="customer_name" name="customer_name"
+                           placeholder="e.g. John Doe"
+                           value="{{ form_data.get('customer_name', session.get('name', '')) }}"
+                           required maxlength="100">
+                </div>
+
+                <div class="field">
+                    <label for="customer_email">Customer Email Address</label>
+                    <input type="email" id="customer_email" name="customer_email"
+                           placeholder="e.g. john.doe@example.com"
+                           value="{{ form_data.get('customer_email', session.get('email', '')) }}"
+                           required maxlength="254">
+                </div>
+
+                <div class="field">
+                    <label for="order_type">Payment / Transaction Type</label>
+                    <select id="order_type" name="order_type" required>
+                        <option value="">Select payment type</option>
+                        {% for t in options.type %}
+                        <option value="{{ t }}" {% if form_data.get('order_type', 'DEBIT') == t %}selected{% endif %}>
+                            {{ t }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="order_date">Order Date</label>
+                    <input type="date" id="order_date" name="order_date"
+                           min="{{ min_date }}" max="{{ max_date }}"
+                           value="{{ form_data.get('order_date', current_date) }}"
+                           required>
+                </div>
+
+                <div class="field">
+                    <label for="order_time_manual">Order Time (HH:MM)</label>
+                    <div class="time-input-group">
+                        <input type="text" id="order_time_manual" name="order_time_manual"
+                               placeholder="HH:MM (e.g. 10:30)" maxlength="5" autocomplete="off"
+                               value="{{ form_data.get('order_time_manual', current_time_display) }}" required>
+                        <select id="order_period" name="order_period" aria-label="Select AM or PM">
+                            <option value="AM" {% if current_period == 'AM' %}selected{% endif %}>AM</option>
+                            <option value="PM" {% if current_period == 'PM' %}selected{% endif %}>PM</option>
+                        </select>
+                    </div>
+                    <input type="hidden" id="order_time" name="order_time" value="{{ form_data.get('order_time', current_time_24) }}">
+                </div>
+            </div>
+
+            <div class="wizard-nav-bar">
+                <div></div>
+                <button type="button" class="wizard-next-btn" onclick="validateAndGoToStep(2)">
+                    Proceed to Order Items (Step 2) →
+                </button>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- SCREEN 2: PRODUCT CATALOGUE & CART             -->
+        <!-- ============================================== -->
+        <section class="order-card form-step-screen" id="stepScreen2">
+            <h3 class="order-section-title">
+                <span class="section-icon">📦</span> Order Items & Product Selection
+                <span style="font-size: 13px; font-weight: 600; color: var(--muted); margin-left: auto;">Step 2 of 3</span>
+            </h3>
+            <p style="color: var(--muted); font-size: 13.5px; margin-top: -8px; margin-bottom: 14px;">
+                Demonstration Catalogue from DataCo Dataset (118 products available). You can add multiple products to this single order.
+            </p>
+
+            <div class="items-table-wrapper">
+                <table class="items-table" id="itemsTable">
+                    <thead>
+                        <tr>
+                            <th style="min-width: 280px;">Product Name & Category</th>
+                            <th style="width: 120px;">Unit Price ($)</th>
+                            <th style="width: 90px;">Quantity</th>
+                            <th style="width: 130px;">Item Total ($)</th>
+                            <th style="width: 80px; text-align: center;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="itemsTbody">
+                        <!-- Default Row 1 -->
+                        <tr class="item-row" data-index="0">
+                            <td>
+                                <select name="product_id[]" class="product-select" required>
+                                    <option value="">Select a product...</option>
+                                    {% for p in products %}
+                                    <option value="{{ p.product_id }}" data-price="{{ '%.2f'|format(p.price) }}" data-name="{{ p.product_name }}">
+                                        [{{ p.category_name }}] {{ p.product_name }} - ${{ '%.2f'|format(p.price) }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                                <input type="hidden" name="product_name[]" class="product-name-input">
+                                <input type="hidden" name="discount_rate[]" class="discount-rate-input" value="0.00">
+                            </td>
+                            <td>
+                                <input type="number" name="product_price[]" class="product-price-input" step="0.01" readonly style="background: #f1f5f9; cursor: not-allowed;">
+                            </td>
+                            <td>
+                                <select name="quantity[]" class="quantity-select" required>
+                                    {% for q in quantity_options %}
+                                    <option value="{{ q }}" {% if q == 1 %}selected{% endif %}>{{ q }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td>
+                                <input type="number" name="item_sales[]" class="item-sales-input" step="0.01" readonly style="background: #f1f5f9; font-weight: 700; color: #0f172a; cursor: not-allowed;">
+                            </td>
+                            <td style="text-align: center;">
+                                <button type="button" class="remove-item-btn" title="Remove Item" disabled>✕</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <button type="button" class="add-item-btn" id="addItemBtn">
+                ➕ Add Another Product
+            </button>
+
+            <!-- Promo / Coupon Code Section -->
+            <div class="promo-box" style="margin-top: 18px; padding: 16px 20px; background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: var(--radius-md); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px;">
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <span style="font-size: 14px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 6px;">
+                        🎟️ Have a Promotional Coupon Code?
+                    </span>
+                    <span style="font-size: 12.5px; color: var(--muted);">
+                        Click to test: 
+                        <span style="background: #e2e8f0; padding: 2px 7px; border-radius: 4px; font-weight: 700; color: #1e293b; cursor: pointer;" onclick="quickApplyCode('WELCOME10')">WELCOME10</span> (10% off), 
+                        <span style="background: #e2e8f0; padding: 2px 7px; border-radius: 4px; font-weight: 700; color: #1e293b; cursor: pointer;" onclick="quickApplyCode('SAVE15')">SAVE15</span> (15% off), or 
+                        <span style="background: #e2e8f0; padding: 2px 7px; border-radius: 4px; font-weight: 700; color: #1e293b; cursor: pointer;" onclick="quickApplyCode('SUPER20')">SUPER20</span> (20% off)
+                    </span>
+                </div>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <input type="text" id="promoCodeInput" name="promo_code" placeholder="Enter coupon code" maxlength="20" style="width: 175px; height: 38px; padding: 0 12px; border-radius: var(--radius-sm); border: 1.5px solid var(--border); font-family: monospace; font-size: 13.5px; text-transform: uppercase; font-weight: 700;">
+                    <button type="button" id="applyPromoBtn" style="height: 38px; padding: 0 16px; border-radius: var(--radius-sm); background: var(--primary); color: #ffffff; border: none; font-size: 13px; font-weight: 700; cursor: pointer;">
+                        Apply
+                    </button>
+                    <button type="button" id="removePromoBtn" style="height: 38px; padding: 0 12px; border-radius: var(--radius-sm); background: #f1f5f9; color: var(--text-secondary); border: 1px solid var(--border); font-size: 13px; font-weight: 600; cursor: pointer; display: none;">
+                        Remove
+                    </button>
+                </div>
+            </div>
+            <div id="promoFeedbackMsg" style="margin-top: 8px; font-size: 13px; font-weight: 600; display: none;"></div>
+
+            <!-- Order Total Display -->
+            <div class="order-total-bar" style="margin-top: 16px; display: flex; flex-direction: column; gap: 6px; align-items: flex-end;">
+                <div style="display: flex; gap: 16px; font-size: 14px; color: var(--muted);">
+                    <span>Subtotal: <strong id="rawSubtotalDisplay" style="color: var(--text);">$0.00</strong></span>
+                    <span id="discountBadgeLine" style="display: none; color: #16a34a; font-weight: 600;">Coupon Discount: <strong id="discountAmountDisplay">-$0.00</strong></span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span class="total-label" style="font-size: 16px; font-weight: 700;">Final Order Total:</span>
+                    <span class="total-amount" id="totalAmountDisplay" style="font-size: 24px; font-weight: 800; color: var(--primary);">$0.00</span>
+                    <input type="hidden" id="total_amount" name="total_amount" value="0.00">
+                </div>
+            </div>
+
+            <div class="wizard-nav-bar">
+                <button type="button" class="wizard-back-btn" onclick="goToStep(1)">
+                    ← Back to Customer Details
+                </button>
+                <button type="button" class="wizard-next-btn" onclick="validateAndGoToStep(3)">
+                    Proceed to Shipping & Delivery (Step 3) →
+                </button>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- SCREEN 3: SHIPPING & DELIVERY DESTINATION      -->
+        <!-- ============================================== -->
+        <section class="order-card form-step-screen" id="stepScreen3">
+            <h3 class="order-section-title">
+                <span class="section-icon">🚚</span> Shipping & Delivery Destination
+                <span style="font-size: 13px; font-weight: 600; color: var(--muted); margin-left: auto;">Step 3 of 3</span>
+            </h3>
+            <p style="color: var(--muted); font-size: 13.5px; margin-top: -8px; margin-bottom: 18px;">
+                Configure the destination and shipping speed to complete your order.
+            </p>
+
+            <div class="form-grid">
+                <div class="field">
+                    <label for="shipping_mode">Shipping Mode</label>
+                    <select id="shipping_mode" name="shipping_mode" required>
+                        <option value="">Select shipping mode</option>
+                        {% for option in options.shipping_mode %}
+                        <option value="{{ option }}" {% if form_data.get('shipping_mode') == option %}selected{% endif %}>
+                            {{ option }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="days_scheduled">Scheduled Shipping Days</label>
+                    <select id="days_scheduled" name="days_scheduled" required>
+                        <option value="">Select scheduled days</option>
+                        {% for day in days_options %}
+                        <option value="{{ day }}" {% if form_data.get('days_scheduled')|string == day|string %}selected{% endif %}>
+                            {{ day }} {% if day == 1 %}day{% else %}days{% endif %}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="market">Market</label>
+                    <select id="market" name="market" data-initial="{{ form_data.get('market', '') }}" required>
+                        <option value="">Select market</option>
+                        {% for option in options.market %}
+                        <option value="{{ option }}" {% if form_data.get('market', '') == option %}selected{% endif %}>
+                            {{ option }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="order_region">Order Region</label>
+                    <select id="order_region" name="order_region" data-initial="{{ form_data.get('order_region', '') }}" required disabled>
+                        <option value="">Select market first</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="order_country">Order Country</label>
+                    <select id="order_country" name="order_country" data-initial="{{ form_data.get('order_country', '') }}" required disabled>
+                        <option value="">Select region first</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="order_state">Order State</label>
+                    <select id="order_state" name="order_state" data-initial="{{ form_data.get('order_state', '') }}" required disabled>
+                        <option value="">Select country first</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Final Order Summary Pill -->
+            <div style="margin-top: 22px; padding: 16px 20px; background: #faf5ff; border: 1.5px solid #e9d5ff; border-radius: var(--radius-md); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                <div>
+                    <span style="font-size: 11.5px; text-transform: uppercase; font-weight: 800; color: #7e22ce; letter-spacing: 0.05em;">Review Before Submitting</span>
+                    <div style="font-size: 14px; font-weight: 600; color: var(--text); margin-top: 3px;">
+                        Customer: <strong id="reviewCustomerName">Sophia Vance</strong> &bull; Products: <strong id="reviewItemCount">1 item</strong>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <span style="font-size: 12px; color: var(--muted); font-weight: 600;">Final Amount:</span>
+                    <div style="font-size: 22px; font-weight: 800; color: #7e22ce; font-family: monospace;" id="reviewFinalAmount">$0.00</div>
+                </div>
+            </div>
+
+            <div class="wizard-nav-bar">
+                <button type="button" class="wizard-back-btn" onclick="goToStep(2)">
+                    ← Back to Order Items
+                </button>
+                <button type="submit" class="wizard-submit-btn" id="submitOrderBtn">
+                    Confirm & Place Order →
+                </button>
+            </div>
+        </section>
+
+    </form>
+
+    <footer>
+        <p>SupplyGuard — AI-Powered Customer Order & Delivery Risk Prediction System</p>
+    </footer>
+
+</div>
+
+<!-- Geographic Hierarchy JSON -->
+<script id="geoHierarchyData" type="application/json">
+{{ geo_hierarchy | tojson }}
+</script>
+
+<script>
+    // ----------------------------------------------------
+    // 0. MULTI-STEP CHECKOUT WIZARD NAVIGATION
+    // ----------------------------------------------------
+    let currentStep = 1;
+
+    function goToStep(step) {
+        currentStep = step;
+
+        for (let i = 1; i <= 3; i++) {
+            const screen = document.getElementById(`stepScreen${i}`);
+            const pill = document.getElementById(`stepPill${i}`);
+            const num = document.getElementById(`stepNum${i}`);
+
+            if (screen) {
+                if (i === step) {
+                    screen.classList.add("active");
+                } else {
+                    screen.classList.remove("active");
+                }
+            }
+
+            if (pill && num) {
+                if (i < step) {
+                    pill.classList.remove("active");
+                    pill.classList.add("completed");
+                    num.innerHTML = "✓";
+                } else if (i === step) {
+                    pill.classList.add("active");
+                    pill.classList.remove("completed");
+                    num.innerHTML = String(i);
+                } else {
+                    pill.classList.remove("active");
+                    pill.classList.remove("completed");
+                    num.innerHTML = String(i);
+                }
+            }
+        }
+
+        const conn1 = document.getElementById("connector1");
+        const conn2 = document.getElementById("connector2");
+        if (conn1) {
+            if (step >= 2) conn1.classList.add("completed");
+            else conn1.classList.remove("completed");
+        }
+        if (conn2) {
+            if (step >= 3) conn2.classList.add("completed");
+            else conn2.classList.remove("completed");
+        }
+
+        const progressFill = document.getElementById("checkoutProgressFill");
+        if (progressFill) {
+            if (step === 1) progressFill.style.width = "33.3%";
+            else if (step === 2) progressFill.style.width = "66.6%";
+            else if (step === 3) progressFill.style.width = "100%";
+        }
+
+        window.scrollTo({ top: 120, behavior: "smooth" });
+    }
+
+    function validateAndGoToStep(targetStep) {
+        if (targetStep === 1) {
+            goToStep(1);
+            return;
+        }
+
+        if (targetStep === 2) {
+            const name = document.getElementById("customer_name");
+            const email = document.getElementById("customer_email");
+            const orderType = document.getElementById("order_type");
+            const orderDate = document.getElementById("order_date");
+            const orderTime = document.getElementById("order_time_manual");
+
+            if (!name.value.trim()) {
+                name.reportValidity();
+                return;
+            }
+            if (!email.value.trim() || !email.checkValidity()) {
+                email.reportValidity();
+                return;
+            }
+            if (!orderType.value) {
+                orderType.reportValidity();
+                return;
+            }
+            if (!orderDate.value) {
+                orderDate.reportValidity();
+                return;
+            }
+            if (!orderTime.value.trim()) {
+                orderTime.reportValidity();
+                return;
+            }
+
+            goToStep(2);
+            return;
+        }
+
+        if (targetStep === 3) {
+            const name = document.getElementById("customer_name");
+            const email = document.getElementById("customer_email");
+            if (!name.value.trim() || !email.value.trim()) {
+                goToStep(1);
+                return;
+            }
+
+            const prodSelects = itemsTbody.querySelectorAll(".product-select");
+            let hasValidProd = false;
+            let count = 0;
+            prodSelects.forEach(sel => {
+                if (sel.value && sel.value.trim() !== "") {
+                    hasValidProd = true;
+                    count++;
+                }
+            });
+
+            if (!hasValidProd) {
+                alert("Please select at least one product before proceeding to Shipping & Delivery.");
+                return;
+            }
+
+            const revName = document.getElementById("reviewCustomerName");
+            const revCount = document.getElementById("reviewItemCount");
+            const revTotal = document.getElementById("reviewFinalAmount");
+
+            if (revName) revName.textContent = name.value.trim();
+            if (revCount) revCount.textContent = count === 1 ? "1 product" : `${count} products`;
+            if (revTotal) revTotal.textContent = totalAmountDisplay.textContent;
+
+            goToStep(3);
+        }
+    }
+
+    // ----------------------------------------------------
+    // 1. DYNAMIC ORDER ITEMS (CART) MANAGEMENT
+    // ----------------------------------------------------
+    const itemsTbody = document.getElementById("itemsTbody");
+    const addItemBtn = document.getElementById("addItemBtn");
+    const totalAmountDisplay = document.getElementById("totalAmountDisplay");
+    const totalAmountInput = document.getElementById("total_amount");
+
+    let activePromoDiscount = 0.0;
+    const PROMO_CODES = {
+        "WELCOME10": 0.10,
+        "SAVE15": 0.15,
+        "SUPER20": 0.20,
+        "SUPPLYGUARD": 0.15
+    };
+
+    function updateRowCalculations(row) {
+        const prodSelect = row.querySelector(".product-select");
+        const priceInput = row.querySelector(".product-price-input");
+        const nameInput = row.querySelector(".product-name-input");
+        const qtySelect = row.querySelector(".quantity-select");
+        const salesInput = row.querySelector(".item-sales-input");
+        const discInput = row.querySelector(".discount-rate-input");
+
+        const selectedOption = prodSelect.options[prodSelect.selectedIndex];
+        if (selectedOption && selectedOption.value) {
+            const price = parseFloat(selectedOption.getAttribute("data-price")) || 0;
+            const name = selectedOption.getAttribute("data-name") || "";
+            priceInput.value = price.toFixed(2);
+            nameInput.value = name;
+
+            const qty = parseInt(qtySelect.value, 10) || 1;
+            discInput.value = activePromoDiscount.toFixed(2);
+
+            const subtotal = qty * price * (1.0 - activePromoDiscount);
+            salesInput.value = subtotal.toFixed(2);
+        } else {
+            priceInput.value = "";
+            nameInput.value = "";
+            salesInput.value = "";
+            discInput.value = "0.00";
+        }
+
+        recalculateOrderTotal();
+    }
+
+    function recalculateOrderTotal() {
+        let rawSubtotal = 0;
+        let finalTotal = 0;
+
+        const rows = itemsTbody.querySelectorAll(".item-row");
+        rows.forEach(row => {
+            const prodSelect = row.querySelector(".product-select");
+            const price = parseFloat(row.querySelector(".product-price-input").value) || 0;
+            const qty = parseInt(row.querySelector(".quantity-select").value, 10) || 1;
+            const sales = parseFloat(row.querySelector(".item-sales-input").value) || 0;
+
+            if (prodSelect && prodSelect.value) {
+                rawSubtotal += (price * qty);
+                finalTotal += sales;
+            }
+        });
+
+        const rawDisplay = document.getElementById("rawSubtotalDisplay");
+        if (rawDisplay) rawDisplay.textContent = "$" + rawSubtotal.toFixed(2);
+
+        const discountBadgeLine = document.getElementById("discountBadgeLine");
+        const discountAmountDisplay = document.getElementById("discountAmountDisplay");
+
+        if (activePromoDiscount > 0 && rawSubtotal > 0) {
+            const discAmt = rawSubtotal * activePromoDiscount;
+            if (discountBadgeLine) discountBadgeLine.style.display = "inline";
+            if (discountAmountDisplay) {
+                discountAmountDisplay.textContent = `-$${discAmt.toFixed(2)} (${Math.round(activePromoDiscount * 100)}% off)`;
+            }
+        } else {
+            if (discountBadgeLine) discountBadgeLine.style.display = "none";
+        }
+
+        totalAmountDisplay.textContent = "$" + finalTotal.toFixed(2);
+        totalAmountInput.value = finalTotal.toFixed(2);
+
+        rows.forEach(row => {
+            const removeBtn = row.querySelector(".remove-item-btn");
+            removeBtn.disabled = rows.length === 1;
+        });
+    }
+
+    function applyPromoCode(code) {
+        code = (code || "").trim().toUpperCase();
+        const promoInput = document.getElementById("promoCodeInput");
+        const feedback = document.getElementById("promoFeedbackMsg");
+        const removeBtn = document.getElementById("removePromoBtn");
+
+        promoInput.value = code;
+
+        if (!code) {
+            activePromoDiscount = 0.0;
+            feedback.style.display = "none";
+            removeBtn.style.display = "none";
+        } else if (PROMO_CODES.hasOwnProperty(code)) {
+            activePromoDiscount = PROMO_CODES[code];
+            feedback.style.display = "block";
+            feedback.style.color = "#15803d";
+            feedback.textContent = `✓ Coupon '${code}' applied successfully! (${Math.round(activePromoDiscount * 100)}% discount)`;
+            removeBtn.style.display = "inline-block";
+        } else {
+            activePromoDiscount = 0.0;
+            feedback.style.display = "block";
+            feedback.style.color = "#b91c1c";
+            feedback.textContent = `⚠️ Invalid coupon code '${code}'. Standard pricing (0% discount) applied.`;
+            removeBtn.style.display = "none";
+        }
+
+        // Update all rows with new discount
+        itemsTbody.querySelectorAll(".item-row").forEach(updateRowCalculations);
+    }
+
+    function quickApplyCode(code) {
+        applyPromoCode(code);
+    }
+
+    const applyPromoBtn = document.getElementById("applyPromoBtn");
+    if (applyPromoBtn) {
+        applyPromoBtn.addEventListener("click", () => {
+            applyPromoCode(document.getElementById("promoCodeInput").value);
+        });
+    }
+
+    const promoCodeInput = document.getElementById("promoCodeInput");
+    if (promoCodeInput) {
+        promoCodeInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                applyPromoCode(promoCodeInput.value);
+            }
+        });
+    }
+
+    const removePromoBtn = document.getElementById("removePromoBtn");
+    if (removePromoBtn) {
+        removePromoBtn.addEventListener("click", () => {
+            applyPromoCode("");
+        });
+    }
+
+    function attachRowEvents(row) {
+        const prodSelect = row.querySelector(".product-select");
+        const qtySelect = row.querySelector(".quantity-select");
+        const removeBtn = row.querySelector(".remove-item-btn");
+
+        prodSelect.addEventListener("change", () => updateRowCalculations(row));
+        qtySelect.addEventListener("change", () => updateRowCalculations(row));
+
+        removeBtn.addEventListener("click", () => {
+            if (itemsTbody.querySelectorAll(".item-row").length > 1) {
+                row.remove();
+                recalculateOrderTotal();
+            }
+        });
+    }
+
+    // Attach to initial row
+    itemsTbody.querySelectorAll(".item-row").forEach(attachRowEvents);
+
+    // Add new product row
+    addItemBtn.addEventListener("click", () => {
+        const firstRow = itemsTbody.querySelector(".item-row");
+        const newRow = firstRow.cloneNode(true);
+
+        // Clear values
+        newRow.querySelector(".product-select").selectedIndex = 0;
+        newRow.querySelector(".product-price-input").value = "";
+        newRow.querySelector(".product-name-input").value = "";
+        newRow.querySelector(".quantity-select").value = "1";
+        newRow.querySelector(".discount-rate-input").value = activePromoDiscount.toFixed(2);
+        newRow.querySelector(".item-sales-input").value = "";
+        newRow.querySelector(".remove-item-btn").disabled = false;
+
+        attachRowEvents(newRow);
+        itemsTbody.appendChild(newRow);
+        recalculateOrderTotal();
+    });
+
+    // ----------------------------------------------------
+    // 2. ORDER TIME 12-hr <-> 24-hr SYNCHRONIZATION
+    // ----------------------------------------------------
+    const timeManualInput = document.getElementById("order_time_manual");
+    const timePeriodSelect = document.getElementById("order_period");
+    const orderTimeInput = document.getElementById("order_time");
+
+    function syncOrderTime() {
+        const rawTime = timeManualInput.value.trim();
+        const period = timePeriodSelect.value;
+
+        if (!rawTime) {
+            orderTimeInput.value = "";
+            return false;
+        }
+
+        const match = rawTime.match(/^([0-1]?[0-9]|2[0-3]):([0-5][0-9])$/);
+        if (!match) {
+            orderTimeInput.value = "";
+            return false;
+        }
+
+        let hour = parseInt(match[1], 10);
+        const minute = match[2];
+
+        if (period === "PM" && hour < 12) hour += 12;
+        else if (period === "AM" && hour === 12) hour = 0;
+
+        orderTimeInput.value = String(hour).padStart(2, "0") + ":" + minute;
+        return true;
+    }
+
+    timeManualInput.addEventListener("input", function (e) {
+        let val = this.value.replace(/[^0-9:]/g, "");
+        if (val.length === 2 && !val.includes(":") && e.inputType !== "deleteContentBackward") {
+            val = val + ":";
+        }
+        this.value = val;
+        syncOrderTime();
+    });
+
+    timePeriodSelect.addEventListener("change", syncOrderTime);
+    syncOrderTime();
+
+    // ----------------------------------------------------
+    // 3. AUTO-SYNC SHIPPING MODE & SCHEDULED DAYS
+    // ----------------------------------------------------
+    const shippingModeSelect = document.getElementById("shipping_mode");
+    const daysScheduledSelect = document.getElementById("days_scheduled");
+
+    const shippingModeToDays = {
+        "Same Day": "0",
+        "First Class": "1",
+        "Second Class": "2",
+        "Standard Class": "4"
+    };
+
+    const daysToShippingMode = {
+        "0": "Same Day",
+        "1": "First Class",
+        "2": "Second Class",
+        "4": "Standard Class"
+    };
+
+    if (shippingModeSelect && daysScheduledSelect) {
+        shippingModeSelect.addEventListener("change", function () {
+            const mode = this.value;
+            if (mode && shippingModeToDays[mode] !== undefined) {
+                daysScheduledSelect.value = shippingModeToDays[mode];
+            } else if (!mode) {
+                daysScheduledSelect.value = "";
+            }
+        });
+
+        daysScheduledSelect.addEventListener("change", function () {
+            const days = this.value;
+            if (days && daysToShippingMode[days] !== undefined) {
+                shippingModeSelect.value = daysToShippingMode[days];
+            } else if (!days) {
+                shippingModeSelect.value = "";
+            }
+        });
+    }
+
+    // ----------------------------------------------------
+    // 4. CASCADING GEOGRAPHIC HIERARCHY
+    // ----------------------------------------------------
+    const geoHierarchyDataEl = document.getElementById("geoHierarchyData");
+    let geoHierarchy = {};
+    if (geoHierarchyDataEl) {
+        try {
+            geoHierarchy = JSON.parse(geoHierarchyDataEl.textContent);
+        } catch (e) {
+            console.error("Could not parse geo hierarchy JSON", e);
+        }
+    }
+
+    const marketSelect = document.getElementById("market");
+    const regionSelect = document.getElementById("order_region");
+    const countrySelect = document.getElementById("order_country");
+    const stateSelect = document.getElementById("order_state");
+
+    const initialGeoValues = {
+        market: marketSelect ? (marketSelect.getAttribute("data-initial") || marketSelect.value || "") : "",
+        region: regionSelect ? (regionSelect.getAttribute("data-initial") || "") : "",
+        country: countrySelect ? (countrySelect.getAttribute("data-initial") || "") : "",
+        state: stateSelect ? (stateSelect.getAttribute("data-initial") || "") : ""
+    };
+
+    function populateRegions(selectedMarket, preservedRegion = "") {
+        regionSelect.innerHTML = "";
+        countrySelect.innerHTML = '<option value="">Select region first</option>';
+        countrySelect.disabled = true;
+        stateSelect.innerHTML = '<option value="">Select country first</option>';
+        stateSelect.disabled = true;
+
+        if (!selectedMarket || !geoHierarchy[selectedMarket]) {
+            regionSelect.innerHTML = '<option value="">Select market first</option>';
+            regionSelect.disabled = true;
+            return;
+        }
+
+        const regions = Object.keys(geoHierarchy[selectedMarket]).sort();
+        regionSelect.disabled = false;
+
+        const defaultOpt = document.createElement("option");
+        defaultOpt.value = "";
+        defaultOpt.textContent = "Select region";
+        regionSelect.appendChild(defaultOpt);
+
+        let matchFound = false;
+        for (const region of regions) {
+            const opt = document.createElement("option");
+            opt.value = region;
+            opt.textContent = region;
+            if (preservedRegion && region === preservedRegion) {
+                opt.selected = true;
+                matchFound = true;
+            }
+            regionSelect.appendChild(opt);
+        }
+
+        if (matchFound) {
+            populateCountries(selectedMarket, preservedRegion, initialGeoValues.country);
+        }
+    }
+
+    function populateCountries(selectedMarket, selectedRegion, preservedCountry = "") {
+        countrySelect.innerHTML = "";
+        stateSelect.innerHTML = '<option value="">Select country first</option>';
+        stateSelect.disabled = true;
+
+        if (!selectedMarket || !selectedRegion || !geoHierarchy[selectedMarket] || !geoHierarchy[selectedMarket][selectedRegion]) {
+            countrySelect.innerHTML = '<option value="">Select region first</option>';
+            countrySelect.disabled = true;
+            return;
+        }
+
+        const countries = Object.keys(geoHierarchy[selectedMarket][selectedRegion]).sort();
+        countrySelect.disabled = false;
+
+        const defaultOpt = document.createElement("option");
+        defaultOpt.value = "";
+        defaultOpt.textContent = "Select country";
+        countrySelect.appendChild(defaultOpt);
+
+        let matchFound = false;
+        for (const country of countries) {
+            const opt = document.createElement("option");
+            opt.value = country;
+            opt.textContent = country;
+            if (preservedCountry && country === preservedCountry) {
+                opt.selected = true;
+                matchFound = true;
+            }
+            countrySelect.appendChild(opt);
+        }
+
+        if (matchFound) {
+            populateStates(selectedMarket, selectedRegion, preservedCountry, initialGeoValues.state);
+        }
+    }
+
+    function populateStates(selectedMarket, selectedRegion, selectedCountry, preservedState = "") {
+        stateSelect.innerHTML = "";
+
+        if (!selectedMarket || !selectedRegion || !selectedCountry ||
+            !geoHierarchy[selectedMarket] || !geoHierarchy[selectedMarket][selectedRegion] ||
+            !geoHierarchy[selectedMarket][selectedRegion][selectedCountry]) {
+            stateSelect.innerHTML = '<option value="">Select country first</option>';
+            stateSelect.disabled = true;
+            return;
+        }
+
+        const states = geoHierarchy[selectedMarket][selectedRegion][selectedCountry];
+        stateSelect.disabled = false;
+
+        const defaultOpt = document.createElement("option");
+        defaultOpt.value = "";
+        defaultOpt.textContent = "Select state";
+        stateSelect.appendChild(defaultOpt);
+
+        let matchFound = false;
+        for (const state of states) {
+            const opt = document.createElement("option");
+            opt.value = state;
+            opt.textContent = state;
+            if (preservedState && state === preservedState) {
+                opt.selected = true;
+                matchFound = true;
+            }
+            stateSelect.appendChild(opt);
+        }
+
+        if (states.length === 1 && !preservedState) {
+            stateSelect.value = states[0];
+        }
+    }
+
+    marketSelect.addEventListener("change", function () {
+        initialGeoValues.region = "";
+        initialGeoValues.country = "";
+        initialGeoValues.state = "";
+        populateRegions(this.value);
+    });
+
+    regionSelect.addEventListener("change", function () {
+        initialGeoValues.country = "";
+        initialGeoValues.state = "";
+        populateCountries(marketSelect.value, this.value);
+    });
+
+    countrySelect.addEventListener("change", function () {
+        initialGeoValues.state = "";
+        populateStates(marketSelect.value, regionSelect.value, this.value);
+    });
+
+    if (initialGeoValues.market) {
+        marketSelect.value = initialGeoValues.market;
+        populateRegions(initialGeoValues.market, initialGeoValues.region);
+    } else {
+        regionSelect.disabled = true;
+        countrySelect.disabled = true;
+        stateSelect.disabled = true;
+    }
+
+    // ----------------------------------------------------
+    // 5. FORM SUBMISSION VALIDATION
+    // ----------------------------------------------------
+    const orderForm = document.getElementById("orderForm");
+    orderForm.addEventListener("submit", function (e) {
+        if (!syncOrderTime()) {
+            e.preventDefault();
+            timeManualInput.setCustomValidity("Please enter a valid time in HH:MM format (e.g. 10:30).");
+            timeManualInput.reportValidity();
+            timeManualInput.setCustomValidity("");
+            return;
+        }
+
+        // Verify products
+        const productSelects = orderForm.querySelectorAll(".product-select");
+        let hasValidProduct = false;
+        for (const select of productSelects) {
+            if (select.value) {
+                hasValidProduct = true;
+            } else {
+                e.preventDefault();
+                select.focus();
+                select.reportValidity();
+                return;
+            }
+        }
+
+        if (!hasValidProduct) {
+            e.preventDefault();
+            alert("Please select at least one product for the order.");
+            return;
+        }
+
+        // Validate geographic selections
+        if (!marketSelect.value) {
+            e.preventDefault();
+            marketSelect.focus();
+            marketSelect.reportValidity();
+            return;
+        }
+        if (!regionSelect.value) {
+            e.preventDefault();
+            regionSelect.focus();
+            regionSelect.reportValidity();
+            return;
+        }
+        if (!countrySelect.value) {
+            e.preventDefault();
+            countrySelect.focus();
+            countrySelect.reportValidity();
+            return;
+        }
+        if (!stateSelect.value) {
+            e.preventDefault();
+            stateSelect.focus();
+            stateSelect.reportValidity();
+            return;
+        }
+    });
+</script>
+</body>
+</html>

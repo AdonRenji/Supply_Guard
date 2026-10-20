@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,62 +5,316 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | SupplyGuard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div class="page">
-        <header class="hero">
-            <div class="logo">SG</div>
-            <div class="brand-content">
-                <h1>SupplyGuard</h1>
-                <p>AI-Powered Shipment Delay Prediction</p>
+<body class="auth-page-body">
+    <div class="auth-screen-canvas">
+
+        <!-- Top Centered Brand Header -->
+        <header class="auth-top-header">
+            <div class="auth-shield-logo">
+                <svg width="48" height="52" viewBox="0 0 48 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 2L4 9.5V23.5C4 35.8 12.5 47.1 24 50C35.5 47.1 44 35.8 44 23.5V9.5L24 2Z" fill="url(#shield-gradient)"/>
+                    <path d="M16 25L21.5 30.5L32 19" stroke="white" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <defs>
+                        <linearGradient id="shield-gradient" x1="4" y1="2" x2="44" y2="50" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#2563EB"/>
+                            <stop offset="1" stop-color="#1D4ED8"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
             </div>
+            <h1 class="auth-brand-name">SupplyGuard</h1>
+            <p class="auth-brand-tagline">AI-Powered Shipment Delay Prediction</p>
         </header>
 
-        <main class="auth-card">
-            <h2>Welcome Back</h2>
-            <p>Sign in to access your dashboard.</p>
+        <!-- Main 3-Column Visual Stage -->
+        <div class="auth-viewport-stage">
 
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% for category, message in messages %}
-                    <div class="alert {{ category }}">{{ message }}</div>
-                {% endfor %}
-            {% endwith %}
+            <!-- Left Logistics Illustration -->
+            <aside class="auth-illustration-side" aria-hidden="true">
+                <div class="logistics-art-wrapper">
+                    <img
+                        src="{{ url_for('static', filename='img/login_left_art_smooth.png') }}"
+                        alt="Supply chain cargo ship, harbor cranes, and delivery transport"
+                        class="logistics-art-img"
+                    >
+                </div>
+            </aside>
 
-            <form method="POST" action="{{ url_for('login') }}">
-                <div class="field">
-                    <label for="email">Email Address</label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        placeholder="Enter your email"
-                        autocomplete="email"
-                        required
+            <!-- Center Login Card -->
+            <main class="auth-center-stage">
+                <div class="auth-card-white">
+                    <!-- Customer vs Manager Tabs -->
+                    <div class="auth-role-tabs" style="display: flex; gap: 8px; margin-bottom: 22px; background: #f1f5f9; padding: 4px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                        <button type="button" id="tabCustomer" class="auth-role-tab active" onclick="selectRole('customer')" style="flex: 1; padding: 9px 12px; font-size: 13.5px; font-weight: 700; border: none; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; background: #ffffff; color: #2563eb; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                            🛒 Customer Portal
+                        </button>
+                        <button type="button" id="tabManager" class="auth-role-tab" onclick="selectRole('manager')" style="flex: 1; padding: 9px 12px; font-size: 13.5px; font-weight: 700; border: none; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; background: transparent; color: #64748b;">
+                            🛡️ Manager Operations
+                        </button>
+                    </div>
+
+                    <h2 class="auth-card-title" id="loginTitle">Customer Portal</h2>
+                    <p class="auth-card-subtitle" id="loginSubtitle">Sign in to place orders and track your deliveries.</p>
+
+                    <!-- Quick Demo Fill Helper -->
+                    <div style="margin-bottom: 18px; text-align: center;">
+                        <button type="button" id="quickDemoBtn" onclick="fillDemo()" style="background: #eff6ff; border: 1px solid #bfdbfe; color: #1d4ed8; font-size: 12.5px; font-weight: 600; padding: 6px 14px; border-radius: 20px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s ease;">
+                            ⚡ <span>Fill Demo Customer</span>
+                        </button>
+                    </div>
+
+                    <!-- Flash messages -->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            <div class="auth-alerts-wrapper">
+                                {% for category, message in messages %}
+                                    <div class="auth-pill-alert {{ category }}">
+                                        <span class="pill-alert-icon">
+                                            {% if category == 'success' %}✓{% else %}!{% endif %}
+                                        </span>
+                                        <span class="pill-alert-text">{{ message }}</span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+
+                    <!-- Form -->
+                    <form method="POST" action="{{ url_for('login') }}" class="auth-form-modern" autocomplete="on">
+                        
+                        <!-- Email Field -->
+                        <div class="auth-field-group">
+                            <label for="email" class="auth-field-label">Email Address</label>
+                            <div class="auth-input-wrapper">
+                                <span class="input-icon-slot" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect width="20" height="16" x="2" y="4" rx="2"/>
+                                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                                    </svg>
+                                </span>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    class="auth-input-control"
+                                    placeholder="Enter your email"
+                                    autocomplete="email"
+                                    required
+                                >
+                            </div>
+                        </div>
+
+                        <!-- Password Field -->
+                        <div class="auth-field-group">
+                            <label for="password" class="auth-field-label">Password</label>
+                            <div class="auth-input-wrapper">
+                                <span class="input-icon-slot" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                    </svg>
+                                </span>
+                                <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    class="auth-input-control"
+                                    placeholder="Enter your password"
+                                    autocomplete="current-password"
+                                    required
+                                >
+                                <button type="button" id="togglePasswordBtn" class="password-toggle-trigger" aria-label="Toggle password visibility">
+                                    <svg id="eyeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                                        <circle cx="12" cy="12" r="3"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="auth-submit-btn">
+                            <span id="submitBtnText">Login as Customer</span>
+                            <span class="btn-arrow" aria-hidden="true">→</span>
+                        </button>
+                    </form>
+
+                    <!-- Account Navigation Link -->
+                    <p class="auth-bottom-switch">
+                        Don't have an account?
+                        <a href="{{ url_for('register') }}" class="switch-accent-link">Create an account</a>
+                    </p>
+
+                    <!-- Divider -->
+                    <div class="auth-card-divider"></div>
+
+                    <!-- Security Note Footnote -->
+                    <div class="auth-security-footnote">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lock-mini-icon">
+                            <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                        <span>Secure authenticated access to SupplyGuard services.</span>
+                    </div>
+
+                </div>
+            </main>
+
+            <!-- Right Value Proposition Features & Map -->
+            <aside class="auth-features-side">
+                
+                <!-- World Map Floating Backdrop Graphic -->
+                <div class="world-map-backdrop" aria-hidden="true">
+                    <img
+                        src="{{ url_for('static', filename='img/login_map_feathered.png') }}"
+                        alt="Global shipment routes and transit hubs"
+                        class="map-art-img"
                     >
                 </div>
 
-                <div class="field">
-                    <label for="password">Password</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        placeholder="Enter your password"
-                        autocomplete="current-password"
-                        required
-                    >
+                <!-- 3 Feature Points -->
+                <div class="features-list-vertical">
+
+                    <!-- Feature 1: Smarter Predictions -->
+                    <div class="auth-feature-row">
+                        <div class="feature-icon-bubble">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            </svg>
+                        </div>
+                        <div class="feature-text-block">
+                            <h3 class="feature-title">Smarter Predictions</h3>
+                            <p class="feature-desc">Identify potential shipment delays before they happen.</p>
+                        </div>
+                    </div>
+
+                    <!-- Feature 2: Better Decisions -->
+                    <div class="auth-feature-row">
+                        <div class="feature-icon-bubble">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 20V10"/>
+                                <path d="M12 20V4"/>
+                                <path d="M6 20v-6"/>
+                            </svg>
+                        </div>
+                        <div class="feature-text-block">
+                            <h3 class="feature-title">Better Decisions</h3>
+                            <p class="feature-desc">Get data-driven insights for faster, safer planning.</p>
+                        </div>
+                    </div>
+
+                    <!-- Feature 3: Safer Supply Chains -->
+                    <div class="auth-feature-row">
+                        <div class="feature-icon-bubble">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="16" height="13" x="1" y="3" rx="2"/>
+                                <polygon points="17 8 20 8 23 11 23 16 17 16 17 8"/>
+                                <circle cx="5.5" cy="18.5" r="2.5"/>
+                                <circle cx="18.5" cy="18.5" r="2.5"/>
+                            </svg>
+                        </div>
+                        <div class="feature-text-block">
+                            <h3 class="feature-title">Safer Supply Chains</h3>
+                            <p class="feature-desc">Reduce risks and keep your deliveries on track.</p>
+                        </div>
+                    </div>
+
                 </div>
 
-                <button type="submit" class="submit-button">
-                    Login to SupplyGuard
-                </button>
-            </form>
+                <!-- Tagline Quote with Accent Line -->
+                <div class="auth-tagline-quote">
+                    <span class="tagline-rule" aria-hidden="true"></span>
+                    <span class="tagline-text">Together for a more reliable supply chain.</span>
+                </div>
 
-            <p class="auth-link">
-                Don't have an account?
-                <a href="{{ url_for('register') }}">Create an account</a>
-            </p>
-        </main>
+            </aside>
+
+        </div>
+
     </div>
+
+    <!-- Password visibility toggle script -->
+    <script>
+        let currentRole = 'customer';
+
+        function selectRole(role) {
+            currentRole = role;
+            const tabCustomer = document.getElementById('tabCustomer');
+            const tabManager = document.getElementById('tabManager');
+            const title = document.getElementById('loginTitle');
+            const subtitle = document.getElementById('loginSubtitle');
+            const submitText = document.getElementById('submitBtnText');
+            const quickDemoBtn = document.getElementById('quickDemoBtn');
+
+            if (role === 'customer') {
+                tabCustomer.style.background = '#ffffff';
+                tabCustomer.style.color = '#2563eb';
+                tabCustomer.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+                tabManager.style.background = 'transparent';
+                tabManager.style.color = '#64748b';
+                tabManager.style.boxShadow = 'none';
+
+                title.textContent = 'Customer Portal';
+                subtitle.textContent = 'Sign in to place orders and track your deliveries.';
+                submitText.textContent = 'Login as Customer';
+                quickDemoBtn.innerHTML = '⚡ <span>Fill Demo Customer</span>';
+            } else {
+                tabManager.style.background = '#ffffff';
+                tabManager.style.color = '#2563eb';
+                tabManager.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+                tabCustomer.style.background = 'transparent';
+                tabCustomer.style.color = '#64748b';
+                tabCustomer.style.boxShadow = 'none';
+
+                title.textContent = 'Manager Operations';
+                subtitle.textContent = 'Sign in to inspect customer orders & evaluate AI delivery risk.';
+                submitText.textContent = 'Login as Manager';
+                quickDemoBtn.innerHTML = '⚡ <span>Fill Demo Manager</span>';
+            }
+        }
+
+        function fillDemo() {
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            if (currentRole === 'customer') {
+                emailInput.value = 'customer_demo@supplyguard.com';
+                passwordInput.value = 'Password123!';
+            } else {
+                emailInput.value = 'manager_demo@supplyguard.com';
+                passwordInput.value = 'Password123!';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggleBtn = document.getElementById('togglePasswordBtn');
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+
+            if (toggleBtn && passwordInput && eyeIcon) {
+                toggleBtn.addEventListener('click', function () {
+                    const isPassword = passwordInput.getAttribute('type') === 'password';
+                    passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+
+                    if (isPassword) {
+                        eyeIcon.innerHTML = `
+                            <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/>
+                            <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/>
+                            <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/>
+                            <line x1="2" y1="2" x2="22" y2="22"/>
+                        `;
+                    } else {
+                        eyeIcon.innerHTML = `
+                            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        `;
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>

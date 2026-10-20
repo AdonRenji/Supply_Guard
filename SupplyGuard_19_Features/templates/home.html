@@ -1,709 +1,367 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SupplyGuard | Shipment Risk Assessment</title>
-
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
-
+    <title>Manager Dashboard | SupplyGuard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
-        .form-step {
-            display: none;
-        }
-
-        .form-step.active {
-            display: block;
-        }
-
-        .step-indicator {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 12px;
-        }
-
-        .step-tab {
-            display: none;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .step-tab.active {
-            display: flex;
-        }
-
-        .time-selectors {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .time-selectors select {
-            width: 100%;
-            min-width: 0;
-        }
-
-        .section-heading {
-            text-align: center;
+        .dashboard-card {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 28px 32px;
+            box-shadow: var(--shadow-md);
             margin-bottom: 28px;
         }
-
-        .sales-field input[readonly] {
-            cursor: not-allowed;
-            opacity: 0.9;
-        }
-
-        .step-navigation {
+        .card-header-bar {
             display: flex;
-            gap: 16px;
-            align-items: stretch;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 18px;
+            padding-bottom: 14px;
+            border-bottom: 1.5px solid #f1f5f9;
         }
-
-        .step-navigation .submit-button {
-            flex: 1;
+        .card-title-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
-
-        .single-button .next-button {
+        .card-icon-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #eff6ff;
+            color: #2563eb;
+            font-size: 20px;
+        }
+        .card-title-group h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text);
+        }
+        .card-title-group p {
+            margin: 2px 0 0 0;
+            font-size: 13px;
+            color: var(--muted);
+        }
+        .orders-table {
             width: 100%;
+            border-collapse: collapse;
+            font-size: 13.5px;
         }
-
-        .result-card {
-            margin-top: 24px;
+        .orders-table th {
+            background: #f8fafc;
+            color: var(--text-secondary);
+            font-weight: 700;
+            text-align: left;
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
         }
-
-        @media (max-width: 600px) {
-            .step-indicator {
-                grid-template-columns: 1fr;
-            }
-
-            .step-navigation {
-                flex-direction: column;
-            }
+        .orders-table td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+        }
+        .orders-table tr:hover td {
+            background: #fbfcfe;
+        }
+        .btn-inspect {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
+            border-radius: var(--radius-sm);
+            padding: 6px 14px;
+            font-size: 12.5px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all var(--transition-fast);
+        }
+        .btn-inspect:hover {
+            background: #2563eb;
+            color: #ffffff;
+            border-color: #2563eb;
+        }
+        .badge-status {
+            display: inline-block;
+            background: #dcfce7;
+            color: #15803d;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: var(--radius-full);
+        }
+        .empty-placeholder {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--muted);
+        }
+        .empty-placeholder .icon {
+            font-size: 42px;
+            margin-bottom: 12px;
+            opacity: 0.8;
         }
     </style>
 </head>
 
 <body>
-<div class="page">
+    <div class="page">
 
-    <!-- Header -->
-    <header class="hero">
-        <div class="logo">SG</div>
+        <!-- Top Header -->
+        <header class="hero">
+            <div class="logo">SG</div>
 
-        <div class="brand-content">
-            <h1>SupplyGuard</h1>
-            <p>AI-Powered Shipment Delay Prediction System</p>
+            <div class="brand-content">
+                <h1>SupplyGuard</h1>
+                <p>Manager Operations & Late-Delivery Risk Assessment</p>
+            </div>
+
+            {% if session.get('email') %}
+            <div class="user-profile-group">
+                <div class="user-actions">
+                    <span class="welcome-user">
+                        Welcome, {{ session.get('name', 'User') }} (Manager)
+                    </span>
+                    <a href="{{ url_for('logout') }}" class="logout-button">
+                        Logout
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </header>
+
+        <!-- Introduction -->
+        <section class="intro" style="margin-bottom: 24px;">
+            <h2>Manager Operations Dashboard</h2>
+            <p>
+                Search customer orders or select from recent orders below to inspect line items, delivery routes, and evaluate AI late-delivery risk.
+            </p>
+        </section>
+
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+        <div class="alert {{ category }}" role="alert" style="margin-bottom: 24px;">
+            {{ message }}
         </div>
+        {% endfor %}
+        {% endwith %}
 
-        {% if session.get('email') %}
-        <div class="user-profile-group">
-            <div class="user-actions">
-                <span class="welcome-user">
-                    Welcome, {{ session.get('name', 'User') }}
-                </span>
+        <!-- 1. ORDER SEARCH & LOOKUP SECTION -->
+        <section class="dashboard-card">
+            <div class="card-header-bar">
+                <div class="card-title-group">
+                    <span class="card-icon-badge">🔍</span>
+                    <div>
+                        <h3>Search Customer Order</h3>
+                        <p>Retrieve any order stored in the SQLite database by its Order ID</p>
+                    </div>
+                </div>
+            </div>
 
-                <a href="{{ url_for('logout') }}" class="logout-button">
-                    Logout
+            {% if lookup_error %}
+            <div class="alert error" role="alert" style="margin-bottom: 16px;">
+                {{ lookup_error }}
+            </div>
+            {% endif %}
+
+            <form method="GET" action="{{ url_for('home') }}" style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <input type="text" name="lookup_id" id="lookup_id_input"
+                       placeholder="Enter Order ID (e.g. SG-ORD-20261020-XXXX)"
+                       value="{{ lookup_id }}"
+                       required
+                       style="flex: 1; min-width: 280px; height: 46px; padding: 0 16px; border-radius: var(--radius-sm); border: 1.5px solid var(--border); font-family: monospace; font-size: 15px; font-weight: 600;">
+                <button type="submit" class="submit-button" style="height: 46px; padding: 0 24px; width: auto; margin-top: 0; font-size: 14.5px;">
+                    Search Order
+                </button>
+                {% if retrieved_order or lookup_id %}
+                <a href="{{ url_for('home') }}" style="display: inline-flex; align-items: center; padding: 0 18px; height: 46px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: #f8fafc; color: var(--text-secondary); text-decoration: none; font-size: 13.5px; font-weight: 600;">
+                    Clear
                 </a>
+                {% endif %}
+            </form>
+        </section>
+
+        <!-- 2. RETRIEVED ORDER & PREDICTION CARD (Appears when an order is searched or clicked) -->
+        {% if retrieved_order %}
+        <section class="dashboard-card" style="border: 2px solid #6366f1; background: #fafbff;">
+            <div class="card-header-bar" style="border-bottom-color: #e0e7ff;">
+                <div>
+                    <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); font-weight: 700;">Selected Order for Inspection</span>
+                    <h3 style="margin: 3px 0 0 0; font-family: monospace; font-size: 22px; font-weight: 800; color: var(--primary);">
+                        {{ retrieved_order.order_id }}
+                    </h3>
+                </div>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <span class="badge-status">● {{ retrieved_order.status }}</span>
+                    <span style="font-size: 13px; color: var(--muted);">Placed on {{ retrieved_order.order_date }} at {{ retrieved_order.order_time }}</span>
+                </div>
             </div>
 
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% for category, message in messages %}
-                <div class="user-flash-badge {{ category }}" role="status">
-                    {{ message }}
+            <!-- Two-Column Meta Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 20px;">
+                <div style="background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px;">
+                    <h4 style="margin: 0 0 10px 0; font-size: 13.5px; font-weight: 700; color: var(--text-secondary);">👤 Customer & Transaction</h4>
+                    <div style="font-size: 13.5px; line-height: 1.7;">
+                        <div><strong>Customer Name:</strong> {{ retrieved_order.customer_name }}</div>
+                        <div><strong>Email Address:</strong> {{ retrieved_order.customer_email }}</div>
+                        <div><strong>Payment Type:</strong> {{ retrieved_order.order_type }}</div>
+                    </div>
                 </div>
-                {% endfor %}
-            {% endwith %}
-        </div>
+
+                <div style="background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px;">
+                    <h4 style="margin: 0 0 10px 0; font-size: 13.5px; font-weight: 700; color: var(--text-secondary);">🚚 Shipment & Route Logistics</h4>
+                    <div style="font-size: 13.5px; line-height: 1.7;">
+                        <div><strong>Shipping Mode:</strong> {{ retrieved_order.shipping_mode }} ({{ retrieved_order.days_scheduled|int }} scheduled day{% if retrieved_order.days_scheduled|int != 1 %}s{% endif %})</div>
+                        <div><strong>Market:</strong> {{ retrieved_order.market }}</div>
+                        <div><strong>Destination:</strong> {{ retrieved_order.order_state }}, {{ retrieved_order.order_country }} ({{ retrieved_order.order_region }})</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Itemized Products Table -->
+            <h4 style="margin: 20px 0 10px 0; font-size: 14.5px; font-weight: 700; color: var(--text);">
+                📦 Ordered Products ({{ retrieved_order['items']|length }} item{% if retrieved_order['items']|length != 1 %}s{% endif %})
+            </h4>
+            <div style="overflow-x: auto; background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 24px;">
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 90px;">Product ID</th>
+                            <th>Product Name</th>
+                            <th style="width: 100px; text-align: right;">Unit Price</th>
+                            <th style="width: 80px; text-align: center;">Qty</th>
+                            <th style="width: 90px; text-align: right;">Discount</th>
+                            <th style="width: 110px; text-align: right;">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in retrieved_order['items'] %}
+                        <tr>
+                            <td><code style="font-family: monospace; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 12px;">#{{ item.product_id }}</code></td>
+                            <td style="font-weight: 600; color: var(--text);">{{ item.product_name }}</td>
+                            <td style="text-align: right;">${{ "%.2f"|format(item.product_price) }}</td>
+                            <td style="text-align: center; font-weight: 600;">{{ item.quantity }}</td>
+                            <td style="text-align: right; color: var(--muted);">{% if item.discount_rate > 0 %}<span style="color: #16a34a; font-weight: 700;">{{ (item.discount_rate * 100)|round|int }}%</span>{% else %}0%{% endif %}</td>
+                            <td style="text-align: right; font-weight: 700; color: var(--primary);">${{ "%.2f"|format(item.sales) }}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr style="background: #f8fafc; font-weight: 700;">
+                            <td colspan="5" style="text-align: right; font-size: 14.5px; color: var(--text);">Total Order Amount:</td>
+                            <td style="text-align: right; font-size: 16px; color: var(--primary); font-family: monospace;">${{ "%.2f"|format(retrieved_order.total_amount) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Big Prediction Action Card -->
+            <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: var(--radius-md); padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+                <div>
+                    <h4 style="margin: 0 0 4px 0; font-size: 16px; font-weight: 800; color: var(--text);">
+                        ⚡ AI Late-Delivery Risk Assessment
+                    </h4>
+                    <p style="margin: 0; font-size: 13.5px; color: var(--muted);">
+                        Evaluate this order using the trained Random Forest 19-feature machine learning model.
+                    </p>
+                    {% if retrieved_order.latest_prediction %}
+                    <div style="margin-top: 8px; font-size: 12.5px; color: #4338ca; background: #e0e7ff; padding: 4px 12px; border-radius: var(--radius-full); display: inline-block;">
+                        ℹ️ Latest assessment: <strong>{{ retrieved_order.latest_prediction.risk_label }}</strong> ({{ (retrieved_order.latest_prediction.late_probability * 100)|round(1) }}%)
+                    </div>
+                    {% endif %}
+                </div>
+
+                <form method="POST" action="{{ url_for('predict_order', order_id=retrieved_order.order_id) }}">
+                    <button type="submit" class="submit-button" style="width: auto; padding: 14px 32px; margin-top: 0; background: var(--accent-gradient); font-size: 15px; font-weight: 700; box-shadow: var(--shadow-button);">
+                        ⚡ Predict Delivery Risk for this Order →
+                    </button>
+                </form>
+            </div>
+        </section>
         {% endif %}
-    </header>
 
-    <!-- Introduction -->
-    <section class="intro">
-        <h2>Shipment Risk Assessment</h2>
-        <p>
-            Enter shipment and product details to estimate
-            the probability of late delivery.
-        </p>
-    </section>
-
-    <!-- Error message -->
-    {% if error %}
-    <div class="alert error" role="alert">
-        {{ error }}
-    </div>
-    {% endif %}
-
-    <!-- Step indicator -->
-    <div class="step-indicator">
-        <div id="shipmentTab" class="step-tab active">
-            Shipment Information
-        </div>
-
-        <div id="productTab" class="step-tab">
-            Product Information
-        </div>
-    </div>
-
-    <!-- Progress bar -->
-    <div class="progress-track">
-        <div id="progressFill" class="progress-fill"
-             style="width: 50%;"></div>
-    </div>
-
-    <form method="POST"
-          action="{{ url_for('home') }}"
-          id="riskForm">
-
-        <!-- ======================================
-             STEP 1: SHIPMENT INFORMATION
-        ======================================= -->
-        <section id="shipmentStep" class="form-step active">
-            <div class="form-section">
-                <div class="form-grid">
-
-                    <div class="field">
-                        <label for="shipping_mode">Shipping Mode</label>
-
-                        <select id="shipping_mode"
-                                name="shipping_mode" required>
-                            <option value="">Select shipping mode</option>
-
-                            {% for option in options.shipping_mode %}
-                            <option value="{{ option }}"
-                                {% if form_data.get('shipping_mode', '') == option %}
-                                    selected
-                                {% endif %}>
-                                {{ option }}
-                            </option>
-                            {% endfor %}
-                        </select>
+        <!-- 3. RECENT CUSTOMER ORDERS TABLE -->
+        <section class="dashboard-card">
+            <div class="card-header-bar">
+                <div class="card-title-group">
+                    <span class="card-icon-badge">📋</span>
+                    <div>
+                        <h3>Recent Customer Orders in Database</h3>
+                        <p>Click "Inspect & Predict Risk" on any order below to load its full details and evaluate delivery risk</p>
                     </div>
-
-                    <div class="field">
-                        <label for="days_scheduled">
-                            Scheduled Shipping Days
-                        </label>
-
-                        <select id="days_scheduled"
-                                name="days_scheduled" required>
-                            <option value="">Select scheduled days</option>
-
-                            {% for day in days_options %}
-                            <option value="{{ day }}"
-                                {% if form_data.get('days_scheduled', '')|string == day|string %}
-                                    selected
-                                {% endif %}>
-                                {{ day }}
-                            </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div class="field">
-                        <label for="market">Market</label>
-
-                        <select id="market" name="market" required>
-                            <option value="">Select market</option>
-
-                            {% for option in options.market %}
-                            <option value="{{ option }}"
-                                {% if form_data.get('market', '') == option %}
-                                    selected
-                                {% endif %}>
-                                {{ option }}
-                            </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div class="field">
-                        <label for="order_region">Order Region</label>
-
-                        <select id="order_region"
-                                name="order_region" required>
-                            <option value="">Select region</option>
-
-                            {% for option in options.order_region %}
-                            <option value="{{ option }}"
-                                {% if form_data.get('order_region', '') == option %}
-                                    selected
-                                {% endif %}>
-                                {{ option }}
-                            </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div class="field">
-                        <label for="order_country">Order Country</label>
-
-                        <select id="order_country"
-                                name="order_country" required>
-                            <option value="">Select country</option>
-
-                            {% for option in options.order_country %}
-                            <option value="{{ option }}"
-                                {% if form_data.get('order_country', '') == option %}
-                                    selected
-                                {% endif %}>
-                                {{ option }}
-                            </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div class="field">
-                        <label for="order_state">Order State</label>
-
-                        <select id="order_state"
-                                name="order_state" required>
-                            <option value="">Select state</option>
-
-                            {% for option in options.order_state %}
-                            <option value="{{ option }}"
-                                {% if form_data.get('order_state', '') == option %}
-                                    selected
-                                {% endif %}>
-                                {{ option }}
-                            </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div class="field">
-                        <label for="order_date">Order Date</label>
-
-                        <input
-                            type="date"
-                            id="order_date"
-                            name="order_date"
-                            min="{{ min_date }}"
-                            max="{{ max_date }}"
-                            value="{{ form_data.get('order_date', '') }}"
-                            required
-                        >
-                    </div>
-
-                    <!-- Order time: manual typing with AM/PM option -->
-                    <div class="field">
-                        <label for="order_time_manual">Order Time</label>
-
-                        <div class="time-input-group">
-                            <input
-                                type="text"
-                                id="order_time_manual"
-                                name="order_time_manual"
-                                placeholder="HH:MM (e.g. 09:30)"
-                                maxlength="5"
-                                autocomplete="off"
-                                required
-                            >
-
-                            <select id="order_period" name="order_period" aria-label="Select AM or PM">
-                                <option value="AM" {% if form_data.get('order_period') == 'AM' %}selected{% endif %}>AM</option>
-                                <option value="PM" {% if form_data.get('order_period') == 'PM' %}selected{% endif %}>PM</option>
-                            </select>
-                        </div>
-
-                        <!-- Combined 24-hr time for backend -->
-                        <input
-                            type="hidden"
-                            id="order_time"
-                            name="order_time"
-                            value="{{ form_data.get('order_time', '') }}"
-                        >
-                    </div>
-
                 </div>
             </div>
 
-            <div class="step-navigation single-button">
-                <button type="button"
-                        class="next-button"
-                        id="nextButton">
-                    Next →
-                </button>
+            {% if recent_orders and recent_orders|length > 0 %}
+            <div style="overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius-md);">
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer Name</th>
+                            <th>Shipping Mode</th>
+                            <th>Destination</th>
+                            <th>Order Date & Time</th>
+                            <th style="text-align: right;">Total Amount</th>
+                            <th style="text-align: center;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ro in recent_orders %}
+                        <tr {% if lookup_id == ro.order_id %}style="background: #eef2ff;"{% endif %}>
+                            <td>
+                                <strong style="font-family: monospace; color: var(--primary); font-size: 13.5px;">
+                                    {{ ro.order_id }}
+                                </strong>
+                            </td>
+                            <td style="font-weight: 600; color: var(--text);">
+                                {{ ro.customer_name }}
+                            </td>
+                            <td>
+                                {{ ro.shipping_mode }}
+                            </td>
+                            <td>
+                                {{ ro.order_country }} ({{ ro.market }})
+                            </td>
+                            <td style="color: var(--muted); font-size: 13px;">
+                                {{ ro.order_date }} {{ ro.order_time }}
+                            </td>
+                            <td style="text-align: right; font-weight: 700; font-family: monospace;">
+                                ${{ "%.2f"|format(ro.total_amount) }}
+                            </td>
+                            <td style="text-align: center;">
+                                <a href="{{ url_for('home', lookup_id=ro.order_id) }}" class="btn-inspect">
+                                    Inspect & Predict →
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
+            {% else %}
+            <div class="empty-placeholder">
+                <div class="icon">📦</div>
+                <h4>No Customer Orders Found in Database</h4>
+                <p>Go to the <a href="{{ url_for('place_order') }}">Customer Order Portal</a> to place your first order.</p>
+            </div>
+            {% endif %}
         </section>
 
-        <!-- ======================================
-             STEP 2: PRODUCT INFORMATION
-        ======================================= -->
-        <section id="productStep" class="form-step">
-            <div class="form-section">
-
-                <h3 class="section-heading">
-                    📦 Product Information
-                </h3>
-
-                <div class="form-grid">
-
-                    <div class="field">
-                        <label for="quantity">Order Item Quantity</label>
-
-                        <select id="quantity" name="quantity" required>
-                            <option value="">Select quantity</option>
-
-                            {% for qty in quantity_options %}
-                            <option value="{{ qty }}"
-                                {% if form_data.get('quantity', '')|string == qty|string %}
-                                    selected
-                                {% endif %}>
-                                {{ qty }}
-                            </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div class="field">
-                        <label for="product_price">
-                            Product Price (per item)
-                        </label>
-
-                        <input
-                            type="number"
-                            id="product_price"
-                            name="product_price"
-                            min="0"
-                            step="any"
-                            placeholder="Enter product price"
-                            value="{{ form_data.get('product_price', '') }}"
-                            required
-                        >
-                    </div>
-
-                    <div class="field">
-                        <label for="discount_rate">Discount Rate</label>
-
-                        <select id="discount_rate"
-                                name="discount_rate" required>
-                            <option value="">Select discount rate</option>
-
-                            {% for rate in discount_options %}
-                            <option value="{{ rate.value }}"
-                                {% if form_data.get('discount_rate', '') and (form_data.get('discount_rate', '')|float == rate.value|float) %}
-                                    selected
-                                {% endif %}>
-                                {{ rate.label }}
-                            </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div class="field sales-field">
-                        <label for="sales">Sales</label>
-
-                        <input
-                            type="number"
-                            id="sales"
-                            name="sales"
-                            step="any"
-                            value="{{ form_data.get('sales', '') }}"
-                            placeholder="Calculated automatically"
-                            readonly
-                        >
-                    </div>
-
-                    <div class="field">
-                        <label for="type">Order Type</label>
-
-                        <select id="type" name="type" required>
-                            <option value="">Select order type</option>
-
-                            {% for option in options.type %}
-                            <option value="{{ option }}"
-                                {% if form_data.get('type', '') == option %}
-                                    selected
-                                {% endif %}>
-                                {{ option }}
-                            </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="step-navigation">
-                <button type="button"
-                        class="back-button"
-                        id="backButton">
-                    ← Back
-                </button>
-
-                <button type="submit" class="submit-button">
-                    Predict Shipment Risk
-                </button>
-            </div>
-        </section>
-
-    </form>
-
-    <!-- ======================================
-         PREDICTION RESULT
-    ======================================= -->
-    {% if result %}
-    <section class="result-card
-        {% if result.prediction %}risk{% else %}safe{% endif %}">
-
-        <p class="result-eyebrow">PREDICTION RESULT</p>
-
-        <h2>{{ result.label }}</h2>
-
-        <div class="probability">
-            {{ "%.2f"|format(result.probability) }}%
-        </div>
-
-        <p class="probability-label">
-            Late Delivery Probability
-        </p>
-
-        <div class="meter">
-            <div class="meter-fill"
-                 style="width: {{ result.probability }}%;">
-            </div>
-        </div>
-
-        <p>
-            Decision threshold: 41%
-        </p>
-    </section>
-    {% endif %}
-
-    <footer>
-        <p>
-            SupplyGuard — AI-Powered Shipment Delay Prediction System
-        </p>
-    </footer>
-
-</div>
-
-<script>
-    const shipmentStep = document.getElementById("shipmentStep");
-    const productStep = document.getElementById("productStep");
-    const shipmentTab = document.getElementById("shipmentTab");
-    const productTab = document.getElementById("productTab");
-    const progressFill = document.getElementById("progressFill");
-
-    const timeManualInput = document.getElementById("order_time_manual");
-    const timePeriodSelect = document.getElementById("order_period");
-    const orderTimeInput = document.getElementById("order_time");
-
-    const riskForm = document.getElementById("riskForm");
-
-    // Convert typed 12-hr time + AM/PM into 24-hr HH:MM for backend
-    function syncOrderTime() {
-        const rawTime = timeManualInput.value.trim();
-        const period = timePeriodSelect.value;
-
-        if (!rawTime) {
-            orderTimeInput.value = "";
-            return false;
-        }
-
-        const match = rawTime.match(/^([0-1]?[0-9]|2[0-3]):([0-5][0-9])$/);
-        if (!match) {
-            orderTimeInput.value = "";
-            return false;
-        }
-
-        let hour = parseInt(match[1], 10);
-        const minute = match[2];
-
-        if (period === "PM" && hour < 12) {
-            hour += 12;
-        } else if (period === "AM" && hour === 12) {
-            hour = 0;
-        }
-
-        orderTimeInput.value = String(hour).padStart(2, "0") + ":" + minute;
-        return true;
-    }
-
-    // Auto-colon as user types e.g. "09" -> "09:"
-    timeManualInput.addEventListener("input", function (e) {
-        let val = this.value.replace(/[^0-9:]/g, "");
-        if (val.length === 2 && !val.includes(":") && e.inputType !== "deleteContentBackward") {
-            val = val + ":";
-        }
-        this.value = val;
-        syncOrderTime();
-    });
-
-    timePeriodSelect.addEventListener("change", syncOrderTime);
-
-    // Restore displayed time if Flask sends back order_time
-    function restoreTimeDisplay() {
-        const saved24 = orderTimeInput.value;
-        if (!saved24) return;
-
-        const match = saved24.match(/^([01]\d|2[0-3]):([0-5]\d)$/);
-        if (match) {
-            let hour = parseInt(match[1], 10);
-            const minute = match[2];
-            let period = "AM";
-
-            if (hour >= 12) {
-                period = "PM";
-                if (hour > 12) hour -= 12;
-            } else if (hour === 0) {
-                hour = 12;
-            }
-
-            timeManualInput.value = String(hour).padStart(2, "0") + ":" + minute;
-            timePeriodSelect.value = period;
-        }
-    }
-    restoreTimeDisplay();
-
-    // Show one step at a time.
-    function showStep(step) {
-        const onShipmentPage = step === 1;
-
-        shipmentStep.classList.toggle("active", onShipmentPage);
-        productStep.classList.toggle("active", !onShipmentPage);
-
-        shipmentTab.classList.toggle("active", onShipmentPage);
-        productTab.classList.toggle("active", !onShipmentPage);
-
-        shipmentTab.style.display = onShipmentPage ? "flex" : "none";
-        productTab.style.display = onShipmentPage ? "none" : "flex";
-
-        progressFill.style.width = onShipmentPage ? "50%" : "100%";
-    }
-
-    // Validate only the shipment page before moving forward.
-    function nextStep() {
-        const fields = shipmentStep.querySelectorAll(
-            "input:not([type='hidden']), select"
-        );
-
-        for (const field of fields) {
-            if (!field.checkValidity()) {
-                field.reportValidity();
-                return;
-            }
-        }
-
-        if (!syncOrderTime()) {
-            timeManualInput.setCustomValidity("Please enter a valid time in HH:MM format (e.g. 09:30).");
-            timeManualInput.reportValidity();
-            timeManualInput.setCustomValidity("");
-            return;
-        }
-
-        showStep(2);
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function previousStep() {
-        showStep(1);
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    document.getElementById("nextButton").addEventListener(
-        "click",
-        nextStep
-    );
-
-    document.getElementById("backButton").addEventListener(
-        "click",
-        previousStep
-    );
-
-    // Calculate Sales using quantity, item price and discount.
-    function calculateSales() {
-        const quantity = document.getElementById("quantity").value;
-        const price = document.getElementById("product_price").value;
-        const discount = document.getElementById("discount_rate").value;
-        const salesField = document.getElementById("sales");
-
-        if (quantity === "" || price === "" || discount === "") {
-            salesField.value = "";
-            return;
-        }
-
-        const q = Number(quantity);
-        const p = Number(price);
-        const d = Number(discount);
-
-        if (
-            !Number.isFinite(q) ||
-            !Number.isFinite(p) ||
-            !Number.isFinite(d) ||
-            q < 1 ||
-            p < 0 ||
-            d < 0 ||
-            d > 1
-        ) {
-            salesField.value = "";
-            return;
-        }
-
-        salesField.value = (q * p * (1 - d)).toFixed(2);
-    }
-
-    document.getElementById("quantity").addEventListener(
-        "change", calculateSales
-    );
-
-    document.getElementById("product_price").addEventListener(
-        "input", calculateSales
-    );
-
-    document.getElementById("discount_rate").addEventListener(
-        "change", calculateSales
-    );
-
-    // Validate the active step before moving forward.
-    // The final form submission validates every field.
-    riskForm.addEventListener("submit", function (event) {
-        calculateSales();
-
-        if (!syncOrderTime()) {
-            event.preventDefault();
-            showStep(1);
-
-            timeManualInput.setCustomValidity("Please enter a valid time in HH:MM format (e.g. 09:30).");
-            timeManualInput.reportValidity();
-            timeManualInput.setCustomValidity("");
-
-            return;
-        }
-
-        const invalidField = Array.from(
-            riskForm.querySelectorAll(
-                "input:not([type='hidden']), select"
-            )
-        ).find(field => !field.checkValidity());
-
-        if (invalidField) {
-            event.preventDefault();
-
-            if (shipmentStep.contains(invalidField)) {
-                showStep(1);
-            } else {
-                showStep(2);
-            }
-
-            invalidField.reportValidity();
-        }
-    });
-
-    // Restore the appropriate step after a server response.
-    {% if result %}
-        showStep(2);
-    {% elif error %}
-        showStep(2);
-    {% else %}
-        showStep(1);
-    {% endif %}
-
-    calculateSales();
-</script>
+        <footer>
+            <p>SupplyGuard — AI-Powered Shipment Delay Prediction System</p>
+        </footer>
+
+    </div>
 </body>
 </html>
