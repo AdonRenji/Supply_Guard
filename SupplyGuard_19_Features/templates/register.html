@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register | SupplyGuard</title>
+    <title>{% if role == 'manager' %}Register Operations Manager{% else %}Register Customer{% endif %} | SupplyGuard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -18,8 +17,13 @@
         </header>
 
         <main class="auth-card">
-            <h2>Create Your Account</h2>
-            <p>Register to start predicting shipment risks.</p>
+            {% if role == 'manager' %}
+            <h2>Create Manager Account</h2>
+            <p>Register for SupplyGuard Operations & AI Risk Management.</p>
+            {% else %}
+            <h2>Create Customer Account</h2>
+            <p>Sign up to browse catalogue, place orders, and track your deliveries.</p>
+            {% endif %}
 
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% for category, message in messages %}
@@ -27,7 +31,7 @@
                 {% endfor %}
             {% endwith %}
 
-            <form method="POST" action="{{ url_for('register') }}">
+            <form method="POST" action="{{ url_for('register', role=role) }}">
                 <div class="field">
                     <label for="name">Full Name</label>
                     <input
@@ -80,21 +84,32 @@
                 </div>
 
                 <div class="field">
-                    <label for="role">Account Type</label>
-                    <select id="role" name="role" required style="width: 100%; height: 42px; border-radius: var(--radius-sm); border: 1.5px solid var(--border); padding: 0 12px; font-size: 14px; font-weight: 600;">
-                        <option value="customer" selected>🛒 Customer (Place Orders & Track Deliveries)</option>
-                        <option value="manager">👔 Manager (Inspect Orders & Predict Late-Delivery Risk)</option>
-                    </select>
+                    <label>Account Type</label>
+                    {% if role == 'manager' %}
+                    <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: var(--radius-sm); padding: 10px 14px; display: flex; align-items: center; gap: 8px; font-weight: 700; color: #1d4ed8; font-size: 14px;">
+                        <span>🛡️ Manager (Inspect Orders & Predict Late-Delivery Risk)</span>
+                    </div>
+                    <input type="hidden" name="role" value="manager">
+                    {% else %}
+                    <div style="background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: var(--radius-sm); padding: 10px 14px; display: flex; align-items: center; gap: 8px; font-weight: 700; color: #15803d; font-size: 14px;">
+                        <span>🛒 Customer (Place Orders & Track Deliveries)</span>
+                    </div>
+                    <input type="hidden" name="role" value="customer">
+                    {% endif %}
                 </div>
 
                 <button type="submit" class="submit-button">
-                    Create Account
+                    {% if role == 'manager' %}Create Manager Account →{% else %}Create Customer Account →{% endif %}
                 </button>
             </form>
 
             <p class="auth-link">
                 Already have an account?
-                <a href="{{ url_for('login') }}">Login here</a>
+                {% if role == 'manager' %}
+                <a href="{{ url_for('login', portal='manager') }}">Login to Manager Operations</a>
+                {% else %}
+                <a href="{{ url_for('login', portal='customer') }}">Login to Customer Portal</a>
+                {% endif %}
             </p>
         </main>
     </div>

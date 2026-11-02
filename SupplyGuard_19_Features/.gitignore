@@ -13,8 +13,6 @@ __pycache__/
 .env
 users.json.tmp
 
+
 # Large trained ML model — keep locally, don't upload
 saved_model/supplyguard_19_model.joblib
-
-
-users.json

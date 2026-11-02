@@ -1,0 +1,32 @@
+{
+    "adonrenji@gmail.com": {
+        "name": "Adon Renji",
+        "role": "manager",
+        "password_hash": "scrypt:32768:8:1$7nW26J6s9a6Cr2Kf$4749ba56f530f77dc3fcc02a2dde9d093c1b2bd1400e146f30c324bb5d2905fb2dab04b4b639798cbba67b46e2c1064a07efa7561292442c623cdf178b141bff"
+    },
+    "customer_demo@supplyguard.com": {
+        "name": "Sophia Vance",
+        "role": "customer",
+        "password_hash": "scrypt:32768:8:1$xCB26ppxWo1el1rw$096138ca692add8c7a78080839a1aebe633b30d3b87866e7269b2a8ca856254b7abcf934edbae97f9d4d6fb31fc354fdfbfb263d179a393a69783ae73a0c4b69"
+    },
+    "adonrenji1@gmail.com": {
+        "name": "Adon Renji",
+        "role": "manager",
+        "password_hash": "scrypt:32768:8:1$VeY4BikwcGJWSKHc$a22a2258683a843e88b67cda78495edbe1c446139838553bff9d2c3709f5e860a25a8fc5c7e12f30de28101b472cde1bb41e4784dda8635e10847b6428ba0ced"
+    },
+    "adon1renji@gmail.com": {
+        "name": "Adon Renji",
+        "role": "customer",
+        "password_hash": "scrypt:32768:8:1$lpv1FxyWZXoyWx5w$6b13e056accd7984a9c515a9bd4c552fdb7d6608a79faa3cb931cc216520d8ad868469a9f0fb791414c0aadb2b91210c4b04aea7c5174ceb33e191a1b6191ec2"
+    },
+    "adonrenji@gmail.com1": {
+        "name": "Adon Renji",
+        "role": "customer",
+        "password_hash": "scrypt:32768:8:1$zNishNiue8CiHaEe$b8e7a2aa03389762dc96f55d5da37931615d46f110a0413c6dbcb397d505f9e507ea80295d829f880012c8dd195a9ec61e6b801a3271f2be2063f888c7531590"
+    },
+    "bistamiss@adon": {
+        "name": "bistamiss",
+        "role": "customer",
+        "password_hash": "scrypt:32768:8:1$Sh7sVnI4CZDfCIOp$35be3572427d4df0742d79e257e8b1a6d2fd707317a2f24c76fbece319deae73d724d29f06f5e1bedf46a8d5e8c9601ed93dda87c5393a8119c2343bc8c1f259"
+    }
+}

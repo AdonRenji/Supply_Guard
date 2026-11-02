@@ -3,6 +3,7 @@ from pathlib import Path
 import json
 import os
 import random
+import sqlite3
 from datetime import datetime
 from functools import wraps
 
@@ -111,7 +112,18 @@ def save_users(users):
     with open(temporary_path, "w", encoding="utf-8") as file:
         json.dump(users, file, indent=4, ensure_ascii=False)
 
-    temporary_path.replace(USERS_PATH)
+    try:
+        temporary_path.replace(USERS_PATH)
+    except PermissionError:
+        import time
+        time.sleep(0.15)
+        try:
+            temporary_path.replace(USERS_PATH)
+        except PermissionError:
+            with open(USERS_PATH, "w", encoding="utf-8") as file:
+                json.dump(users, file, indent=4, ensure_ascii=False)
+            if temporary_path.exists():
+                temporary_path.unlink(missing_ok=True)
 
 
 def login_required(view_function):
@@ -132,7 +144,6 @@ def manager_required(view_function):
     @wraps(view_function)
     def wrapped_view(*args, **kwargs):
         if "email" not in session:
-            flash("Please log in with a manager account to access operations.", "error")
             return redirect(url_for("login"))
 
         if session.get("role") != "manager":
@@ -163,20 +174,25 @@ def customer_required(view_function):
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    target_role = request.args.get("role", "customer").strip().lower()
+    if target_role not in ["customer", "manager"]:
+        target_role = "customer"
+
     if "email" in session:
         if session.get("role") == "customer":
             return redirect(url_for("place_order"))
-        return redirect(url_for("home"))
+        elif session.get("role") == "manager" and target_role != "manager":
+            return redirect(url_for("home"))
 
     if request.method == "POST":
         name = request.form.get("name", "").strip()
         email = request.form.get("email", "").strip().lower()
         password = request.form.get("password", "")
         confirm_password = request.form.get("confirm_password", "")
-        role = request.form.get("role", "customer").strip().lower()
+        role = request.form.get("role", target_role).strip().lower()
 
         if role not in ["customer", "manager"]:
-            role = "customer"
+            role = target_role
 
         if not name or not email or not password or not confirm_password:
             flash("Please complete all fields.", "error")
@@ -207,8 +223,13 @@ def register():
                     }
 
                     save_users(users)
-                    flash(f"Account created successfully as {role.capitalize()}. Please log in.", "success")
-                    return redirect(url_for("login"))
+                    if "email" in session and session.get("role") == "manager":
+                        flash(f"New Manager account for '{name}' ({email}) created successfully!", "success")
+                        return redirect(url_for("home"))
+
+                    portal_name = "Customer Portal" if role == "customer" else "Manager Operations"
+                    flash(f"Account created successfully as {role.capitalize()}! Please sign in via the {portal_name}.", "success")
+                    return redirect(url_for("login", portal=role))
 
             except (OSError, RuntimeError):
                 app.logger.exception("Registration could not be completed.")
@@ -217,7 +238,7 @@ def register():
                     "error",
                 )
 
-    return render_template("register.html")
+    return render_template("register.html", role=target_role)
 
 
 # --------------------------------------------------
@@ -231,9 +252,16 @@ def login():
             return redirect(url_for("place_order"))
         return redirect(url_for("home"))
 
+    active_portal = request.args.get("portal", "customer").strip().lower()
+    if active_portal not in ["customer", "manager"]:
+        active_portal = "customer"
+
     if request.method == "POST":
         email = request.form.get("email", "").strip().lower()
         password = request.form.get("password", "")
+        login_portal = request.form.get("login_portal", active_portal).strip().lower()
+        if login_portal not in ["customer", "manager"]:
+            login_portal = "customer"
 
         try:
             users = load_users()
@@ -245,25 +273,36 @@ def login():
                 and user.get("password_hash")
                 and check_password_hash(user["password_hash"], password)
             ):
+                actual_role = user.get("role", "customer").lower()
+
+                # Strict Portal Scope Enforcement
+                if login_portal == "customer" and actual_role != "customer":
+                    flash("ℹ️ This is a Manager account. Please select the 'Manager Operations' tab above to sign in.", "error")
+                    return render_template("login.html", active_portal="manager")
+
+                if login_portal == "manager" and actual_role != "manager":
+                    flash("⚠️ Access Denied: This is a Customer account. Please select the 'Customer Portal' tab above to sign in.", "error")
+                    return render_template("login.html", active_portal="customer")
+
                 session.clear()
                 session["email"] = email
                 session["name"] = user.get("name", "User")
-                role = user.get("role", "manager")
-                session["role"] = role
+                session["role"] = actual_role
 
                 flash(f"Welcome back, {session['name']}!", "success")
-                if role == "customer":
+                if actual_role == "customer":
                     return redirect(url_for("place_order"))
                 else:
                     return redirect(url_for("home"))
 
             flash("Invalid email or password.", "error")
+            return render_template("login.html", active_portal=login_portal)
 
         except (OSError, RuntimeError):
             app.logger.exception("Login could not be completed.")
             flash("Unable to access user accounts. Check users.json.", "error")
 
-    return render_template("login.html")
+    return render_template("login.html", active_portal=active_portal)
 
 
 # --------------------------------------------------
@@ -575,27 +614,273 @@ def build_prediction_result(row_dict, late_probability, pred_id=None, order_id=N
 
     region_name = order.get("order_region") if order else row_dict.get("Order Region", "")
 
-    if is_late:
-        recommendations = [
-            "Verify the delivery schedule with the carrier.",
-            f"Monitor shipment progress across {region_name} transit checkpoints for early signs of delay.",
-            "Inform the relevant stakeholders about the potential delay."
-        ]
-        key_insight = (
-            f"The high risk is mainly due to the scheduled delivery time ({int(row_dict['Days for shipment (scheduled)'])} days) "
-            f"and the selected shipping mode ({row_dict['Shipping Mode']}), combined with the order being placed during a "
-            f"{'weekend' if is_weekend_bool else 'weekday'} and {'night' if is_night_bool else 'daytime'} hour."
-        )
+    mode = str(row_dict.get("Shipping Mode", ""))
+    sched_days = int(row_dict.get("Days for shipment (scheduled)", 0))
+
+    time_of_day = "night" if is_night_bool else "daytime"
+    day_type = "weekend" if is_weekend_bool else "weekday"
+
+    order_hour_val = int(row_dict.get("Order Hour", 12))
+    country_name = order.get("order_country") if order else str(row_dict.get("Order Country", ""))
+    order_type = str(row_dict.get("Type", "DEBIT"))
+
+    total_qty = 1
+    if order and order.get("items"):
+        total_qty = sum(it.get("quantity", 1) for it in order["items"])
     else:
-        recommendations = [
-            "Confirm the delivery schedule with the carrier.",
-            f"Monitor shipment progress across {region_name} checkpoints at regular intervals.",
-            "Inform the relevant stakeholders that the shipment is progressing on schedule."
-        ]
-        key_insight = (
-            f"The low risk is supported by the scheduled delivery time ({int(row_dict['Days for shipment (scheduled)'])} days) "
-            f"and reliable historical performance for {row_dict['Shipping Mode']} in {region_name}."
-        )
+        total_qty = int(row_dict.get("Order Item Quantity", 1))
+
+    dest_str = country_name if country_name else region_name
+
+    if is_late:
+        # Simple timing reason
+        if is_night_bool:
+            timing_phrase = f"placed late at night ({order_hour_val:02d}:00) after carrier cut-off"
+        elif 18 <= order_hour_val <= 21:
+            timing_phrase = f"placed in the evening ({order_hour_val:02d}:00) after daily dispatch"
+        elif is_weekend_bool:
+            timing_phrase = f"placed on a weekend ({day_name}) during reduced carrier operations"
+        else:
+            timing_phrase = f"placed on {day_name} at {order_hour_val:02d}:00"
+
+        # Simple mode & schedule reason
+        if mode == "Same Day" or sched_days == 0:
+            mode_phrase = "demands same-day delivery with no extra margin for delays"
+        elif mode == "First Class" or sched_days == 1:
+            mode_phrase = f"has a tight 1-day delivery schedule to {dest_str}"
+        elif mode == "Second Class" or sched_days == 2:
+            mode_phrase = f"allows only 2 days for transit to {dest_str}"
+        else:
+            mode_phrase = f"uses Standard Class ({sched_days} scheduled days), which frequently faces hub sorting delays"
+
+        # Simple 1-sentence key insight
+        key_insight = f"High delay risk was predicted because this order was {timing_phrase}, and {mode_phrase}."
+
+        # Standard actionable recommendations for all late-delivery orders
+        destination_label = dest_str if dest_str else "the destination"
+        rec_1 = "Prioritize warehouse packing immediately for the next courier pickup."
+        rec_2 = f"Dispatch via a direct local courier to {destination_label}."
+        rec_3 = "Share live delivery tracking with the customer."
+
+        recommendations = [rec_1, rec_2, rec_3]
+
+    else:
+        # Simple timing for on-time
+        timing_phrase = f"placed during normal business hours ({order_hour_val:02d}:00 on {day_name})"
+
+        # Simple mode & schedule for on-time
+        if mode == "Standard Class":
+            mode_phrase = f"the {sched_days}-day scheduled window gives enough time for standard delivery to {dest_str}"
+        elif mode in ["First Class", "Second Class"]:
+            mode_phrase = f"{mode} priority shipping provides fast and reliable transit to {dest_str}"
+        else:
+            mode_phrase = "early dispatch allows same-day delivery during regular daytime hours"
+
+        key_insight = f"Low delay risk was predicted because this order was {timing_phrase}, and {mode_phrase}."
+
+        rec_1 = f"Pack this order following standard {mode} procedures."
+        rec_2 = f"Hand over the parcel during regular carrier pickup on {day_name}."
+        rec_3 = f"Provide tracking details confirming delivery to {dest_str} within {sched_days} business days."
+
+        recommendations = [rec_1, rec_2, rec_3]
+
+    # Dynamic Contributing Factors for Machine Learning Prediction Explanation UI
+    dest_display = f"{region_name} ({dest_str})" if dest_str and dest_str != region_name else (region_name or dest_str or "Global")
+
+    if is_late:
+        # 1. Shipping Mode
+        if mode == "Standard Class":
+            mode_score = 82
+            mode_impact_level = "high"
+            mode_impact_label = "High Delay Impact"
+            mode_bar_class = "bar-high"
+            mode_impact_class = "impact-danger"
+            mode_exp = "Standard Class passes through multiple regional sorting hubs, which frequently causes transit delays."
+        elif mode == "Same Day":
+            mode_score = 88
+            mode_impact_level = "critical"
+            mode_impact_label = "Zero-Margin Schedule"
+            mode_bar_class = "bar-critical"
+            mode_impact_class = "impact-critical"
+            mode_exp = "Same Day shipping requires immediate fulfillment, leaving no buffer for warehouse processing."
+        elif mode == "First Class":
+            mode_score = 74
+            mode_impact_level = "high"
+            mode_impact_label = "Tight Turnaround"
+            mode_bar_class = "bar-high"
+            mode_impact_class = "impact-danger"
+            mode_exp = "First Class requires fast 1-day delivery, so any small sorting delay causes a late arrival."
+        else:
+            mode_score = 64
+            mode_impact_level = "moderate"
+            mode_impact_label = "Limited Buffer"
+            mode_bar_class = "bar-medium"
+            mode_impact_class = "impact-warning"
+            mode_exp = "Second Class allows only 2 days, leaving little room for transit hold-ups."
+
+        # 2. Transit Time & Scheduling
+        if sched_days <= 1:
+            transit_score = 85
+            transit_impact_level = "critical"
+            transit_impact_label = "Tight Delivery Window"
+            transit_bar_class = "bar-critical"
+            transit_impact_class = "impact-critical"
+            if sched_days == 0:
+                transit_exp = "A 0-day scheduled window requires delivery today, leaving zero buffer for carrier transit."
+            else:
+                transit_exp = "A 1-day scheduled window requires next-day delivery, leaving minimal buffer for carrier transit."
+        elif sched_days >= 4:
+            transit_score = 76
+            transit_impact_level = "high"
+            transit_impact_label = "Long Transit Route"
+            transit_bar_class = "bar-high"
+            transit_impact_class = "impact-danger"
+            transit_exp = f"{sched_days} scheduled transit days involve multiple hub transfers, increasing delay risk."
+        else:
+            transit_score = 62
+            transit_impact_level = "moderate"
+            transit_impact_label = "Short Buffer Margin"
+            transit_bar_class = "bar-medium"
+            transit_impact_class = "impact-warning"
+            transit_exp = f"{sched_days} scheduled transit days provide less than 24 hours of buffer for delays."
+
+        # 3. Destination Region
+        dest_score = 69
+        dest_impact_level = "high"
+        dest_impact_label = "Regional Route Risk"
+        dest_bar_class = "bar-high"
+        dest_impact_class = "impact-danger"
+        dest_exp = f"Shipments to {dest_display} pass through multiple regional hubs, increasing delay risk."
+
+        # 4. Dispatch Timing
+        if is_night_bool:
+            time_score = 89
+            time_impact_level = "critical"
+            time_impact_label = "Late-Night Placement"
+            time_bar_class = "bar-critical"
+            time_impact_class = "impact-critical"
+            time_exp = f"Order was placed at {order_hour_val:02d}:00 after carrier cut-off, delaying dispatch to the next morning."
+        elif is_weekend_bool:
+            time_score = 80
+            time_impact_level = "high"
+            time_impact_label = "Weekend Placement"
+            time_bar_class = "bar-high"
+            time_impact_class = "impact-danger"
+            time_exp = f"Order was placed on {day_name} when carriers operate on reduced sorting schedules."
+        elif order_hour_val >= 16:
+            time_score = 72
+            time_impact_level = "moderate"
+            time_impact_label = "Near Cut-Off Time"
+            time_bar_class = "bar-medium"
+            time_impact_class = "impact-warning"
+            time_exp = f"Order booked at {order_hour_val:02d}:00 is close to the daily carrier cut-off."
+        else:
+            time_score = 56
+            time_impact_level = "moderate"
+            time_impact_label = "Peak Queue Hours"
+            time_bar_class = "bar-medium"
+            time_impact_class = "impact-warning"
+            time_exp = f"Order placed at {order_hour_val:02d}:00 during peak warehouse fulfillment hours."
+
+        # Drivers
+        if is_night_bool:
+            primary_driver = f"Late-Night Order Placement ({order_hour_val:02d}:00 after carrier cut-off)"
+            secondary_driver = f"Shipping Mode ({mode} - {sched_days} scheduled days)"
+        elif mode in ["Same Day", "First Class"]:
+            primary_driver = f"Tight Delivery Window ({sched_days} scheduled days)"
+            secondary_driver = f"Destination Route ({region_name})"
+        elif is_weekend_bool:
+            primary_driver = f"Weekend Timing ({day_name} reduced carrier shifts)"
+            secondary_driver = f"Shipping Mode ({mode})"
+        else:
+            primary_driver = f"Standard Class Transit Hub Stops"
+            secondary_driver = f"Destination Region ({region_name})"
+
+    else:
+        # On-Time / Low Risk
+        if mode in ["First Class", "Second Class"]:
+            mode_score = 22
+            mode_impact_level = "optimal"
+            mode_impact_label = "Priority Shipping"
+            mode_bar_class = "bar-low"
+            mode_impact_class = "impact-success"
+            mode_exp = f"{mode} moves quickly through carrier hubs with minimal waiting time."
+        elif mode == "Standard Class":
+            mode_score = 30
+            mode_impact_level = "favorable"
+            mode_impact_label = "Adequate Transit Time"
+            mode_bar_class = "bar-low"
+            mode_impact_class = "impact-success"
+            mode_exp = "Standard Class scheduled days give enough time for normal delivery."
+        else:
+            mode_score = 25
+            mode_impact_level = "optimal"
+            mode_impact_label = "Same-Day Route"
+            mode_bar_class = "bar-low"
+            mode_impact_class = "impact-success"
+            mode_exp = "Local courier can complete same-day delivery during regular hours."
+
+        transit_score = 18
+        transit_impact_level = "optimal"
+        transit_impact_label = "Enough Buffer Time"
+        transit_bar_class = "bar-low"
+        transit_impact_class = "impact-success"
+        transit_exp = f"The {sched_days}-day scheduled window provides plenty of buffer for any minor delays."
+
+        dest_score = 24
+        dest_impact_level = "optimal"
+        dest_impact_label = "Direct Carrier Route"
+        dest_bar_class = "bar-low"
+        dest_impact_class = "impact-success"
+        dest_exp = f"Carrier routes to {dest_display} are direct and reliable."
+
+        time_score = 15
+        time_impact_level = "optimal"
+        time_impact_label = "Optimal Order Time"
+        time_bar_class = "bar-low"
+        time_impact_class = "impact-success"
+        time_exp = f"Order was placed during business hours ({order_hour_val:02d}:00 on {day_name}) with ample packing time."
+
+        primary_driver = f"Sufficient Transit Buffer ({sched_days} scheduled days)"
+        secondary_driver = f"Normal Business Hours ({order_hour_val:02d}:00 on {day_name})"
+
+    contributing_factors = {
+        "shipping_mode": {
+            "score": mode_score,
+            "impact_level": mode_impact_level,
+            "impact_label": mode_impact_label,
+            "impact_class": mode_impact_class,
+            "bar_class": mode_bar_class,
+            "explanation": mode_exp,
+        },
+        "transit_time": {
+            "score": transit_score,
+            "impact_level": transit_impact_level,
+            "impact_label": transit_impact_label,
+            "impact_class": transit_impact_class,
+            "bar_class": transit_bar_class,
+            "explanation": transit_exp,
+        },
+        "destination_region": {
+            "score": dest_score,
+            "impact_level": dest_impact_level,
+            "impact_label": dest_impact_label,
+            "impact_class": dest_impact_class,
+            "bar_class": dest_bar_class,
+            "explanation": dest_exp,
+            "route_display": dest_display,
+        },
+        "dispatch_timing": {
+            "score": time_score,
+            "impact_level": time_impact_level,
+            "impact_label": time_impact_label,
+            "impact_class": time_impact_class,
+            "bar_class": time_bar_class,
+            "explanation": time_exp,
+        },
+        "primary_driver": primary_driver,
+        "secondary_driver": secondary_driver,
+    }
 
     # Circle circumference for r=40 is ~251.2
     stroke_offset = round(251.2 - (251.2 * late_probability), 1)
@@ -606,7 +891,7 @@ def build_prediction_result(row_dict, late_probability, pred_id=None, order_id=N
         qty_display = f"{sum(it['quantity'] for it in order['items'])} items"
         price_display = "Itemized in order"
         disc_display = "Itemized in order"
-        sales_display = f"${float(order['total_amount']):.2f}"
+        sales_display = f"${float(order.get('total_amount', row_dict.get('Sales', 0.0))):.2f}"
     else:
         qty_display = int(row_dict["Order Item Quantity"])
         price_display = f"${float(row_dict['Order Item Product Price']):.2f}"
@@ -629,6 +914,8 @@ def build_prediction_result(row_dict, late_probability, pred_id=None, order_id=N
         "stroke_offset": stroke_offset,
         "shipping_mode": row_dict["Shipping Mode"],
         "days_scheduled": f"{int(row_dict['Days for shipment (scheduled)'])} days",
+        "interaction_mode_hour": row_dict.get("Interaction_ShippingMode_OrderHour", f"{row_dict.get('Shipping Mode')}_{int(row_dict.get('Order Hour', 0))}"),
+        "market": order.get("market") if order else row_dict.get("Market"),
         "order_region": order.get("order_region") if order else row_dict.get("Order Region"),
         "order_country": order.get("order_country") if order else row_dict.get("Order Country"),
         "order_state": order.get("order_state") if order else row_dict.get("Order State"),
@@ -646,6 +933,7 @@ def build_prediction_result(row_dict, late_probability, pred_id=None, order_id=N
         "is_night": "Yes" if is_night_bool else "No",
         "recommendations": recommendations,
         "key_insight": key_insight,
+        "contributing_factors": contributing_factors,
     }
     return result_data
 
@@ -668,6 +956,14 @@ def home():
             lookup_error = f"No order found matching Order ID '{lookup_id}'. Please verify the ID."
 
     recent_orders = database.get_recent_orders(limit=10)
+
+    # Deduplicate flash messages in session so they never appear multiple times
+    if "_flashes" in session and session["_flashes"]:
+        unique_flashes = []
+        for cat, msg in session["_flashes"]:
+            if (cat, msg) not in unique_flashes:
+                unique_flashes.append((cat, msg))
+        session["_flashes"] = unique_flashes
 
     return render_template(
         "home.html",
@@ -742,10 +1038,14 @@ def place_order():
 
     if request.method == "POST":
         try:
+            now_submit = datetime.now()
+            today_date = now_submit.strftime("%Y-%m-%d")
+            submit_time_24 = now_submit.strftime("%H:%M")
+
             customer_name = request.form.get("customer_name", "").strip()
             customer_email = request.form.get("customer_email", "").strip().lower()
             order_type = request.form.get("order_type", "").strip()
-            order_date = request.form.get("order_date", "").strip()
+            order_date = request.form.get("order_date", "").strip() or today_date
             order_time = request.form.get("order_time", "").strip()
             order_time_manual = request.form.get("order_time_manual", "").strip()
             order_period = request.form.get("order_period", "AM").strip().upper()
@@ -765,19 +1065,23 @@ def place_order():
                 raise ValueError("Payment / transaction type is required.")
 
             if not order_time and order_time_manual:
-                if ":" not in order_time_manual:
-                    raise ValueError("Time must be in HH:MM format.")
-                h_str, m_str = order_time_manual.split(":", 1)
-                h = int(h_str)
-                m = int(m_str)
-                if order_period == "PM" and h != 12:
-                    h += 12
-                elif order_period == "AM" and h == 12:
-                    h = 0
-                order_time = f"{h:02d}:{m:02d}"
+                if ":" in order_time_manual:
+                    h_str, m_str = order_time_manual.split(":", 1)
+                    try:
+                        h = int(h_str)
+                        m = int(m_str)
+                        if order_period == "PM" and h != 12:
+                            h += 12
+                        elif order_period == "AM" and h == 12:
+                            h = 0
+                        order_time = f"{h:02d}:{m:02d}"
+                    except ValueError:
+                        order_time = submit_time_24
+                else:
+                    order_time = submit_time_24
 
             if not order_time:
-                raise ValueError("Order time is required.")
+                order_time = submit_time_24
 
             if not shipping_mode or not days_scheduled:
                 raise ValueError("Shipping mode and scheduled days are required.")
@@ -874,6 +1178,12 @@ def place_order():
 
         except ValueError as exc:
             error = str(exc)
+        except sqlite3.OperationalError as exc:
+            app.logger.warning("Database lock detected: %s", exc)
+            if "database is locked" in str(exc).lower():
+                error = "Database is currently locked by another program (DB Browser for SQLite). Please close DB Browser (or click 'Write Changes' / 'Close Database') and try again."
+            else:
+                error = f"Database error: {exc}"
         except Exception:
             app.logger.exception("Failed to place order.")
             error = "Could not place order. Please review your inputs and try again."
@@ -997,13 +1307,98 @@ def predict_order(order_id):
             recommendations_json=json.dumps(result_data["recommendations"])
         )
 
-        flash(f"Risk prediction completed for Order {order['order_id']} and saved to database.", "success")
+        # Clear any accumulated flash messages so messages never duplicate
+        session.pop("_flashes", None)
+        flash(f"Risk prediction completed for Order {order['order_id']}.", "success")
         return render_template("result.html", result=result_data, order=order)
 
     except Exception:
         app.logger.exception("Order prediction failed.")
         flash("Could not run delivery risk prediction on order.", "error")
         return redirect(url_for("home", lookup_id=order_id))
+
+
+@app.route("/prediction-explanation/<order_id>", methods=["GET", "POST"])
+@manager_required
+def prediction_explanation(order_id):
+    order = database.get_order_by_order_id(order_id)
+    if not order:
+        flash(f"Order '{order_id}' not found.", "error")
+        return redirect(url_for("home"))
+
+    items = order.get("items", [])
+    if not items:
+        flash("Order has no associated items to evaluate.", "error")
+        return redirect(url_for("home", lookup_id=order_id))
+
+    try:
+        order_datetime = pd.to_datetime(f"{order['order_date']} {order['order_time']}:00")
+        day_of_week = int(order_datetime.dayofweek)
+        order_hour = int(order_datetime.hour)
+
+        item_rows = []
+        for item in items:
+            row = {
+                "Shipping Mode": order["shipping_mode"],
+                "Days for shipment (scheduled)": float(order["days_scheduled"]),
+                "Order Item Quantity": float(item["quantity"]),
+                "Market": to_model_geo(order["market"]),
+                "Order Region": to_model_geo(order["order_region"]),
+                "Order Country": to_model_geo(order["order_country"]),
+                "Order State": to_model_geo(order["order_state"]),
+                "Order Item Product Price": float(item["product_price"]),
+                "Order Item Discount Rate": float(item["discount_rate"]),
+                "Sales": float(item["sales"]),
+                "Type": order["order_type"],
+                "Order Month": int(order_datetime.month),
+                "Order Day": int(order_datetime.day),
+                "Order Day of Week": day_of_week,
+                "Order Hour": order_hour,
+                "Is Weekend": int(day_of_week in [5, 6]),
+                "Order Week of Year": float(order_datetime.isocalendar().week),
+                "Is Night": int(order_hour < 6 or order_hour >= 22),
+                "Interaction_ShippingMode_OrderHour": f"{order['shipping_mode']}_{order_hour}",
+            }
+            item_rows.append(row)
+
+        df_items = pd.DataFrame(item_rows, columns=FEATURES)
+        probs = model.predict_proba(df_items)
+        classes = list(model.classes_)
+        class_1_idx = classes.index(1)
+
+        item_probs = [float(probs[i, class_1_idx]) for i in range(len(items))]
+        max_idx = item_probs.index(max(item_probs))
+        overall_late_probability = item_probs[max_idx]
+
+        pred_id = f"SG-XAI-{datetime.now().strftime('%Y%m%d')}-{random.randint(1000, 9999)}"
+
+        result_data = build_prediction_result(
+            item_rows[max_idx],
+            overall_late_probability,
+            pred_id=pred_id,
+            order_id=order["order_id"],
+            order=order
+        )
+
+        return render_template("prediction_explanation.html", result=result_data, order=order)
+
+    except Exception:
+        app.logger.exception("Prediction explanation failed.")
+        flash("Could not generate prediction explanation for order.", "error")
+        return redirect(url_for("home", lookup_id=order_id))
+
+
+@app.route("/prediction-explanation", methods=["GET", "POST"])
+@manager_required
+def prediction_explanation_direct():
+    order_id = request.args.get("order_id")
+    if order_id:
+        return redirect(url_for("prediction_explanation", order_id=order_id))
+    recent = database.get_recent_orders(limit=1)
+    if recent:
+        return redirect(url_for("prediction_explanation", order_id=recent[0]["order_id"]))
+    flash("No orders available to explain.", "error")
+    return redirect(url_for("home"))
 
 
 @app.route("/api/geo-hierarchy", methods=["GET"])

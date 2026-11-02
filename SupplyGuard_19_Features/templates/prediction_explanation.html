@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shipment Delay Risk Assessment | SupplyGuard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="result-body">
+<div class="result-page-container">
+
+    <!-- Top Header -->
+    <header class="hero result-hero">
+        <div class="logo">SG</div>
+
+        <div class="brand-content">
+            <h1>SupplyGuard</h1>
+            <p>Smarter Predictions. Safer Deliveries.</p>
+        </div>
+
+        {% if session.get('email') %}
+        <div class="user-actions">
+            <span class="welcome-user">
+                Welcome, {{ session.get('name', 'User') }} (Manager)
+            </span>
+
+            <a href="{{ url_for('logout') }}" class="logout-button">
+                Logout
+            </a>
+        </div>
+        {% endif %}
+    </header>
+
+    <!-- Main Explanation Card -->
+    <main class="prediction-results-card">
+
+        <!-- Card Top Bar: Navigation & Metadata -->
+        <div class="results-top-bar">
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                {% if order %}
+                <a href="{{ url_for('home', lookup_id=order.order_id) }}" class="back-pill-btn">
+                    ← Back to Order {{ order.order_id }}
+                </a>
+                {% else %}
+                <a href="{{ url_for('home') }}" class="back-pill-btn">
+                    ← Back to Dashboard
+                </a>
+                {% endif %}
+            </div>
+
+            <div class="meta-pills">
+                {% if result.order_id %}
+                <span class="meta-tag" style="background: #e0e7ff; color: #3730a3; border-color: #c7d2fe;">
+                    <span class="meta-icon">📦</span> Order ID: <strong>{{ result.order_id }}</strong>
+                </span>
+                {% endif %}
+                <span class="meta-tag">
+                    <span class="meta-icon">📋</span> Explanation ID: <strong>{{ result.prediction_id }}</strong>
+                </span>
+                <span class="meta-tag">
+                    <span class="meta-icon">🕒</span> {{ result.timestamp }}
+                </span>
+            </div>
+        </div>
+
+        <!-- Section Title: Shipment Delay Risk Assessment -->
+        <div class="results-header-title" style="margin-bottom: 24px;">
+            <div class="cube-icon-badge">🧠</div>
+            <div>
+                <h2>Shipment Delay Risk Assessment</h2>
+                <p>Machine learning prediction and key contributing factors</p>
+            </div>
+        </div>
+
+        <!-- Risk Status Banner with Circular Gauge -->
+        <div class="risk-status-banner {% if result.is_late %}high-risk{% else %}low-risk{% endif %}">
+            <div class="risk-info-left">
+                <div class="status-indicator-badge">
+                    {% if result.is_late %}!{% else %}✓{% endif %}
+                </div>
+                <div class="status-text">
+                    <span class="status-eyebrow">Predicted Risk</span>
+                    <h3>{{ result.label }}</h3>
+                    <p>{{ result.description }}</p>
+                </div>
+            </div>
+
+            <div class="risk-gauge-right">
+                <div class="radial-gauge-wrapper">
+                    <svg viewBox="0 0 100 100" class="radial-gauge-svg">
+                        <circle class="gauge-track" cx="50" cy="50" r="40" />
+                        <circle
+                            class="gauge-progress {% if result.is_late %}gauge-high{% else %}gauge-low{% endif %}"
+                            cx="50" cy="50" r="40"
+                            style="stroke-dashoffset: {{ result.stroke_offset }};"
+                        />
+                    </svg>
+                    <div class="gauge-center-text">
+                        <span class="gauge-percent">{{ result.probability_int }}%</span>
+                        <span class="gauge-caption">Risk Probability</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Machine Learning Prediction Explanation (XAI Engine Container) -->
+        <section class="ml-explanation-container" id="ml-prediction-explanation-ui" style="margin-top: 24px;">
+            <div class="explanation-header-bar">
+                <div class="explanation-title-group">
+                    <h3 class="explanation-title">Key Contributing Factors</h3>
+                    <p class="explanation-subtitle">
+                        Main factors affecting the delivery schedule for this order.
+                    </p>
+                </div>
+            </div>
+
+            <!-- 4 Key Contributing Factors Grid -->
+            <div class="factor-attribution-grid">
+                <!-- 1. Shipping Mode -->
+                <div class="factor-card factor-{{ result.contributing_factors.shipping_mode.impact_level }}">
+                    <div class="factor-card-top">
+                        <div class="factor-icon-wrap">🚚</div>
+                        <div class="factor-titles">
+                            <span class="factor-category">Contributing Factor 1</span>
+                            <h5 class="factor-name">Shipping Mode</h5>
+                        </div>
+                        <span class="factor-impact-badge {{ result.contributing_factors.shipping_mode.impact_class }}">
+                            {{ result.contributing_factors.shipping_mode.impact_label }}
+                        </span>
+                    </div>
+                    <div class="factor-value-row">
+                        <span class="factor-data-label">Selected Mode:</span>
+                        <strong class="factor-data-value">{{ result.shipping_mode }}</strong>
+                    </div>
+                </div>
+
+                <!-- 2. Transit Time & Scheduling -->
+                <div class="factor-card factor-{{ result.contributing_factors.transit_time.impact_level }}">
+                    <div class="factor-card-top">
+                        <div class="factor-icon-wrap">⏱️</div>
+                        <div class="factor-titles">
+                            <span class="factor-category">Contributing Factor 2</span>
+                            <h5 class="factor-name">Transit Time & Scheduling</h5>
+                        </div>
+                        <span class="factor-impact-badge {{ result.contributing_factors.transit_time.impact_class }}">
+                            {{ result.contributing_factors.transit_time.impact_label }}
+                        </span>
+                    </div>
+                    <div class="factor-value-row">
+                        <span class="factor-data-label">Scheduled Window:</span>
+                        <strong class="factor-data-value">{{ result.days_scheduled }}</strong>
+                    </div>
+                </div>
+
+                <!-- 3. Destination Region & Geography -->
+                <div class="factor-card factor-{{ result.contributing_factors.destination_region.impact_level }}">
+                    <div class="factor-card-top">
+                        <div class="factor-icon-wrap">🌍</div>
+                        <div class="factor-titles">
+                            <span class="factor-category">Contributing Factor 3</span>
+                            <h5 class="factor-name">Destination Region</h5>
+                        </div>
+                        <span class="factor-impact-badge {{ result.contributing_factors.destination_region.impact_class }}">
+                            {{ result.contributing_factors.destination_region.impact_label }}
+                        </span>
+                    </div>
+                    <div class="factor-value-row">
+                        <span class="factor-data-label">Destination Route:</span>
+                        <strong class="factor-data-value">{{ result.contributing_factors.destination_region.route_display }}</strong>
+                    </div>
+                </div>
+
+                <!-- 4. Dispatch Timing -->
+                <div class="factor-card factor-{{ result.contributing_factors.dispatch_timing.impact_level }}">
+                    <div class="factor-card-top">
+                        <div class="factor-icon-wrap">⏰</div>
+                        <div class="factor-titles">
+                            <span class="factor-category">Contributing Factor 4</span>
+                            <h5 class="factor-name">Dispatch Timing</h5>
+                        </div>
+                        <span class="factor-impact-badge {{ result.contributing_factors.dispatch_timing.impact_class }}">
+                            {{ result.contributing_factors.dispatch_timing.impact_label }}
+                        </span>
+                    </div>
+                    <div class="factor-value-row">
+                        <span class="factor-data-label">Order Timestamp:</span>
+                        <strong class="factor-data-value">{{ result.order_day_name }} at {{ result.order_hour }}:00</strong>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>SupplyGuard — AI-Powered Shipment Delay Prediction System</p>
+    </footer>
+
+</div>
+</body>
+</html>

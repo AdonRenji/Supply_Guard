@@ -60,24 +60,19 @@
                     <h2 class="auth-card-title" id="loginTitle">Customer Portal</h2>
                     <p class="auth-card-subtitle" id="loginSubtitle">Sign in to place orders and track your deliveries.</p>
 
-                    <!-- Quick Demo Fill Helper -->
-                    <div style="margin-bottom: 18px; text-align: center;">
-                        <button type="button" id="quickDemoBtn" onclick="fillDemo()" style="background: #eff6ff; border: 1px solid #bfdbfe; color: #1d4ed8; font-size: 12.5px; font-weight: 600; padding: 6px 14px; border-radius: 20px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s ease;">
-                            ⚡ <span>Fill Demo Customer</span>
-                        </button>
-                    </div>
-
                     <!-- Flash messages -->
                     {% with messages = get_flashed_messages(with_categories=true) %}
                         {% if messages %}
                             <div class="auth-alerts-wrapper">
                                 {% for category, message in messages %}
-                                    <div class="auth-pill-alert {{ category }}">
-                                        <span class="pill-alert-icon">
-                                            {% if category == 'success' %}✓{% else %}!{% endif %}
-                                        </span>
-                                        <span class="pill-alert-text">{{ message }}</span>
-                                    </div>
+                                    {% if "Please log in with a manager account to access operations" not in message %}
+                                        <div class="auth-pill-alert {{ category }}">
+                                            <span class="pill-alert-icon">
+                                                {% if category == 'success' %}✓{% else %}!{% endif %}
+                                            </span>
+                                            <span class="pill-alert-text">{{ message }}</span>
+                                        </div>
+                                    {% endif %}
                                 {% endfor %}
                             </div>
                         {% endif %}
@@ -85,6 +80,7 @@
 
                     <!-- Form -->
                     <form method="POST" action="{{ url_for('login') }}" class="auth-form-modern" autocomplete="on">
+                        <input type="hidden" name="login_portal" id="loginPortal" value="{{ active_portal|default('customer') }}">
                         
                         <!-- Email Field -->
                         <div class="auth-field-group">
@@ -145,8 +141,8 @@
 
                     <!-- Account Navigation Link -->
                     <p class="auth-bottom-switch">
-                        Don't have an account?
-                        <a href="{{ url_for('register') }}" class="switch-accent-link">Create an account</a>
+                        <span id="registerPromptText">Don't have an account?</span>
+                        <a href="{{ url_for('register', role='customer') }}" id="registerLink" class="switch-accent-link">Create a customer account</a>
                     </p>
 
                     <!-- Divider -->
@@ -239,7 +235,7 @@
 
     <!-- Password visibility toggle script -->
     <script>
-        let currentRole = 'customer';
+        let currentRole = "{{ active_portal|default('customer') }}";
 
         function selectRole(role) {
             currentRole = role;
@@ -248,7 +244,11 @@
             const title = document.getElementById('loginTitle');
             const subtitle = document.getElementById('loginSubtitle');
             const submitText = document.getElementById('submitBtnText');
-            const quickDemoBtn = document.getElementById('quickDemoBtn');
+            const loginPortal = document.getElementById('loginPortal');
+            const registerPrompt = document.getElementById('registerPromptText');
+            const registerLink = document.getElementById('registerLink');
+
+            if (loginPortal) loginPortal.value = role;
 
             if (role === 'customer') {
                 tabCustomer.style.background = '#ffffff';
@@ -261,7 +261,11 @@
                 title.textContent = 'Customer Portal';
                 subtitle.textContent = 'Sign in to place orders and track your deliveries.';
                 submitText.textContent = 'Login as Customer';
-                quickDemoBtn.innerHTML = '⚡ <span>Fill Demo Customer</span>';
+                if (registerPrompt) registerPrompt.textContent = "Don't have an account?";
+                if (registerLink) {
+                    registerLink.textContent = "Create an account";
+                    registerLink.href = "{{ url_for('register', role='customer') }}";
+                }
             } else {
                 tabManager.style.background = '#ffffff';
                 tabManager.style.color = '#2563eb';
@@ -273,23 +277,20 @@
                 title.textContent = 'Manager Operations';
                 subtitle.textContent = 'Sign in to inspect customer orders & evaluate AI delivery risk.';
                 submitText.textContent = 'Login as Manager';
-                quickDemoBtn.innerHTML = '⚡ <span>Fill Demo Manager</span>';
-            }
-        }
-
-        function fillDemo() {
-            const emailInput = document.getElementById('email');
-            const passwordInput = document.getElementById('password');
-            if (currentRole === 'customer') {
-                emailInput.value = 'customer_demo@supplyguard.com';
-                passwordInput.value = 'Password123!';
-            } else {
-                emailInput.value = 'manager_demo@supplyguard.com';
-                passwordInput.value = 'Password123!';
+                if (registerPrompt) registerPrompt.textContent = "New operations staff?";
+                if (registerLink) {
+                    registerLink.textContent = "Create a manager account";
+                    registerLink.href = "{{ url_for('register', role='manager') }}";
+                }
             }
         }
 
         document.addEventListener('DOMContentLoaded', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const portalFromUrl = urlParams.get('portal');
+            const initialRole = portalFromUrl || "{{ active_portal|default('customer') }}";
+            selectRole(initialRole);
+
             const toggleBtn = document.getElementById('togglePasswordBtn');
             const passwordInput = document.getElementById('password');
             const eyeIcon = document.getElementById('eyeIcon');

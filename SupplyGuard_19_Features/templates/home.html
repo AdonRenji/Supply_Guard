@@ -164,8 +164,7 @@
                 <div class="card-title-group">
                     <span class="card-icon-badge">🔍</span>
                     <div>
-                        <h3>Search Customer Order</h3>
-                        <p>Retrieve any order stored in the SQLite database by its Order ID</p>
+                        <h3 style="margin: 0;">Search Customer Order</h3>
                     </div>
                 </div>
             </div>
@@ -266,23 +265,9 @@
             </div>
 
             <!-- Big Prediction Action Card -->
-            <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: var(--radius-md); padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
-                <div>
-                    <h4 style="margin: 0 0 4px 0; font-size: 16px; font-weight: 800; color: var(--text);">
-                        ⚡ AI Late-Delivery Risk Assessment
-                    </h4>
-                    <p style="margin: 0; font-size: 13.5px; color: var(--muted);">
-                        Evaluate this order using the trained Random Forest 19-feature machine learning model.
-                    </p>
-                    {% if retrieved_order.latest_prediction %}
-                    <div style="margin-top: 8px; font-size: 12.5px; color: #4338ca; background: #e0e7ff; padding: 4px 12px; border-radius: var(--radius-full); display: inline-block;">
-                        ℹ️ Latest assessment: <strong>{{ retrieved_order.latest_prediction.risk_label }}</strong> ({{ (retrieved_order.latest_prediction.late_probability * 100)|round(1) }}%)
-                    </div>
-                    {% endif %}
-                </div>
-
-                <form method="POST" action="{{ url_for('predict_order', order_id=retrieved_order.order_id) }}">
-                    <button type="submit" class="submit-button" style="width: auto; padding: 14px 32px; margin-top: 0; background: var(--accent-gradient); font-size: 15px; font-weight: 700; box-shadow: var(--shadow-button);">
+            <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: var(--radius-md); padding: 20px 24px; display: flex; align-items: center; justify-content: flex-end;">
+                <form method="POST" action="{{ url_for('predict_order', order_id=retrieved_order.order_id) }}" onsubmit="if(this.submitted) return false; this.submitted=true;" style="margin: 0;">
+                    <button type="submit" class="submit-button" style="width: auto; padding: 14px 32px; margin: 0; background: var(--accent-gradient); font-size: 15px; font-weight: 700; box-shadow: var(--shadow-button);">
                         ⚡ Predict Delivery Risk for this Order →
                     </button>
                 </form>

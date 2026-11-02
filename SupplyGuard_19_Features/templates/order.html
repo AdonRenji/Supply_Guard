@@ -38,6 +38,11 @@
             color: #ffffff;
             box-shadow: var(--shadow-button);
         }
+        #order_date::-webkit-calendar-picker-indicator {
+            opacity: 0.35;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
         .order-card {
             background: #ffffff;
             border: 1px solid var(--border);
@@ -468,8 +473,9 @@
                 <div class="field">
                     <label for="order_date">Order Date</label>
                     <input type="date" id="order_date" name="order_date"
-                           min="{{ min_date }}" max="{{ max_date }}"
                            value="{{ form_data.get('order_date', current_date) }}"
+                           readonly tabindex="-1"
+                           style="background: #f1f5f9; cursor: not-allowed; font-weight: 600; color: #334155;"
                            required>
                 </div>
 
@@ -477,9 +483,14 @@
                     <label for="order_time_manual">Order Time (HH:MM)</label>
                     <div class="time-input-group">
                         <input type="text" id="order_time_manual" name="order_time_manual"
-                               placeholder="HH:MM (e.g. 10:30)" maxlength="5" autocomplete="off"
-                               value="{{ form_data.get('order_time_manual', current_time_display) }}" required>
-                        <select id="order_period" name="order_period" aria-label="Select AM or PM">
+                               placeholder="HH:MM" maxlength="5" autocomplete="off"
+                               value="{{ form_data.get('order_time_manual', current_time_display) }}"
+                               readonly tabindex="-1"
+                               style="background: #f1f5f9; cursor: not-allowed; font-weight: 600; color: #334155;"
+                               required>
+                        <select id="order_period" name="order_period" aria-label="Select AM or PM"
+                                style="background: #f1f5f9; cursor: not-allowed; pointer-events: none; font-weight: 700; color: #334155;"
+                                tabindex="-1">
                             <option value="AM" {% if current_period == 'AM' %}selected{% endif %}>AM</option>
                             <option value="PM" {% if current_period == 'PM' %}selected{% endif %}>PM</option>
                         </select>
@@ -623,25 +634,32 @@
                 <div class="field">
                     <label for="shipping_mode">Shipping Mode</label>
                     <select id="shipping_mode" name="shipping_mode" required>
-                        <option value="">Select shipping mode</option>
+                        <option value="">Select shipping speed</option>
                         {% for option in options.shipping_mode %}
                         <option value="{{ option }}" {% if form_data.get('shipping_mode') == option %}selected{% endif %}>
-                            {{ option }}
+                            {% if option == 'Same Day' %}⏱️ Same Day
+                            {% elif option == 'First Class' %}🚀 First Class Priority
+                            {% elif option == 'Second Class' %}⚡ Second Class Express
+                            {% elif option == 'Standard Class' %}🚚 Standard Class
+                            {% else %}{{ option }}{% endif %}
                         </option>
                         {% endfor %}
                     </select>
                 </div>
 
                 <div class="field">
-                    <label for="days_scheduled">Scheduled Shipping Days</label>
-                    <select id="days_scheduled" name="days_scheduled" required>
-                        <option value="">Select scheduled days</option>
-                        {% for day in days_options %}
-                        <option value="{{ day }}" {% if form_data.get('days_scheduled')|string == day|string %}selected{% endif %}>
-                            {{ day }} {% if day == 1 %}day{% else %}days{% endif %}
-                        </option>
-                        {% endfor %}
-                    </select>
+                    <label for="days_scheduled_display">Scheduled Shipping Days</label>
+                    <input type="text"
+                           id="days_scheduled_display"
+                           placeholder="Auto-assigned when mode is selected"
+                           readonly
+                           tabindex="-1"
+                           value="{% if form_data.get('days_scheduled') is not none and form_data.get('days_scheduled') != '' %}{{ form_data.get('days_scheduled')|int }} day{% if form_data.get('days_scheduled')|int != 1 %}s{% endif %}{% endif %}"
+                           style="background: #f1f5f9; cursor: not-allowed; font-weight: 700; color: #1e293b;">
+                    <input type="hidden"
+                           id="days_scheduled"
+                           name="days_scheduled"
+                           value="{{ form_data.get('days_scheduled', '') }}">
                 </div>
 
                 <div class="field">
@@ -683,7 +701,7 @@
                 <div>
                     <span style="font-size: 11.5px; text-transform: uppercase; font-weight: 800; color: #7e22ce; letter-spacing: 0.05em;">Review Before Submitting</span>
                     <div style="font-size: 14px; font-weight: 600; color: var(--text); margin-top: 3px;">
-                        Customer: <strong id="reviewCustomerName">Sophia Vance</strong> &bull; Products: <strong id="reviewItemCount">1 item</strong>
+                        Customer: <strong id="reviewCustomerName">Sophia Vance</strong> &bull; <span id="reviewProductLabel">Product</span>: <strong id="reviewItemCount">—</strong>
                     </div>
                 </div>
                 <div style="text-align: right;">
@@ -821,27 +839,32 @@
                 return;
             }
 
-            const prodSelects = itemsTbody.querySelectorAll(".product-select");
-            let hasValidProd = false;
-            let count = 0;
-            prodSelects.forEach(sel => {
-                if (sel.value && sel.value.trim() !== "") {
-                    hasValidProd = true;
-                    count++;
+            const itemNames = [];
+            const rows = itemsTbody.querySelectorAll(".item-row");
+            rows.forEach(row => {
+                const prodSelect = row.querySelector(".product-select");
+                if (prodSelect && prodSelect.value) {
+                    const opt = prodSelect.options[prodSelect.selectedIndex];
+                    const prodName = (opt && opt.getAttribute("data-name")) || (row.querySelector(".product-name-input") ? row.querySelector(".product-name-input").value : "");
+                    if (prodName) {
+                        itemNames.push(prodName.trim());
+                    }
                 }
             });
 
-            if (!hasValidProd) {
+            if (itemNames.length === 0) {
                 alert("Please select at least one product before proceeding to Shipping & Delivery.");
                 return;
             }
 
             const revName = document.getElementById("reviewCustomerName");
+            const revLabel = document.getElementById("reviewProductLabel");
             const revCount = document.getElementById("reviewItemCount");
             const revTotal = document.getElementById("reviewFinalAmount");
 
             if (revName) revName.textContent = name.value.trim();
-            if (revCount) revCount.textContent = count === 1 ? "1 product" : `${count} products`;
+            if (revLabel) revLabel.textContent = itemNames.length > 1 ? "Products" : "Product";
+            if (revCount) revCount.textContent = itemNames.join(", ");
             if (revTotal) revTotal.textContent = totalAmountDisplay.textContent;
 
             goToStep(3);
@@ -882,8 +905,8 @@
             const qty = parseInt(qtySelect.value, 10) || 1;
             discInput.value = activePromoDiscount.toFixed(2);
 
-            const subtotal = qty * price * (1.0 - activePromoDiscount);
-            salesInput.value = subtotal.toFixed(2);
+            const itemTotal = qty * price;
+            salesInput.value = itemTotal.toFixed(2);
         } else {
             priceInput.value = "";
             nameInput.value = "";
@@ -896,18 +919,15 @@
 
     function recalculateOrderTotal() {
         let rawSubtotal = 0;
-        let finalTotal = 0;
 
         const rows = itemsTbody.querySelectorAll(".item-row");
         rows.forEach(row => {
             const prodSelect = row.querySelector(".product-select");
             const price = parseFloat(row.querySelector(".product-price-input").value) || 0;
             const qty = parseInt(row.querySelector(".quantity-select").value, 10) || 1;
-            const sales = parseFloat(row.querySelector(".item-sales-input").value) || 0;
 
             if (prodSelect && prodSelect.value) {
                 rawSubtotal += (price * qty);
-                finalTotal += sales;
             }
         });
 
@@ -917,8 +937,9 @@
         const discountBadgeLine = document.getElementById("discountBadgeLine");
         const discountAmountDisplay = document.getElementById("discountAmountDisplay");
 
+        let discAmt = 0;
         if (activePromoDiscount > 0 && rawSubtotal > 0) {
-            const discAmt = rawSubtotal * activePromoDiscount;
+            discAmt = rawSubtotal * activePromoDiscount;
             if (discountBadgeLine) discountBadgeLine.style.display = "inline";
             if (discountAmountDisplay) {
                 discountAmountDisplay.textContent = `-$${discAmt.toFixed(2)} (${Math.round(activePromoDiscount * 100)}% off)`;
@@ -927,8 +948,13 @@
             if (discountBadgeLine) discountBadgeLine.style.display = "none";
         }
 
+        const finalTotal = Math.max(0, rawSubtotal - discAmt);
+
         totalAmountDisplay.textContent = "$" + finalTotal.toFixed(2);
         totalAmountInput.value = finalTotal.toFixed(2);
+
+        const revTotal = document.getElementById("reviewFinalAmount");
+        if (revTotal) revTotal.textContent = "$" + finalTotal.toFixed(2);
 
         rows.forEach(row => {
             const removeBtn = row.querySelector(".remove-item-btn");
@@ -1012,6 +1038,7 @@
 
     // Attach to initial row
     itemsTbody.querySelectorAll(".item-row").forEach(attachRowEvents);
+    itemsTbody.querySelectorAll(".item-row").forEach(updateRowCalculations);
 
     // Add new product row
     addItemBtn.addEventListener("click", () => {
@@ -1033,87 +1060,105 @@
     });
 
     // ----------------------------------------------------
-    // 2. ORDER TIME 12-hr <-> 24-hr SYNCHRONIZATION
+    // 2. REAL-TIME CLOCK & AUTO-SYNC (LOCKED TO TODAY & REAL TIME)
     // ----------------------------------------------------
+    const orderDateInput = document.getElementById("order_date");
     const timeManualInput = document.getElementById("order_time_manual");
     const timePeriodSelect = document.getElementById("order_period");
     const orderTimeInput = document.getElementById("order_time");
 
-    function syncOrderTime() {
-        const rawTime = timeManualInput.value.trim();
-        const period = timePeriodSelect.value;
+    function updateLiveRealTime() {
+        const now = new Date();
 
-        if (!rawTime) {
-            orderTimeInput.value = "";
-            return false;
+        // 1. Current local date: YYYY-MM-DD
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, "0");
+        const day = String(now.getDate()).padStart(2, "0");
+        if (orderDateInput) {
+            orderDateInput.value = `${year}-${month}-${day}`;
         }
 
-        const match = rawTime.match(/^([0-1]?[0-9]|2[0-3]):([0-5][0-9])$/);
-        if (!match) {
-            orderTimeInput.value = "";
-            return false;
+        // 2. Current local time: 12-hour display and 24-hour value
+        let hour24 = now.getHours();
+        const minute = String(now.getMinutes()).padStart(2, "0");
+        const period = hour24 >= 12 ? "PM" : "AM";
+
+        let hour12 = hour24 % 12;
+        if (hour12 === 0) hour12 = 12;
+        const hour12Str = String(hour12).padStart(2, "0");
+
+        if (timeManualInput) {
+            timeManualInput.value = `${hour12Str}:${minute}`;
         }
-
-        let hour = parseInt(match[1], 10);
-        const minute = match[2];
-
-        if (period === "PM" && hour < 12) hour += 12;
-        else if (period === "AM" && hour === 12) hour = 0;
-
-        orderTimeInput.value = String(hour).padStart(2, "0") + ":" + minute;
-        return true;
+        if (timePeriodSelect) {
+            timePeriodSelect.value = period;
+        }
+        if (orderTimeInput) {
+            const hour24Str = String(hour24).padStart(2, "0");
+            orderTimeInput.value = `${hour24Str}:${minute}`;
+        }
     }
 
-    timeManualInput.addEventListener("input", function (e) {
-        let val = this.value.replace(/[^0-9:]/g, "");
-        if (val.length === 2 && !val.includes(":") && e.inputType !== "deleteContentBackward") {
-            val = val + ":";
-        }
-        this.value = val;
-        syncOrderTime();
-    });
+    function syncOrderTime() {
+        updateLiveRealTime();
+        return Boolean(orderTimeInput && orderTimeInput.value);
+    }
 
-    timePeriodSelect.addEventListener("change", syncOrderTime);
-    syncOrderTime();
+    // Initialize immediately and refresh live every second
+    updateLiveRealTime();
+    setInterval(updateLiveRealTime, 1000);
+
+    // Prevent user from manually modifying locked date and time
+    if (orderDateInput) {
+        orderDateInput.addEventListener("keydown", (e) => e.preventDefault());
+        orderDateInput.addEventListener("click", (e) => e.preventDefault());
+    }
+    if (timeManualInput) {
+        timeManualInput.addEventListener("keydown", (e) => e.preventDefault());
+        timeManualInput.addEventListener("paste", (e) => e.preventDefault());
+    }
+    if (timePeriodSelect) {
+        timePeriodSelect.addEventListener("mousedown", (e) => e.preventDefault());
+        timePeriodSelect.addEventListener("keydown", (e) => e.preventDefault());
+    }
 
     // ----------------------------------------------------
-    // 3. AUTO-SYNC SHIPPING MODE & SCHEDULED DAYS
+    // 3. AUTO-SYNC SHIPPING MODE & SCHEDULED DAYS (READ-ONLY)
     // ----------------------------------------------------
     const shippingModeSelect = document.getElementById("shipping_mode");
-    const daysScheduledSelect = document.getElementById("days_scheduled");
+    const daysScheduledHidden = document.getElementById("days_scheduled");
+    const daysScheduledDisplay = document.getElementById("days_scheduled_display");
 
     const shippingModeToDays = {
-        "Same Day": "0",
-        "First Class": "1",
-        "Second Class": "2",
-        "Standard Class": "4"
+        "Same Day": { val: "0", label: "0 days" },
+        "First Class": { val: "1", label: "1 day" },
+        "Second Class": { val: "2", label: "2 days" },
+        "Standard Class": { val: "4", label: "4 days" }
     };
 
-    const daysToShippingMode = {
-        "0": "Same Day",
-        "1": "First Class",
-        "2": "Second Class",
-        "4": "Standard Class"
-    };
+    function syncScheduledDays() {
+        if (!shippingModeSelect || !daysScheduledHidden || !daysScheduledDisplay) return;
+        const mode = shippingModeSelect.value;
+        if (mode && shippingModeToDays[mode] !== undefined) {
+            daysScheduledHidden.value = shippingModeToDays[mode].val;
+            daysScheduledDisplay.value = shippingModeToDays[mode].label;
+        } else {
+            daysScheduledHidden.value = "";
+            daysScheduledDisplay.value = "";
+        }
+    }
 
-    if (shippingModeSelect && daysScheduledSelect) {
-        shippingModeSelect.addEventListener("change", function () {
-            const mode = this.value;
-            if (mode && shippingModeToDays[mode] !== undefined) {
-                daysScheduledSelect.value = shippingModeToDays[mode];
-            } else if (!mode) {
-                daysScheduledSelect.value = "";
-            }
-        });
+    if (shippingModeSelect && daysScheduledHidden && daysScheduledDisplay) {
+        shippingModeSelect.addEventListener("change", syncScheduledDays);
 
-        daysScheduledSelect.addEventListener("change", function () {
-            const days = this.value;
-            if (days && daysToShippingMode[days] !== undefined) {
-                shippingModeSelect.value = daysToShippingMode[days];
-            } else if (!days) {
-                shippingModeSelect.value = "";
-            }
-        });
+        // Lock display textbox from manual focus/input
+        daysScheduledDisplay.addEventListener("mousedown", (e) => e.preventDefault());
+        daysScheduledDisplay.addEventListener("keydown", (e) => e.preventDefault());
+
+        // Initialize if shipping mode already has a value
+        if (shippingModeSelect.value && shippingModeToDays[shippingModeSelect.value] !== undefined) {
+            syncScheduledDays();
+        }
     }
 
     // ----------------------------------------------------
@@ -1283,6 +1328,7 @@
     // ----------------------------------------------------
     const orderForm = document.getElementById("orderForm");
     orderForm.addEventListener("submit", function (e) {
+        updateLiveRealTime();
         if (!syncOrderTime()) {
             e.preventDefault();
             timeManualInput.setCustomValidity("Please enter a valid time in HH:MM format (e.g. 10:30).");
@@ -1308,6 +1354,14 @@
         if (!hasValidProduct) {
             e.preventDefault();
             alert("Please select at least one product for the order.");
+            return;
+        }
+
+        // Validate shipping mode selection
+        if (!shippingModeSelect.value || !daysScheduledHidden.value) {
+            e.preventDefault();
+            shippingModeSelect.focus();
+            shippingModeSelect.reportValidity();
             return;
         }
 

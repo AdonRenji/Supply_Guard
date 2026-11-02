@@ -121,15 +121,18 @@
                         </div>
 
                         <div class="field">
-                            <label for="days_scheduled">Scheduled Shipping Days</label>
-                            <select id="days_scheduled" name="days_scheduled" required>
-                                <option value="">Select scheduled days</option>
-                                {% for day in days_options %}
-                                <option value="{{ day }}" {% if form_data.get('days_scheduled', '')|string == day|string %}selected{% endif %}>
-                                    {{ day }} {% if day == 1 %}day{% else %}days{% endif %}
-                                </option>
-                                {% endfor %}
-                            </select>
+                            <label for="days_scheduled_display">Scheduled Shipping Days</label>
+                            <input type="text"
+                                   id="days_scheduled_display"
+                                   placeholder="Auto-assigned when mode is selected"
+                                   readonly
+                                   tabindex="-1"
+                                   value="{% if form_data.get('days_scheduled') is not none and form_data.get('days_scheduled') != '' %}{{ form_data.get('days_scheduled')|int }} day{% if form_data.get('days_scheduled')|int != 1 %}s{% endif %}{% endif %}"
+                                   style="background: #f1f5f9; cursor: not-allowed; font-weight: 700; color: #1e293b;">
+                            <input type="hidden"
+                                   id="days_scheduled"
+                                   name="days_scheduled"
+                                   value="{{ form_data.get('days_scheduled', '') }}">
                         </div>
 
                         <div class="field">
@@ -413,23 +416,34 @@
         }
 
         const shippingModeSelect = document.getElementById("shipping_mode");
-        const daysScheduledSelect = document.getElementById("days_scheduled");
-        const shippingModeToDays = { "Same Day": "0", "First Class": "1", "Second Class": "2", "Standard Class": "4" };
-        const daysToShippingMode = { "0": "Same Day", "1": "First Class", "2": "Second Class", "4": "Standard Class" };
+        const daysScheduledHidden = document.getElementById("days_scheduled");
+        const daysScheduledDisplay = document.getElementById("days_scheduled_display");
+        const shippingModeToDays = {
+            "Same Day": { val: "0", label: "0 days" },
+            "First Class": { val: "1", label: "1 day" },
+            "Second Class": { val: "2", label: "2 days" },
+            "Standard Class": { val: "4", label: "4 days" }
+        };
 
-        if (shippingModeSelect && daysScheduledSelect) {
-            shippingModeSelect.addEventListener("change", function () {
-                const mode = this.value;
-                if (mode && shippingModeToDays[mode] !== undefined) {
-                    daysScheduledSelect.value = shippingModeToDays[mode];
-                }
-            });
-            daysScheduledSelect.addEventListener("change", function () {
-                const days = this.value;
-                if (days && daysToShippingMode[days] !== undefined) {
-                    shippingModeSelect.value = daysToShippingMode[days];
-                }
-            });
+        function syncManualScheduledDays() {
+            if (!shippingModeSelect || !daysScheduledHidden || !daysScheduledDisplay) return;
+            const mode = shippingModeSelect.value;
+            if (mode && shippingModeToDays[mode] !== undefined) {
+                daysScheduledHidden.value = shippingModeToDays[mode].val;
+                daysScheduledDisplay.value = shippingModeToDays[mode].label;
+            } else {
+                daysScheduledHidden.value = "";
+                daysScheduledDisplay.value = "";
+            }
+        }
+
+        if (shippingModeSelect && daysScheduledHidden && daysScheduledDisplay) {
+            shippingModeSelect.addEventListener("change", syncManualScheduledDays);
+            daysScheduledDisplay.addEventListener("mousedown", (e) => e.preventDefault());
+            daysScheduledDisplay.addEventListener("keydown", (e) => e.preventDefault());
+            if (shippingModeSelect.value) {
+                syncManualScheduledDays();
+            }
         }
 
         function syncOrderTime() {

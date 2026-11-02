@@ -17,7 +17,7 @@ DB_PATH = BASE_DIR / "supplyguard.db"
 
 def get_db_connection():
     """Establish and return an SQLite connection with row factories and foreign keys enabled."""
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(DB_PATH, timeout=30.0)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON;")
     return conn
